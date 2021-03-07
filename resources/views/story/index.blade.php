@@ -1,13 +1,17 @@
 @extends('layouts.app')
 
+@section('title', __(' - Stories'))
+
 @section('content')
 <div class="container">
     <h1>Stories</h1>
-    <a href="/story/create">Add new</a>
+    @can('create', App\Models\Story::class)
+        <a href="/story/create">Add new</a>
+    @endcan
     <div class="row">
         @foreach($stories as $story)
             <div class="col">
-                <div class="card">
+                <div class="card" style="max-width:18rem;">
                     @switch($story->priority)
                         @case(1)
                         @php
@@ -37,10 +41,11 @@
                         <b>{{ $story->title }}</b> ({{ $text }})
                     </div>
                     <div class="card-body">
-                        <p class="card-text">
+                        <div class="card-text mb-2">
                             {{ __('Description') . ': ' . $story->description }}<br>
-                            {{ __('Acceptance tests') . ': ' . $story->tests }}
-                        </p>
+                            {{ __('Acceptance tests') }} :<br>
+                            {!! nl2br($story->tests) !!}
+                        </div>
                         <a href="#" class="btn btn-primary">{{__('Edit story')}}</a>
                     </div>
                 </div>

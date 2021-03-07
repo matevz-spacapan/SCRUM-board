@@ -15,7 +15,7 @@ class CreateStoriesTable extends Migration
     {
         Schema::create('stories', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id');
+            $table->integer('project_id')->nullable();
             $table->string('title');
             $table->text('description');
             $table->text('tests');
@@ -23,7 +23,8 @@ class CreateStoriesTable extends Migration
             $table->integer('business_value');
             $table->timestamps();
 
-            $table->index('project_id');
+            // TODO uncomment when projects are set up
+            //$table->index('project_id');
         });
     }
 

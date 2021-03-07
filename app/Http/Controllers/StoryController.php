@@ -21,6 +21,7 @@ class StoryController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Story::class);
         return view('story.create');
     }
 
