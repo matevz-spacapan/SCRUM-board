@@ -6,7 +6,7 @@
 <div class="container">
     <h1>Stories</h1>
     @can('create', App\Models\Story::class)
-        <a href="/story/create">Add new</a>
+        <a href="/story/create" class="btn btn-success">Add new</a>
     @endcan
     <div class="row">
         @foreach($stories as $story)
