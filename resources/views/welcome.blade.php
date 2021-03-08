@@ -30,10 +30,12 @@
                             <a href="{{ url('/home') }}" class="text-lg text-white underline btn btn-primary">Home</a>
                         @else
                             <a href="{{ route('login') }}" class="text-lg text-white underline btn btn-primary">Log in</a>
-
+                            
+                            <!-- Registracija ni mozna, samo admin lahko doda uporabnika!
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="ml-4 text-lg text-white underline btn btn-primary">Register</a>
                             @endif
+                            -->
                         @endauth
                     </div>
                 @endif

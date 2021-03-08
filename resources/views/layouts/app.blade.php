@@ -33,9 +33,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/story">{{ __('Stories') }}</a>
-                        </li>
+                        
+                        @can('story-list')
+                            <li class="nav-item"><a class="nav-link" href="/story">{{ __('Stories') }}</a></li>
+                        @endcan
+                        @can('role-list')
+                        <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
+                        @endcan
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -48,11 +52,12 @@
                                 </li>
                             @endif
 
+                            <!-- Registracije ni, samo admin lahko doda uporabnika!
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
-                            @endif
+                            @endif-->
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -60,7 +65,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('settings-form').submit();">
+                                    <a class="dropdown-item" href="user/settings" >
                                         {{ __('Settings') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
@@ -89,7 +94,7 @@
                 <div class="row justify-content-center">
                     <div class="col text-center">
                         copyright© 2021<br/>
-                        Ekipa SMRPO 3
+                        {{ __('Ekipa SMRPO 3') }}
                         
                     </div>
                 </div>
