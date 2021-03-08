@@ -15,7 +15,7 @@ class CreateStoriesTable extends Migration
     {
         Schema::create('stories', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id')->nullable();
+            $table->unsignedBigInteger('project_id')->nullable();
             $table->string('title');
             $table->text('description');
             $table->text('tests');
