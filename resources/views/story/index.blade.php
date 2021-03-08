@@ -5,8 +5,8 @@
 @section('content')
 <div class="container">
     <h1>Stories</h1>
-
-    @can('create', App\Models\Story::class)
+    
+    @can('story-create')
         <a href="/story/create" class="btn btn-success">Add new</a>
     @endcan
     <div class="row">

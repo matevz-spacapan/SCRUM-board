@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\DB;
 class StoryController extends Controller
 {
     public function __construct(){
-        /*$this->middleware('permission:story-list|story-create|story-edit|story-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:story-list|story-create|story-edit|story-delete', ['only' => ['index','store']]);
         $this->middleware('permission:story-create', ['only' => ['create','store']]);
         $this->middleware('permission:story-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:story-delete', ['only' => ['destroy']]);
-        $this->middleware('auth');*/
+        $this->middleware('auth');
     }
 
     public function index()
