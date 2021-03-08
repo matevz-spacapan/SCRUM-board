@@ -10951,8 +10951,8 @@ a.text-dark:focus {
   min-height: 100vh;
 }
 
-main {
-  padding-bottom: 100px;
+#footerDown {
+  padding-bottom: 100px !important;
 }
 
 #footer {
