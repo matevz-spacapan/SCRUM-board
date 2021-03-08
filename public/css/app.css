@@ -10946,6 +10946,22 @@ a.text-dark:focus {
   font-size: 5rem;
 }
 
+#app {
+  position: relative;
+  min-height: 100vh;
+}
+
+main {
+  padding-bottom: 100px;
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+}
+
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;

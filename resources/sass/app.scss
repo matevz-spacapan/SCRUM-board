@@ -13,7 +13,23 @@
     font-size:5rem;
 }
 
+#app {
+    position: relative;
+    min-height: 100vh;
+}
 
+$footer-height: 100px;
+
+main {
+    padding-bottom: $footer-height;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: $footer-height;
+}
 
 html {
 line-height: 1.15;
