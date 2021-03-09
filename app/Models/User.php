@@ -42,8 +42,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function projectusers() {
-        return $this->belongsToMany(ProjectUser::class);
+    public function projects() {
+        return $this->belongsToMany('App\Project')->withTimestamps();
     }
 }
 }
