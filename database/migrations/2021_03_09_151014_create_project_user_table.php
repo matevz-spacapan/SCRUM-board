@@ -19,10 +19,10 @@ class CreateProjectUserTable extends Migration
             $table->bigInteger('project_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
 
-            $table->integer('role')
+            $table->integer('role');
 
             
-             $table->foreign('project_id')
+            $table->foreign('project_id')
                 ->references('id')
                 ->on('projects');
             
