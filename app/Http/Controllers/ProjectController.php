@@ -47,8 +47,9 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project = Project::findOrFail($project->id);
-        $stories = DB::select("SELECT * from stories WHERE project_id={$project->id}");
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+        $stories = DB::select("SELECT * from stories WHERE project_id={$project->id}"); //ORDER BY priority ASC
         return view('project.show', ['stories' => $stories, 'project' => $project]);
     }
 

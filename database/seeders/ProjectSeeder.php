@@ -16,17 +16,17 @@ class ProjectSeeder extends Seeder
     public function run()
     {
         Project::create([
-            'project_name' => 'Prvi projekt',
+            'project_name' => 'First project',
             'product_owner' => 1,
             'project_master' => 2
         ]);
         Project::create([
-            'project_name' => 'Drugi projekt',
+            'project_name' => 'Second project',
             'product_owner' => 2,
             'project_master' => 3
         ]);
         Project::create([
-            'project_name' => 'Tretji projekt',
+            'project_name' => 'Third project',
             'product_owner' => 3,
             'project_master' => 1
         ]);

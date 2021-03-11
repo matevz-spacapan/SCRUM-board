@@ -12,6 +12,20 @@ class StoryPolicy
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\User  $user
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(User $user, $ability)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
@@ -43,14 +57,8 @@ class StoryPolicy
      */
     public function create(User $user, Project $project)
     {
-        //dd($user->projects);
-        foreach($user->projects as $projects)
-        {
-            if ($projects->id == $project->id && ($projects->product_owner == $user->id || $projects->project_master == $user->id)) {
-                return true;
-            }
-        }
-        return false;
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
+            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
