@@ -14,18 +14,15 @@ class CreateProjectUserTable extends Migration
     public function up()
     {
         Schema::create('project_user', function (Blueprint $table) {
-            
+
             $table->primary(['project_id','user_id']);
             $table->bigInteger('project_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
 
-            $table->integer('role');
-
-            
             $table->foreign('project_id')
                 ->references('id')
                 ->on('projects');
-            
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');

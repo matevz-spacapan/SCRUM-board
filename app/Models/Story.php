@@ -17,5 +17,11 @@ class Story extends Model
         'tests',
         'priority',
         'business_value',
+        'project_id',
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 }

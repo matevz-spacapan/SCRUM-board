@@ -2,36 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use App\Models\Story;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StoryController extends Controller
 {
-    public function __construct(){
-        /*$this->middleware('permission:story-list|story-create|story-edit|story-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:story-create', ['only' => ['create','store']]);
-        $this->middleware('permission:story-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:story-delete', ['only' => ['destroy']]);
-        $this->middleware('auth');*/
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Project $project)
+    {
+        //
     }
 
-    public function index()
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Project $project)
     {
-        $stories = DB::select('SELECT * from stories');
-        return view('story.index', ['stories' => $stories]);
+        Project::findOrFail($project->id);
+        $this->authorize('create', [Story::class, $project]);
+        return view('story.create', ['id' => $project->id]);
     }
 
-    public function create()
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, Project $project)
     {
-        $this->authorize('create', Story::class);
-        return view('story.create');
-    }
-
-    public function store(Request $request)
-    {
+        Project::findOrFail($project->id);
+        $this->authorize('create_story', [Project::class, $project->id]);
+        $request->request->add(['project_id' => $project->id]);
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'project_id' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
@@ -40,6 +55,55 @@ class StoryController extends Controller
 
         Story::create($data);
 
-        return redirect()->route('story.index');
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Project $project, Story $story)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Project $project, Story $story)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Project $project, Story $story)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Project $project, Story $story)
+    {
+        //
     }
 }

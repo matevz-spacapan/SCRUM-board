@@ -28,9 +28,12 @@ Route::get('/admin/user/create', 'App\Http\Controllers\UserController@create')->
 Route::get('/user/settings', 'App\Http\Controllers\UserController@edit')->name('user.edit');
 Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name('user.update');
 
-Route::get('/story', 'App\Http\Controllers\StoryController@index')->name('story.index');
-Route::post('/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
-Route::get('/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
+
+Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
+
+
+Route::post('/project/{project}/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
+Route::get('/project/{project}/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
 
 
 Route::group(['middleware' => ['auth']], function() {

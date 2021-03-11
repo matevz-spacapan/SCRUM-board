@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', __(' - Stories'))
+@section('title', ' - '.$project->project_name)
 
 @section('content')
 <div class="container">
-    <h1>Stories</h1>
+    <h1>{{$project->project_name}}</h1>
 
-    @can('create', App\Models\Story::class)
-        <a href="/story/create" class="btn btn-success">Add new</a>
+    @can("create", [\App\Models\Story::class, $project])
+        <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">Add new</a>
     @endcan
     <div class="row">
         @foreach($stories as $story)
             <div class="col">
-                <div class="card" style="max-width:18rem;">
+                <div class="card" style="max-width:23rem;">
                     @switch($story->priority)
                         @case(1)
                         @php
@@ -43,8 +43,8 @@
                     </div>
                     <div class="card-body">
                         <div class="card-text mb-2">
-                            {{ __('Description') . ': ' . $story->description }}<br>
-                            {{ __('Acceptance tests') }} :<br>
+                            <b>Description: </b>{{$story->description }}<br><br>
+                            <b>Acceptance tests: </b><br>
                             {!! nl2br($story->tests) !!}
                         </div>
                         <a href="#" class="btn btn-primary">{{__('Edit story')}}</a>

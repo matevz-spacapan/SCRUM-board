@@ -15,7 +15,11 @@ class Project extends Model
     ];
 
     public function users() {
-        return $this->belongsToMany('App\User')->withPivot('role')->withTimestamps();
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    public function stories(){
+        return $this->hasMany(Story::class);
     }
 
     public function sprints() {

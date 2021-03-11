@@ -10,7 +10,7 @@
                 <div class="card-header">{{ __('Add story') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('story.store') }}">
+                    <form method="POST" action="{{ route('story.store', $id) }}">
                         @csrf
 
                         <div class="form-group row">
