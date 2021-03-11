@@ -59,7 +59,8 @@ class SprintController extends Controller
                 $overlaps = Sprint::query()->whereBetween('start_date', [$start_date, $end_date])
                     ->orWhereBetween('end_date', [$start_date, $end_date])
                     ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date]);
+                    ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date])
+                    ->first();
 
                 if ($overlaps) {
                     $fail('The sprint overlaps with an existing sprint');
