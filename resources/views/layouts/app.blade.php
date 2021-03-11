@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -34,9 +35,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
-                        @can('story-list')
-                            <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
-                        @endcan
+                        <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
 
                         @can('role-list')
                         <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
@@ -94,7 +93,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col text-center">
-                        copyright© 2021<br/>
+                        Copyright © 2021<br/>
                         {{ __('Ekipa SMRPO 3') }}
 
                     </div>
