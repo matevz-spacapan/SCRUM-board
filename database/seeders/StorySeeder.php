@@ -17,7 +17,7 @@ class StorySeeder extends Seeder
         Story::create([
             'title' => 'Dodajanje uporabniških zgodb',
             'project_id' => 1,
-            'description' => "Produktni vodja in skrbnik metodologije lahko vnašata nove uporabniške zgodbe v že obstoječ projekt.\nZa vsako zgodbo lahko določita njeno ime, besedilo, sprejemne teste, prioriteto (must have, could have, should have, won\'t have this time) in poslovno vrednost.",
+            'description' => "Produktni vodja in skrbnik metodologije lahko vnašata nove uporabniške zgodbe v že obstoječ projekt.\nZa vsako zgodbo lahko določita njeno ime, besedilo, sprejemne teste, prioriteto (must have, could have, should have, won't have this time) in poslovno vrednost.",
             'tests' => "Preveri regularen potek.\nPreveri podvajanje imena uporabniške zgodbe.\nPreveri ustrezno določitev prioritete uporabniške zgodbe.\nPreveri za neregularen vnos poslovne vrednosti.",
             'priority' => random_int(1, 4),
             'business_value' => random_int(0, 500)

@@ -9,33 +9,33 @@
     @can("create", [\App\Models\Story::class, $project])
         <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">Add new</a>
     @endcan
-    <div class="row">
+    <div class="row row-cols-3">
         @foreach($stories as $story)
-            <div class="col">
-                <div class="card" style="max-width:23rem;">
+            <div class="col my-3">
+                <div class="card h-100">
                     @switch($story->priority)
                         @case(1)
                         @php
                             $text = __('1 - Must have');
-                            $color='bg-danger text-light';
+                            $color='priority-1 text-light';
                         @endphp
                         @break
                         @case(2)
                         @php
                             $text = __('2 - Should have');
-                            $color='bg-warning';
+                            $color='priority-2 text-light';
                         @endphp
                         @break
                         @case(3)
                         @php
                             $text = __('3 - Could have');
-                            $color='bg-info';
+                            $color='priority-3';
                         @endphp
                         @break
                         @default
                         @php
                             $text = __('4 - Won\'t have this time');
-                            $color='bg-secondary text-light';
+                            $color='priority-4';
                         @endphp
                     @endswitch
                     <div class="card-header {{ $color }}">
@@ -43,10 +43,11 @@
                     </div>
                     <div class="card-body">
                         <div class="card-text mb-2">
-                            <b>Description: </b>{{$story->description }}<br><br>
-                            <b>Acceptance tests: </b><br>
-                            {!! nl2br($story->tests) !!}
+                            <p><b>Description:</b> <br> {!! nl2br($story->description) !!}</p>
+                            <b>Acceptance tests:</b><br> {!! nl2br($story->tests) !!}
                         </div>
+                    </div>
+                    <div class="card-footer">
                         <a href="#" class="btn btn-primary">{{__('Edit story')}}</a>
                     </div>
                 </div>

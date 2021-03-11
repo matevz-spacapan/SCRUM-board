@@ -42,7 +42,7 @@ class StoryController extends Controller
     public function store(Request $request, Project $project)
     {
         Project::findOrFail($project->id);
-        $this->authorize('create_story', [Project::class, $project->id]);
+        $this->authorize('create', [Story::class, $project]);
         $request->request->add(['project_id' => $project->id]);
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
