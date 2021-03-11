@@ -30,8 +30,10 @@ Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name
 
 
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
-Route::post('/project/{project}', 'App\Http\Controllers\ProjectController@store_story')->name('project.store_story');
-Route::get('/project/{project}/create', 'App\Http\Controllers\ProjectController@create_story')->name('project.create_story');
+
+
+Route::post('/project/{project}/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
+Route::get('/project/{project}/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
 
 
 Route::group(['middleware' => ['auth']], function() {

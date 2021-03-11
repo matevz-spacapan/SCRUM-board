@@ -6,8 +6,8 @@
 <div class="container">
     <h1>{{$project->project_name}}</h1>
 
-    @can("create_story", [\App\Models\Project::class, $id])
-        <a href="{{ route('project.create_story', $id) }}" class="btn btn-success mb-3">Add new</a>
+    @can("create", [\App\Models\Story::class, $project])
+        <a href="{{ route('story.create', $id) }}" class="btn btn-success mb-3">Add new</a>
     @endcan
     <div class="row">
         @foreach($stories as $story)
