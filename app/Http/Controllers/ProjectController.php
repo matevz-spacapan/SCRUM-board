@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
