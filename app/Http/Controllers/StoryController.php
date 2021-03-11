@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Story;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class StoryController extends Controller
 {
@@ -45,7 +46,9 @@ class StoryController extends Controller
         $this->authorize('create', [Story::class, $project]);
         $request->request->add(['project_id' => $project->id]);
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255',
+                Rule::unique('stories')->where(function ($query) use ($project) {
+                return $query->where('project_id', $project->id); })],
             'project_id' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
