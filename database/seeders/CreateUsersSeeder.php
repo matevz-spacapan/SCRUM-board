@@ -21,7 +21,7 @@ class CreateUsersSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin')
         ]);
-        $roleAdmin = Role::create(['name' => 'Admin']);
+        $roleAdmin = Role::create(['name' => 'Administrator']);
         $permissionsAdmin = Permission::pluck('id','id')->all();
         $roleAdmin->syncPermissions($permissionsAdmin);
         $userAdmin->assignRole([$roleAdmin->id]);
@@ -31,9 +31,8 @@ class CreateUsersSeeder extends Seeder
             'email' => 'devel@devel.com',
             'password' => bcrypt('devel')
         ]);
-        $roleDev = Role::create(['name' => 'Developer']);
-        $permissionsDev = array( 9 => 9, 13 => 13, 17 => 17, 18 => 18, 19 => 19, 20 => 20);
-        $roleDev->syncPermissions($permissionsDev);
+        $roleDev = Role::create(['name' => 'User']);
+        $roleDev->syncPermissions();
         $userDev->assignRole([$roleDev->id]);
         
         $userCust = User::create([
@@ -41,9 +40,8 @@ class CreateUsersSeeder extends Seeder
             'email' => 'cust@cust.com',
             'password' => bcrypt('cust')
         ]);
-        $roleCust = Role::create(['name' => 'Customer']);
-        $permissionsCust = array( 13 => 13, 14 => 14, 15 => 15, 16 => 16);
-        $roleCust->syncPermissions($permissionsCust);
+        $roleCust = Role::create(['name' => 'User']);
+        $roleCust->syncPermissions();
         $userCust->assignRole([$roleCust->id]);
     }
 }

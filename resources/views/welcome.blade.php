@@ -4,8 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Canban - Ekipa SMRPO 3</title>
-
+        <title>{{ config('app.name') }}</title>
         
         <!-- Styles -->
         <link href="css/app.css" rel="stylesheet">

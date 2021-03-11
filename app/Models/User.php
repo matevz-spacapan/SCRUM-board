@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'last_login',
     ];
 
     /**
@@ -43,6 +45,15 @@ class User extends Authenticatable
     ];
 
     public function projects() {
-        return $this->belongsToMany('App\Project')->withTimestamps();
+        return $this->belongsToMany(Project::class)->withTimestamps();
+    }
+
+    /**
+     * Returns true if the logged in user's account has ID equal to 1 (ADMIN account).
+     *
+     * @return bool
+     */
+    public function isAdmin(){
+        return Auth::user()->id === 1;
     }
 }
