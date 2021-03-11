@@ -37,7 +37,8 @@ class StoryPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
+     * @param Project $project
      * @return mixed
      */
     public function create(User $user, Project $project)
