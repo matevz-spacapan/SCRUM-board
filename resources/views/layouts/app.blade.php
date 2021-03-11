@@ -37,7 +37,7 @@
 
                         <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
 
-                        @can('role-list')
+                        @can('users-list')
                         <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
                         @endcan
                     </ul>
