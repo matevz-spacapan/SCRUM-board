@@ -3,11 +3,11 @@
 namespace App\Policies;
 
 use App\Models\Project;
+use App\Models\Story;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\DB;
 
-class ProjectPolicy
+class StoryPolicy
 {
     use HandlesAuthorization;
 
@@ -26,22 +26,40 @@ class ProjectPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function view(User $user, Project $project)
+    public function view(User $user, Story $story)
     {
         //
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function create(User $user, Project $project)
+    {
+        //dd($user->projects);
+        foreach($user->projects as $projects)
+        {
+            if ($projects->id == $project->id && ($projects->product_owner == $user->id || $projects->project_master == $user->id)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function update(User $user, Project $project)
+    public function update(User $user, Story $story)
     {
         //
     }
@@ -50,10 +68,10 @@ class ProjectPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function delete(User $user, Project $project)
+    public function delete(User $user, Story $story)
     {
         //
     }
@@ -62,10 +80,10 @@ class ProjectPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function restore(User $user, Project $project)
+    public function restore(User $user, Story $story)
     {
         //
     }
@@ -74,10 +92,10 @@ class ProjectPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function forceDelete(User $user, Project $project)
+    public function forceDelete(User $user, Story $story)
     {
         //
     }
