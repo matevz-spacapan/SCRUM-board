@@ -17,7 +17,9 @@ class CreateUsersSeeder extends Seeder
     public function run()
     {
         $userAdmin = User::create([
-            'name' => 'Administrator',
+            'username' => 'Administrator',
+            'name' => 'Admin',
+            'surname' => 'Istrator',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin')
         ]);
@@ -27,21 +29,23 @@ class CreateUsersSeeder extends Seeder
         $userAdmin->assignRole([$roleAdmin->id]);
         
         $userDev = User::create([
-            'name' => 'Developer',
+            'username' => 'Developer',
+            'name' => 'Devel',
+            'surname' => 'Oper',
             'email' => 'devel@devel.com',
             'password' => bcrypt('devel')
         ]);
-        $roleDev = Role::create(['name' => 'User']);
-        $roleDev->syncPermissions();
-        $userDev->assignRole([$roleDev->id]);
+        $roleUser = Role::create(['name' => 'User']);
+        $roleUser->syncPermissions();
+        $userDev->assignRole([$roleUser->id]);
         
         $userCust = User::create([
-            'name' => 'Customer',
+            'username' => 'Customer',
+            'name' => 'Cust',
+            'surname' => 'Omer',
             'email' => 'cust@cust.com',
             'password' => bcrypt('cust')
         ]);
-        $roleCust = Role::create(['name' => 'User']);
-        $roleCust->syncPermissions();
-        $userCust->assignRole([$roleCust->id]);
+        $userCust->assignRole([$roleUser->id]);
     }
 }

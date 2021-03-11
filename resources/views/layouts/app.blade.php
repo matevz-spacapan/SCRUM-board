@@ -33,15 +33,19 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+                    
                     <ul class="navbar-nav mr-auto">
-
-                        <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
-
-                        @can('users-list')
-                        <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
-                        @endcan
+                        @auth
+                        
+                            <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
+                            
+                            
+                            @can('users-list') {{--<!--IS ADMIN-->--}}
+                                <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
+                            @endcan
+                        @endauth
                     </ul>
-
+                    
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -61,7 +65,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->username }}
                                     
                                 </a>
                                 
@@ -76,7 +80,7 @@
                                         @csrf
                                     </form>
                                     
-                                    <div class="dropdown-item disabled"> {{ __('Last login: ') }} {{ \Carbon\Carbon::parse(Auth::user()->last_login)->format('h:i:s d. m. Y')}}  </div>
+                                    <div class="dropdown-item disabled"> {{Auth::user()->getLastLogin()}}  </div>
                                 </div>
                             </li>
                         @endguest
