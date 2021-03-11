@@ -1,12 +1,12 @@
 <?php
-  
+
 namespace Database\Seeders;
-  
+
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-  
+
 class CreateUsersSeeder extends Seeder
 {
     /**
@@ -27,7 +27,7 @@ class CreateUsersSeeder extends Seeder
         $permissionsAdmin = Permission::pluck('id','id')->all();
         $roleAdmin->syncPermissions($permissionsAdmin);
         $userAdmin->assignRole([$roleAdmin->id]);
-        
+
         $userDev = User::create([
             'username' => 'Developer',
             'name' => 'Devel',
@@ -35,10 +35,10 @@ class CreateUsersSeeder extends Seeder
             'email' => 'devel@devel.com',
             'password' => bcrypt('devel')
         ]);
-        $roleUser = Role::create(['name' => 'User']);
-        $roleUser->syncPermissions();
-        $userDev->assignRole([$roleUser->id]);
-        
+        $roleDev = Role::create(['name' => 'User']);
+        $roleDev->syncPermissions();
+        $userDev->assignRole([$roleDev->id]);
+
         $userCust = User::create([
             'username' => 'Customer',
             'name' => 'Cust',
@@ -46,6 +46,6 @@ class CreateUsersSeeder extends Seeder
             'email' => 'cust@cust.com',
             'password' => bcrypt('cust')
         ]);
-        $userCust->assignRole([$roleUser->id]);
+        $userCust->assignRole([$roleDev->id]);
     }
 }
