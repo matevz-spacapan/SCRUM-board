@@ -10,7 +10,7 @@
                     <div class="card-header">{{ __('Add sprint') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('sprint.store') }}">
+                        <form method="POST" action="{{ route('sprint.store', $id) }}">
                             @csrf
 
                             <div class="form-group row">
