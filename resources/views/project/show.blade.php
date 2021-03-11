@@ -6,6 +6,28 @@
 <div class="container">
     <h1>{{$project->project_name}}</h1>
 
+    @can("create", [\App\Models\Sprint::class, $project])
+        <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-success mb-3">Add new sprint</a>
+    @endcan
+    <div class="row row-cols-3">
+        @foreach($sprints as $sprint)
+            <div class="col my-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="card-text mb-2">
+                            <b>Speed: {!! nl2br($sprint->speed) !!}</b><br>
+                            <b>Start time: {!! nl2br($sprint->start_date) !!} </b><br>
+                            <b>End time: {!! nl2br($sprint->end_date) !!}</b>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="btn btn-primary">{{__('Edit sprint')}}</a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
     @can("create", [\App\Models\Story::class, $project])
         <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">Add new</a>
     @endcan
