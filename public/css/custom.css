@@ -10,3 +10,8 @@
 .priority-4{
     background-color: #FCD9DD;
 }
+.estimate{
+    width: 40px !important;
+    display: inline-block !important;
+    padding: 0 !important;
+}

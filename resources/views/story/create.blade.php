@@ -72,7 +72,7 @@
                             <label for="business_value" class="col-md-4 col-form-label text-md-right">{{ __('Business value') }}</label>
 
                             <div class="col-md-6">
-                                <input id="business_value" type="number" class="form-control @error('business_value') is-invalid @enderror" name="business_value" value="{{ old('business_value') }}" min="0" required>
+                                <input id="business_value" type="number" class="form-control @error('business_value') is-invalid @enderror" name="business_value" value="{{ old('business_value') }}" min="1" max="10" required>
 
                                 @error('business_value')
                                 <span class="invalid-feedback" role="alert">

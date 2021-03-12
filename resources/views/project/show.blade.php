@@ -35,52 +35,87 @@
     @can("create", [\App\Models\Story::class, $project])
         <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">Add new story</a>
     @endcan
-    <div class="row row-cols-3">
-        @foreach($stories as $story)
-            <div class="col my-3">
-                <div class="card h-100">
-                    @switch($story->priority)
-                        @case(1)
-                        @php
-                            $text = __('1 - Must have');
-                            $color='priority-1 text-light';
-                        @endphp
-                        @break
-                        @case(2)
-                        @php
-                            $text = __('2 - Should have');
-                            $color='priority-2 text-light';
-                        @endphp
-                        @break
-                        @case(3)
-                        @php
-                            $text = __('3 - Could have');
-                            $color='priority-3';
-                        @endphp
-                        @break
-                        @default
-                        @php
-                            $text = __('4 - Won\'t have this time');
-                            $color='priority-4';
-                        @endphp
-                    @endswitch
-                    <div class="card-header {{ $color }}">
-                        <b>{{ $story->title }}</b> ({{ $text }})
+    @foreach($stories as $story)
+        @switch($story->priority)
+            @case(1)
+            @php
+                $text = __('Must have');
+                $color='priority-1 text-light';
+            @endphp
+            @break
+            @case(2)
+            @php
+                $text = __('Should have');
+                $color='priority-2 text-light';
+            @endphp
+            @break
+            @default
+            @php
+                $text = __('Could have');
+                $color='priority-3';
+            @endphp
+        @endswitch
+        @if($list = explode("\n", $story->tests)) @endif
+        <div class="card mb-3">
+            <div class="card-header {{ $color }}">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3>#{{ $story->id }} - {{ $story->title }}</h3>
+                        <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
                     </div>
-                    <div class="card-body">
-                        <div class="card-text mb-2">
-                            <p><b>{{ __('Description') }}:</b> <br> {!! nl2br($story->description) !!}</p>
-                            <b>{{ __('Acceptance tests') }}:</b><br> {!! nl2br($story->tests) !!}<br><br>
-                            <p><b>{{ __('Business value') }}:</b> {{ $story->business_value }}</p>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="#" class="btn btn-primary">{{__('Edit story')}}</a>
+                    <div>
+                        <div>Sprint estimate <input type="text" class="form-control text-center estimate" disabled> pts</div>
+<!--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>-->
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+            <div class="card-body">
+                <div>{!! nl2br($story->description) !!}</div>
+                <div class="text-primary">
+                    <ul style="padding-left: 0; list-style: inside;">
+                        @foreach($list as $num => $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
+            </div>
+        </div>
+    @endforeach
+
+    @foreach($stories_wont_have as $story)
+        @if($list = explode("\n", $story->tests)) @endif
+        <div class="card mb-3">
+            <div class="card-header">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3>#{{ $story->id }} - {{ $story->title }}</h3>
+                        <div>Priority: <b><i>{{ __('Won\'t have this time') }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
+                    </div>
+                    <div>
+                        <div>Sprint estimate <input type="text" class="form-control text-center estimate" disabled> pts</div>
+                        <!-- <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>{!! nl2br($story->description) !!}</div>
+                <div class="text-primary">
+                    <ul style="padding-left: 0; list-style: inside;">
+                        @foreach($list as $num => $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
+            </div>
+        </div>
+    @endforeach
+
     @if(count($stories) === 0)
         <p>This project has no stories.</p>
     @endif
