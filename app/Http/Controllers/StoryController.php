@@ -82,7 +82,12 @@ class StoryController extends Controller
      */
     public function edit(Project $project, Story $story)
     {
-        //
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        return view('story.edit', ['id' => $story->id]);
+
+
     }
 
     /**

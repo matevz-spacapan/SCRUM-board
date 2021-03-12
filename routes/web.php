@@ -33,6 +33,7 @@ Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')-
 
 Route::post('/project/{project}/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
 Route::get('/project/{project}/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
+Route::get('/project/{project}/story/{story}/edit', 'App\Http\Controllers\StoryController@edit')->name('story.edit');
 
 Route::post('/project/{project}/sprint', 'App\Http\Controllers\SprintController@store')->name('sprint.store');
 Route::get('/project/{project}/sprint/create', 'App\Http\Controllers\SprintController@create')->name('sprint.create');
