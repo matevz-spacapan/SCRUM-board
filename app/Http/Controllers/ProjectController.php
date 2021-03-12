@@ -50,7 +50,9 @@ class ProjectController extends Controller
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
         $stories = DB::select("SELECT * from stories WHERE project_id={$project->id}"); //ORDER BY priority ASC
-        $sprints = DB::select("SELECT * from sprints WHERE project_id={$project->id}");
+        $sprints = DB::select("SELECT * from sprints
+                WHERE project_id={$project->id}
+                and sprints.end_date >= CURDATE()");
         return view('project.show', ['stories' => $stories, 'project' => $project, 'sprints' => $sprints]);
     }
 
