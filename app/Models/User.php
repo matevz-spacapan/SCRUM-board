@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     public function getLastLogin(){
         if($this->last_login != NULL){
-            return 'Previous login: '.\Carbon\Carbon::parse($this->last_login)->setTimezone('Europe/Ljubljana')->format('H:i:s d. m. Y');
+            return 'Previous login: '.\Carbon\Carbon::parse($this->last_login)->format('H:i:s d. m. Y');
         }
         return 'First login';
 
