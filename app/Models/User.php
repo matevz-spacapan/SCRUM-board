@@ -45,7 +45,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     public function projects() {
         return $this->belongsToMany(Project::class)->withTimestamps();
     }
@@ -56,20 +56,25 @@ class User extends Authenticatable
      * @return bool
      */
     public function isAdmin(){
+<<<<<<< HEAD
         $roles = Auth::user()->getRoleNames();
         
         #return $roles[0]==="Administrator";
         #return Auth::user()->id === 1;
         
         return in_array("Administrator", $roles);
+=======
+        $role = Auth::user()->getRoleNames();
+        return $role[0]==="Administrator";
+>>>>>>> fbcdc85bd74f4293a19ea57cfbf177bcea41722a
     }
-    
+
     public function getLastLogin(){
         if($this->last_login != NULL){
             return 'Last login: '.\Carbon\Carbon::parse($this->last_login)->format('H:i:s d. m. Y');
         }
         return 'First login';
-        
+
     }
-    
+
 }
