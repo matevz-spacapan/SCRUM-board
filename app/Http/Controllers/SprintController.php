@@ -55,7 +55,7 @@ class SprintController extends Controller
             'project_id' => ['required', 'numeric', 'min:0'],
             'speed' => 'required|numeric|min:1',
             'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => ['required','date','after_or_equal:start_date', function ($attribute, $value, $fail) use ($end_date, $start_date) {
+            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($end_date, $start_date) {
                 $overlaps = Sprint::query()->whereBetween('start_date', [$start_date, $end_date])
                     ->orWhereBetween('end_date', [$start_date, $end_date])
                     ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
