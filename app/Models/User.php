@@ -56,12 +56,17 @@ class User extends Authenticatable
      * @return bool
      */
     public function isAdmin(){
-        return Auth::user()->id === 1;
+        $roles = Auth::user()->getRoleNames();
+        
+        #return $roles[0]==="Administrator";
+        #return Auth::user()->id === 1;
+        
+        return in_array("Administrator", $roles);
     }
     
     public function getLastLogin(){
         if($this->last_login != NULL){
-            return 'Previous login: '.\Carbon\Carbon::parse($this->last_login)->setTimezone('Europe/Ljubljana')->format('H:i:s d. m. Y');
+            return 'Last login: '.\Carbon\Carbon::parse($this->last_login)->format('H:i:s d. m. Y');
         }
         return 'First login';
         
