@@ -53,7 +53,7 @@ class StoryController extends Controller
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
-            'business_value' => ['required', 'numeric', 'min:0']
+            'business_value' => ['required', 'numeric', 'between:1,10']
         ]);
 
         Story::create($data);
