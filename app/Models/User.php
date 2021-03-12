@@ -56,7 +56,8 @@ class User extends Authenticatable
      * @return bool
      */
     public function isAdmin(){
-        return Auth::user()->id === 1;
+        $role = Auth::user()->getRoleNames();
+        return $role[0]==="Administrator";
     }
 
     public function getLastLogin(){
