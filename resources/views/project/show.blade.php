@@ -6,6 +6,8 @@
 <div class="container">
     <h1>{{$project->project_name}}</h1>
 
+    <h4 class="mt-2">{{ __('Project sprints') }}</h4>
+
     @can("create", [\App\Models\Sprint::class, $project])
         <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-success mb-3">Add new sprint</a>
     @endcan
@@ -28,8 +30,10 @@
         @endforeach
     </div>
 
+
+    <h4 class="mt-5">{{ __('Project stories') }}</h4>
     @can("create", [\App\Models\Story::class, $project])
-        <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">Add new</a>
+        <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">Add new story</a>
     @endcan
     <div class="row row-cols-3">
         @foreach($stories as $story)
@@ -65,8 +69,9 @@
                     </div>
                     <div class="card-body">
                         <div class="card-text mb-2">
-                            <p><b>Description:</b> <br> {!! nl2br($story->description) !!}</p>
-                            <b>Acceptance tests:</b><br> {!! nl2br($story->tests) !!}
+                            <p><b>{{ __('Description') }}:</b> <br> {!! nl2br($story->description) !!}</p>
+                            <b>{{ __('Acceptance tests') }}:</b><br> {!! nl2br($story->tests) !!}<br><br>
+                            <p><b>{{ __('Business value') }}:</b> {{ $story->business_value }}</p>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -76,5 +81,8 @@
             </div>
         @endforeach
     </div>
+    @if(count($stories) === 0)
+        <p>This project has no stories.</p>
+    @endif
 </div>
 @endsection
