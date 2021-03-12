@@ -38,7 +38,7 @@ Route::post('/project/{project}/sprint', 'App\Http\Controllers\SprintController@
 Route::get('/project/{project}/sprint/create', 'App\Http\Controllers\SprintController@create')->name('sprint.create');
 
 
+
 Route::group(['middleware' => ['auth']], function() {
-    Route::resource('roles', 'App\Http\Controllers\RoleController');
-    Route::resource('users', 'App\Http\Controllers\UserController');
+    Route::resource('/admin/users', 'App\Http\Controllers\UserController');
 });

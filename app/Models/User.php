@@ -19,7 +19,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'username',
         'name',
+        'surname',
         'email',
         'password',
         'last_login',
@@ -54,6 +56,16 @@ class User extends Authenticatable
      * @return bool
      */
     public function isAdmin(){
-        return Auth::user()->id === 1;
+        $role = Auth::user()->getRoleNames();
+        return $role[0]==="Administrator";
     }
+
+    public function getLastLogin(){
+        if($this->last_login != NULL){
+            return 'Previous login: '.\Carbon\Carbon::parse($this->last_login)->format('H:i:s d. m. Y');
+        }
+        return 'First login';
+
+    }
+
 }
