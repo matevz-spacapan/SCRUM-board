@@ -101,14 +101,15 @@ class StoryController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'project_id' => ['required', 'numeric', 'min:0'],
+            #'project_id' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
             'business_value' => ['required', 'numeric', 'between:1,10']
         ]);
 
-        $story->save($data);
+        $story->update($data);
+
         return redirect()->route('project.show', $project->id);
     }
 
