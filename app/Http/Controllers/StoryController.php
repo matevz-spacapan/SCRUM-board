@@ -53,7 +53,8 @@ class StoryController extends Controller
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
-            'business_value' => ['required', 'numeric', 'between:1,10']
+            'business_value' => ['required', 'numeric', 'between:1,10'],
+            'hash' => ['numeric', 'unique:stories']
         ]);
 
         Story::create($data);
@@ -110,6 +111,23 @@ class StoryController extends Controller
 
         $story->update($data);
 
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
+     * Update the time estimate in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function update_time(Request $request, Project $project, Story $story)
+    {
+        $data = $request->validate([
+            'time_estimate' => ['required', 'numeric', 'min:1']
+        ]);
+        $story->update($data);
         return redirect()->route('project.show', $project->id);
     }
 

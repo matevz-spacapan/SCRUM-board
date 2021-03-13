@@ -21,10 +21,11 @@ class CreateStoriesTable extends Migration
             $table->text('tests');
             $table->integer('priority');
             $table->integer('business_value');
+            $table->integer('hash')->unique()->nullable();
+            $table->integer('time_estimate')->nullable();
             $table->timestamps();
 
-            // TODO uncomment when projects are set up
-            //$table->index('project_id');
+            $table->index('project_id');
         });
     }
 
