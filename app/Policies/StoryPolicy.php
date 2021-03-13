@@ -70,7 +70,7 @@ class StoryPolicy
      */
     public function update(User $user, Story $story)
     {
-        return true;
+        //
     }
 
     /**
@@ -82,7 +82,7 @@ class StoryPolicy
      */
     public function delete(User $user, Story $story)
     {
-        return true;
+        //
     }
 
     /**
