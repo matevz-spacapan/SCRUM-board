@@ -49,10 +49,9 @@ class ProjectController extends Controller
     {
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
-        $stories = DB::select("SELECT * from stories WHERE project_id={$project->id} AND priority != 4");
-        $stories_wont_have = DB::select("SELECT * from stories WHERE project_id={$project->id} AND priority = 4");
+        $stories = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4)");
         $sprints = DB::select("SELECT * from sprints WHERE project_id={$project->id} ORDER BY start_date ASC");
-        return view('project.show', ['stories' => $stories, 'stories_wont_have' => $stories_wont_have, 'project' => $project, 'sprints' => $sprints]);
+        return view('project.show', ['stories' => $stories, 'project' => $project, 'sprints' => $sprints]);
     }
 
     /**
