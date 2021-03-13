@@ -21,7 +21,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">#</span>
                                     </div>
-                                    <input id="hash" type="text" class="form-control @error('hash') is-invalid @enderror col-2" name="hash" value="{{ old('hash') }}" style="margin-left:-2px" min="1">
+                                    <input id="hash" type="text" class="form-control @error('hash') is-invalid @enderror col-2" name="hash" value="{{ old('hash') }}" style="margin-left:-2px">
                                     <input id="title" type="text" class="form-control @error('title') is-invalid @enderror col" name="title" value="{{ old('title') }}" style="margin-left:-2px" required autofocus>
                                 </div>
 

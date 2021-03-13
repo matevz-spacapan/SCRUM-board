@@ -22,6 +22,7 @@ class CreateStoriesTable extends Migration
             $table->integer('priority');
             $table->integer('business_value');
             $table->integer('hash')->unique()->nullable();
+            $table->integer('time_estimate')->nullable();
             $table->timestamps();
 
             $table->index('project_id');

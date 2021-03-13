@@ -19,6 +19,7 @@ class Story extends Model
         'business_value',
         'project_id',
         'hash',
+        'time_estimate',
     ];
 
     public function project()

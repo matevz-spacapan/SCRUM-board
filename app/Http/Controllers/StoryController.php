@@ -100,6 +100,23 @@ class StoryController extends Controller
     }
 
     /**
+     * Update the time estimate in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function update_time(Request $request, Project $project, Story $story)
+    {
+        $data = $request->validate([
+            'time_estimate' => ['required', 'numeric', 'min:1']
+        ]);
+        $story->update($data);
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Project  $project

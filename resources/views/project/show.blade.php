@@ -73,8 +73,15 @@
                         @endif
                         <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
                     </div>
-                    <div>
-                        <div>Sprint estimate <input type="text" class="form-control text-center estimate" disabled> pts</div>
+                    <div class="text-right">
+                        <div class="mb-1">
+                            <form method="POST" action="{{ route('story.update_time', [$project->id, $story->id]) }}">
+                                @csrf
+                                Time estimate <input type="text" class="form-control text-center estimate" name="time_estimate" value="{{ old("time_estimate{$story->id}", $story->time_estimate) }}"> pts
+                                <button type="submit" class="btn btn-outline-success">Update</button>
+                            </form>
+                        </div>
+                        <div></div>
                         <!--<div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>-->
                     </div>
                 </div>
