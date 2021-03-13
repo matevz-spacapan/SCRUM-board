@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="{{ route('story.edit') }}" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
+                <a href="{{ route('story.edit' , [$project->id, $story->id])  }}" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
             </div>
         </div>
     @endforeach
@@ -111,7 +111,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <a href="{{ route('story.edit') }}" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
+                <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
             </div>
         </div>
     @endforeach

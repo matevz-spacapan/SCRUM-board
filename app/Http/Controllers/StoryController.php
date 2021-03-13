@@ -85,8 +85,7 @@ class StoryController extends Controller
         Project::findOrFail($project->id);
         Story::findOrFail($story->id);
 
-        return view('story.edit', ['id' => $story->id]);
-
+        return view('story.edit', ['story' => $story, 'project' => $project]);
 
     }
 
@@ -100,7 +99,17 @@ class StoryController extends Controller
      */
     public function update(Request $request, Project $project, Story $story)
     {
-        //
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'project_id' => ['required', 'numeric', 'min:0'],
+            'description' => ['required', 'string'],
+            'tests' => ['required', 'string'],
+            'priority' => 'required',
+            'business_value' => ['required', 'numeric', 'between:1,10']
+        ]);
+
+        $story->save($data);
+        return redirect()->route('project.show', $project->id);
     }
 
     /**
