@@ -29,7 +29,9 @@
             </div>
         @endforeach
     </div>
-
+    @if(count($sprints) === 0)
+        <p>This project has no sprints.</p>
+    @endif
 
     <h4 class="mt-5">{{ __('Project stories') }}</h4>
     @can("create", [\App\Models\Story::class, $project])
