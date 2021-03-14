@@ -100,13 +100,15 @@ class StoryController extends Controller
      */
     public function update(Request $request, Project $project, Story $story)
     {
+        $this->authorize('update', [Story::class, $project]);
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             #'project_id' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
-            'business_value' => ['required', 'numeric', 'between:1,10']
+            'business_value' => ['required', 'numeric', 'between:1,10'],
+            'hash' => ['numeric', 'unique:stories']
         ]);
 
         $story->update($data);
@@ -140,6 +142,9 @@ class StoryController extends Controller
      */
     public function destroy(Project $project, Story $story)
     {
-        //
+        $this->authorize('delete', [Story::class, $project]);
+
+        $story->delete();
+        return redirect()->route('project.show', $project->id);
     }
 }

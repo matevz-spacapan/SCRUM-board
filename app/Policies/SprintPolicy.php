@@ -53,9 +53,10 @@ class SprintPolicy
      * @param  \App\Models\Sprint  $sprint
      * @return mixed
      */
-    public function update(User $user, Sprint $sprint)
+    public function update(User $user, Project $project)
     {
-        //
+        //TODO check if he can create
+        return true;
     }
 
     /**
@@ -65,10 +66,18 @@ class SprintPolicy
      * @param  \App\Models\Sprint  $sprint
      * @return mixed
      */
-    public function delete(User $user, Sprint $sprint)
+    public function delete(User $user, Project $project)
     {
-        //
+        //TODO check if he can create
+        return true;
     }
+
+    public function addTasks(User $user, Project $project)
+    {
+        //TODO check if he can create
+        return true;
+    }
+
 
     /**
      * Determine whether the user can restore the model.

@@ -68,9 +68,9 @@ class StoryPolicy
      * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function update(User $user, Story $story)
+    public function update(User $user, Project $project)
     {
-        //
+        return true;
     }
 
     /**
@@ -80,9 +80,10 @@ class StoryPolicy
      * @param  \App\Models\Story  $story
      * @return mixed
      */
-    public function delete(User $user, Story $story)
+    public function delete(User $user, Project $project)
     {
-        //
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
+            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**

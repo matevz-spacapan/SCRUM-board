@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Edit story') }}</div>
+                    <div class="card-header">{{ __('Edit story #') }}{{$story->id}}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('story.update', [$project->id, $story->id]) }}">
@@ -18,9 +18,19 @@
                                 <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="title" type="text"
-                                           class="form-control @error('title') is-invalid @enderror"
-                                           name="title" value="{{ old('title') ?? $story->title }}" required autofocus>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">#</span>
+                                        </div>
+                                        <input id="hash" type="text" class="form-control @error('hash') is-invalid @enderror col-2" name="hash" value="{{ old('hash') ?? $story->hash }}" style="margin-left:-2px">
+                                        <input id="title" type="text" class="form-control @error('title') is-invalid @enderror col" name="title" value="{{ old('title') ?? $story->title }}" style="margin-left:-2px" required autofocus>
+                                    </div>
+
+                                    @error('hash')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
 
                                     @error('title')
                                     <span class="invalid-feedback" role="alert">
