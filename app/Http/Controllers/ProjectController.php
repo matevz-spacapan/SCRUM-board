@@ -58,8 +58,6 @@ class ProjectController extends Controller
             $stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4)");
             $stories_sprint = [];
         }
-        /*$stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4 AND sprint_id IS NULL) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4 AND sprint_id IS NULL)");
-        $stories_sprint = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND sprint_id IS NOT NULL)");*/
         $sprints = DB::select("SELECT * from sprints WHERE project_id={$project->id} ORDER BY start_date ASC");
         return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
     }
