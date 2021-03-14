@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -51,9 +49,19 @@ class ProjectController extends Controller
     {
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
-        $stories = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4)");
+        $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
+        if (count($active_sprint) > 0){
+            $stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4 AND (sprint_id IS NULL OR sprint_id != {$active_sprint[0]->id})) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4 AND (sprint_id IS NULL OR sprint_id != {$active_sprint[0]->id}))");
+            $stories_sprint = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND sprint_id = {$active_sprint[0]->id})");
+        }
+        else{
+            $stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4)");
+            $stories_sprint = [];
+        }
+        /*$stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4 AND sprint_id IS NULL) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4 AND sprint_id IS NULL)");
+        $stories_sprint = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND sprint_id IS NOT NULL)");*/
         $sprints = DB::select("SELECT * from sprints WHERE project_id={$project->id} ORDER BY start_date ASC");
-        return view('project.show', ['stories' => $stories, 'project' => $project, 'sprints' => $sprints]);
+        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
     }
 
     /**
@@ -77,35 +85,6 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function update_stories(Request $request, Project $project)
-    {
-        // update time estimates for stories
-        if($request->has('time')){
-            $validator = Validator::make($request->all(), [
-                'time_estimate.*' => ['nullable', 'numeric', 'between:1,10'],
-            ])->validate();
-            foreach ($validator['time_estimate'] as $id => $value){
-                $story = Story::find($id);
-                if (is_null($story->time_estimate) || isset($value)) {
-                    $story->time_estimate = $value;
-                    $story->save();
-                }
-            }
-        }
-        // add selected stories to active sprint
-        else{
-
-        }
-        return redirect()->route('project.show', $project->id);
     }
 
     /**

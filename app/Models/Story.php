@@ -20,6 +20,7 @@ class Story extends Model
         'project_id',
         'hash',
         'time_estimate',
+        'to_sprint',
     ];
 
     public function project()
