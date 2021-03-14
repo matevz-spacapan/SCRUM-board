@@ -38,6 +38,9 @@
             </div>
         @endforeach
     </div>
+    @if(count($sprints) === 0)
+        <p>This project has no active sprints.</p>
+    @endif
     @include('story.loop', ['stories_list' => $stories_sprint])
 
     <h4 class="mt-5">{{ __('Project stories') }}</h4>
