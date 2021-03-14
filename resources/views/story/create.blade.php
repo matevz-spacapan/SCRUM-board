@@ -7,10 +7,13 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Add story') }}</div>
+                <div class="card-header d-flex justify-content-between align-items-baseline">
+                    <div>{{ __('Add story') }}</div>
+                    <div><a class="btn btn-link" href="{{ route('project.show', $project->id) }}">{{ __('Go back') }}</a></div>
+                </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('story.store', $id) }}">
+                    <form method="POST" action="{{ route('story.store', $project->id) }}">
                         @csrf
 
                         <div class="form-group row">

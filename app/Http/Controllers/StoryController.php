@@ -30,7 +30,7 @@ class StoryController extends Controller
     {
         Project::findOrFail($project->id);
         $this->authorize('create', [Story::class, $project]);
-        return view('story.create', ['id' => $project->id]);
+        return view('story.create', ['project' => $project]);
     }
 
     /**
