@@ -23,6 +23,7 @@ class CreateStoriesTable extends Migration
             $table->integer('business_value');
             $table->integer('hash')->unique()->nullable();
             $table->integer('time_estimate')->nullable();
+            $table->foreignId('sprint_id')->nullable()->constrained();
             $table->timestamps();
 
             $table->index('project_id');

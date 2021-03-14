@@ -21,7 +21,8 @@ class StorySeeder extends Seeder
             'tests' => "Preveri regularen potek.\nPreveri podvajanje imena uporabniške zgodbe.\nPreveri ustrezno določitev prioritete uporabniške zgodbe.\nPreveri za neregularen vnos poslovne vrednosti.",
             'priority' => random_int(1, 4),
             'business_value' => random_int(1, 10),
-            'hash' => 1
+            'hash' => 1,
+            'sprint_id' => 1
         ]);
         Story::create([
             'title' => 'Pregledovanje in spreminjanje časovnega poteka dela',
@@ -30,7 +31,8 @@ class StorySeeder extends Seeder
             'tests' => "Preveri regularen potek.\nPreveri veljavnost vnesenega časa.\nPreveri za zgodbo, ki je razvijalec ni sprejel.\nPreveri za že zaključene zgodbe.",
             'priority' => random_int(1, 4),
             'business_value' => random_int(1, 10),
-            'hash' => 2
+            'hash' => 2,
+            'sprint_id' => 1
         ]);
         Story::create([
             'title' => 'Ustvarjanje novega Sprinta',

@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             CreateUsersSeeder::class,
             ProjectSeeder::class,
-            StorySeeder::class,
             SprintSeeder::class,
+            StorySeeder::class,
         ]);
     }
 }
