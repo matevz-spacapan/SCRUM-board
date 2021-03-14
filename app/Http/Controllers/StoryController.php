@@ -86,6 +86,8 @@ class StoryController extends Controller
         Project::findOrFail($project->id);
         Story::findOrFail($story->id);
 
+        $this->authorize('update', [Story::class, $project]);
+
         return view('story.edit', ['story' => $story, 'project' => $project]);
 
     }

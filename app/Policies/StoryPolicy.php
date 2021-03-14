@@ -70,7 +70,8 @@ class StoryPolicy
      */
     public function update(User $user, Project $project)
     {
-        return true;
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
+            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
