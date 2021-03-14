@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -75,6 +77,35 @@ class ProjectController extends Controller
     public function update(Request $request, Project $project)
     {
         //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function update_stories(Request $request, Project $project)
+    {
+        // update time estimates for stories
+        if($request->has('time')){
+            $validator = Validator::make($request->all(), [
+                'time_estimate.*' => ['nullable', 'numeric', 'between:1,10'],
+            ])->validate();
+            foreach ($validator['time_estimate'] as $id => $value){
+                $story = Story::find($id);
+                if (is_null($story->time_estimate) || isset($value)) {
+                    $story->time_estimate = $value;
+                    $story->save();
+                }
+            }
+        }
+        // add selected stories to active sprint
+        else{
+
+        }
+        return redirect()->route('project.show', $project->id);
     }
 
     /**
