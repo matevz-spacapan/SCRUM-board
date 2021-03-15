@@ -18,7 +18,7 @@
 
                                 <div class="col-md-6">
                                     <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
-                                           name="speed" value="{{ old('speed') }}" required autofocus min="1">
+                                           name="speed" value="{{ Session::get('speed') | old('speed') }}" required autofocus min="1">
 
                                     @error('speed')
                                     <span class="invalid-feedback" role="alert">
