@@ -32,7 +32,7 @@
                     @if(count($active_sprint) > 0 && (is_null($story->sprint_id) || $story->sprint_id != $active_sprint[0]->id))
                         @can('update_sprints', [\App\Models\Story::class, $project])
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" {{ $story->time_estimate ? "name=to_sprint[] value={$story->id}" : 'disabled' }}>
+                                <input class="form-check-input" type="checkbox" {{ $story->time_estimate ? "name=to_sprint[] value={$story->id}" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
                             </div>
                         @endcan
                     @endif
@@ -48,7 +48,7 @@
                         Time estimate
                         @if(!(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id))
                             @can('update_time', [\App\Models\Story::class, $project])
-                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10"> pts
+                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
                             @else
                                 {{ $story->time_estimate ? "{$story->time_estimate} pts" : 'not set' }}
                             @endcan
