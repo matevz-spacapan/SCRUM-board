@@ -14,7 +14,7 @@
             ({{ __('Developer') }})
         @endif
     </h1>
-
+    <span @popper(Horray!)>Hover over me! <i class="far fa-question-circle"></i></span>
     <h4 class="mt-2">{{ __('Project sprints') }}</h4>
 
     @can("create", [\App\Models\Sprint::class, $project])
