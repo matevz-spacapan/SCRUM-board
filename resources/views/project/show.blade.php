@@ -53,6 +53,8 @@
 
         @if(count($stories_project) === 0 && count($stories_sprint) === 0)
             <p>{{ __('This project has no stories.') }}</p>
+        @elseif(count($stories_project) === 0 && count($stories_sprint) > 0)
+            <p>{{ __('This project has no other stories.') }}</p>
         @else
             <div>
                 @can('update_time', [\App\Models\Story::class, $project])

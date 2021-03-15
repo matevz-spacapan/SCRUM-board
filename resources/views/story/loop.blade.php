@@ -29,10 +29,10 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <div>
-                    @if(is_null($story->sprint_id))
+                    @if(count($active_sprint) > 0 && (is_null($story->sprint_id) || $story->sprint_id != $active_sprint[0]->id))
                         @can('update_sprints', [\App\Models\Story::class, $project])
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" {{ ($story->time_estimate && count($active_sprint) > 0) ? "name=to_sprint[] value={$story->id}" : 'disabled' }}>
+                                <input class="form-check-input" type="checkbox" {{ $story->time_estimate ? "name=to_sprint[] value={$story->id}" : 'disabled' }}>
                             </div>
                         @endcan
                     @endif
@@ -46,7 +46,7 @@
                 <div class="text-right">
                     <div>
                         Time estimate
-                        @if(is_null($story->sprint_id))
+                        @if(!(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id))
                             @can('update_time', [\App\Models\Story::class, $project])
                                 <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10"> pts
                             @else
