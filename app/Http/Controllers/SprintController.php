@@ -116,8 +116,9 @@ class SprintController extends Controller
         $this->authorize('update', [Sprint::class, $sprint]);
         $request->request->add(['project_id' => $project->id]);
 
-        if ($sprint->start_date->lq(Carbon::now()) && $sprint->end_date->gt(Carbon::now())) {
+        if (Carbon::create($sprint->start_date) <= Carbon::now() && Carbon::parse($sprint->end_date) >= Carbon::now()) {
             // sprint is in progress
+            echo 'a';
             return redirect()->back()->withErrors(['in_progress' => 'Sprint is in progress'])->withInput();
         }
 

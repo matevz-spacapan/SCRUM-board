@@ -44,7 +44,7 @@
                                 <label for="start_date" class="col-md-4 col-form-label text-md-right">{{ __('Start date') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="start_date" type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date"
+                                    <input id="start_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror" name="start_date"
                                            value="{{ $sprint->start_date ?? old('start_date') }}" required autofocus>
 
                                     @error('start_date')
@@ -59,7 +59,7 @@
                                 <label for="end_date" class="col-md-4 col-form-label text-md-right">{{ __('End date') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="end_date" type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date"
+                                    <input id="end_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror" name="end_date"
                                            value="{{ $sprint->end_date ??old('end_date') }}" required autofocus>
 
                                     @error('end_date')
