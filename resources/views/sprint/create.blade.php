@@ -1,16 +1,28 @@
 @extends('layouts.app')
 
-@section('title', __(' - New Sprint'))
+@if(isset($sprint))
+    @section('title', __(' - Update Sprint'))
+@else
+    @section('title', __(' - New Sprint'))
+@endif
 
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Add sprint') }}</div>
+                    @if(isset($sprint))
+                        <div class="card-header">{{ __('Update sprint') }}</div>
+                    @else
+                        <div class="card-header">{{ __('Add sprint') }}</div>
+                    @endif
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('sprint.store', $id) }}">
+                        @if(isset($sprint))
+                            <form method="POST" action="{{ route('sprint.update', [$id, $sprint->id]) }}">
+                        @else
+                            <form method="POST" action="{{ route('sprint.store', $id) }}">
+                        @endif
                             @csrf
 
                             <div class="form-group row">
@@ -18,7 +30,7 @@
 
                                 <div class="col-md-6">
                                     <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
-                                           name="speed" value="{{ Session::get('speed') | old('speed') }}" required autofocus min="1">
+                                           name="speed" value="{{ $sprint->speed ?? old('speed') }}" required autofocus min="1">
 
                                     @error('speed')
                                     <span class="invalid-feedback" role="alert">
@@ -33,7 +45,7 @@
 
                                 <div class="col-md-6">
                                     <input id="start_date" type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date"
-                                           value="{{ old('start_date') }}" required autofocus>
+                                           value="{{ $sprint->start_date ?? old('start_date') }}" required autofocus>
 
                                     @error('start_date')
                                     <span class="invalid-feedback" role="alert">
@@ -48,9 +60,14 @@
 
                                 <div class="col-md-6">
                                     <input id="end_date" type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date"
-                                           value="{{ old('end_date') }}" required autofocus>
+                                           value="{{ $sprint->end_date ??old('end_date') }}" required autofocus>
 
                                     @error('end_date')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                    @error('in_progress')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -61,7 +78,11 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Add sprint') }}
+                                        @if(isset($sprint))
+                                            {{ __('Update sprint') }}
+                                        @else
+                                            {{ __('Add sprint') }}
+                                        @endif
                                     </button>
                                 </div>
                             </div>

@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\Story;
 use Carbon\Carbon;
+use http\Exception\RuntimeException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
@@ -96,7 +97,7 @@ class SprintController extends Controller
     public function edit(Project $project, Sprint $sprint)
     {
         Project::findOrFail($project->id);
-        $this->authorize('update', [Sprint::class, $project]);
+        $this->authorize('update', [Sprint::class, $sprint]);
         return view('sprint.create', ['id' => $project->id, 'sprint'=>$sprint])
             ->with(['speed'=>$sprint->speed, 'start_date'=>$sprint->start_date]);
     }
@@ -112,12 +113,12 @@ class SprintController extends Controller
     public function update(Request $request, Project $project, Sprint $sprint)
     {
         Project::findOrFail($project->id);
-        $this->authorize('update', [Sprint::class, $project]);
+        $this->authorize('update', [Sprint::class, $sprint]);
         $request->request->add(['project_id' => $project->id]);
 
-        if ($sprint->start_time->lq(Carbon::now()) && $sprint->end_time->gt(Carbon::now())) {
+        if ($sprint->start_date->lq(Carbon::now()) && $sprint->end_date->gt(Carbon::now())) {
             // sprint is in progress
-            return back()->withErrors(['in_progress' => 'Sprint is in progress'])->withInput();
+            return redirect()->back()->withErrors(['in_progress' => 'Sprint is in progress'])->withInput();
         }
 
         $start_date = $request->request->get('start_date');
