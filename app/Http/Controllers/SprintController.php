@@ -8,6 +8,7 @@ use App\Models\Story;
 use Carbon\Carbon;
 use http\Exception\RuntimeException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 
@@ -57,11 +58,15 @@ class SprintController extends Controller
             'project_id' => ['required', 'numeric', 'min:0'],
             'speed' => 'required|numeric|min:1',
             'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($end_date, $start_date) {
-                $overlaps = Sprint::query()->whereBetween('start_date', [$start_date, $end_date])
-                    ->orWhereBetween('end_date', [$start_date, $end_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date])
+            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($project, $end_date, $start_date) {
+                $overlaps = Sprint::query()
+                    ->where(function($query) use ($end_date, $start_date) {
+                        $query->whereBetween('start_date', [$start_date, $end_date])
+                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date]);
+                        })
+                    ->where('project_id', $project->id)
                     ->first();
 
                 if ($overlaps) {
@@ -118,7 +123,6 @@ class SprintController extends Controller
 
         if (Carbon::create($sprint->start_date) <= Carbon::now() && Carbon::parse($sprint->end_date) >= Carbon::now()) {
             // sprint is in progress
-            echo 'a';
             return redirect()->back()->withErrors(['in_progress' => 'Sprint is in progress'])->withInput();
         }
 
@@ -129,12 +133,16 @@ class SprintController extends Controller
             'project_id' => ['required', 'numeric', 'min:0'],
             'speed' => 'required|numeric|min:1',
             'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($sprint, $end_date, $start_date) {
-                $overlaps = Sprint::query()->whereBetween('start_date', [$start_date, $end_date])
-                    ->orWhereBetween('end_date', [$start_date, $end_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date])
-                    ->whereKeyNot($sprint->id)
+            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($project, $sprint, $end_date, $start_date) {
+                $overlaps = Sprint::query()
+                    ->where(function($query) use ($end_date, $start_date) {
+                        $query->whereBetween('start_date', [$start_date, $end_date])
+                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date]);
+                        })
+                    ->where('id', '!=', $sprint->id)
+                    ->where('project_id', $project->id)
                     ->first();
 
                 if ($overlaps) {
@@ -143,7 +151,7 @@ class SprintController extends Controller
             }]
         ]);
 
-        Sprint::update($data);
+        $sprint->update($request->all());
 
         return redirect()->route('project.show', $project->id);
     }
