@@ -18,6 +18,9 @@ class Story extends Model
         'priority',
         'business_value',
         'project_id',
+        'hash',
+        'time_estimate',
+        'to_sprint',
     ];
 
     public function project()

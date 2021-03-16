@@ -15,16 +15,16 @@ class CreateStoriesTable extends Migration
     {
         Schema::create('stories', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id')->nullable();
+            $table->foreignId('project_id')->nullable()->constrained();
             $table->string('title');
             $table->text('description');
             $table->text('tests');
             $table->integer('priority');
             $table->integer('business_value');
+            $table->integer('hash')->nullable();
+            $table->integer('time_estimate')->nullable();
+            $table->foreignId('sprint_id')->nullable()->constrained();
             $table->timestamps();
-
-            // TODO uncomment when projects are set up
-            //$table->index('project_id');
         });
     }
 
