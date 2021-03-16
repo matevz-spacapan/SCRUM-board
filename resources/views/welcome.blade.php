@@ -4,8 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Canban - Ekipa SMRPO 3</title>
-
+        <title>{{ config('app.name') }}</title>
         
         <!-- Styles -->
         <link href="css/app.css" rel="stylesheet">
@@ -20,7 +19,7 @@
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
                 
                 <div>
-                    <h1 id="naslovVhodnaStran" class="text-center text-white">Canban Software</h1>
+                    <h1 id="naslovVhodnaStran" class="text-center text-white">Scrum Software</h1>
                     <h2 class="text-center text-white">SMRPO 3<h2>
                 </div>
                 

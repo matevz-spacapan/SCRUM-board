@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -18,9 +19,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'username',
         'name',
+        'surname',
         'email',
         'password',
+        'last_login',
     ];
 
     /**
@@ -45,4 +49,23 @@ class User extends Authenticatable
     public function projects() {
         return $this->belongsToMany(Project::class)->withTimestamps();
     }
+
+    /**
+     * Returns true if the logged in user's account has ID equal to 1 (ADMIN account).
+     *
+     * @return bool
+     */
+    public function isAdmin(){
+        $role = Auth::user()->getRoleNames();
+        return $role[0]==="Administrator";
+    }
+
+    public function getLastLogin(){
+        if($this->last_login != NULL){
+            return 'Previous login: '.\Carbon\Carbon::parse($this->last_login)->format('H:i:s d. m. Y');
+        }
+        return 'First login';
+
+    }
+
 }

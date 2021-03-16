@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -32,15 +33,17 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
+
                     <ul class="navbar-nav mr-auto">
+                        @auth
 
-                        @can('story-list')
                             <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
-                        @endcan
 
-                        @can('role-list')
-                        <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
-                        @endcan
+
+                            @can('users-list') {{--<!--IS ADMIN-->--}}
+                                <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
+                            @endcan
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -62,7 +65,8 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->username }}
+
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -72,10 +76,11 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
+
+                                    <div class="dropdown-item disabled"> {{Auth::user()->getLastLogin()}}  </div>
                                 </div>
                             </li>
                         @endguest
@@ -92,7 +97,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col text-center">
-                        copyright© 2021<br/>
+                        Copyright © 2021<br/>
                         {{ __('Ekipa SMRPO 3') }}
 
                     </div>
@@ -100,5 +105,6 @@
             </div>
         </footer>
     </div>
+    @include('popper::assets')
 </body>
 </html>

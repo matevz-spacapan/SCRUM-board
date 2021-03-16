@@ -1,12 +1,12 @@
 <?php
-  
+
 namespace Database\Seeders;
-  
+
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-  
+
 class CreateUsersSeeder extends Seeder
 {
     /**
@@ -17,33 +17,35 @@ class CreateUsersSeeder extends Seeder
     public function run()
     {
         $userAdmin = User::create([
-            'name' => 'Administrator',
+            'username' => 'Administrator',
+            'name' => 'Admin',
+            'surname' => 'Istrator',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin')
         ]);
-        $roleAdmin = Role::create(['name' => 'Admin']);
+        $roleAdmin = Role::create(['name' => 'Administrator']);
         $permissionsAdmin = Permission::pluck('id','id')->all();
         $roleAdmin->syncPermissions($permissionsAdmin);
         $userAdmin->assignRole([$roleAdmin->id]);
-        
+
         $userDev = User::create([
-            'name' => 'Developer',
+            'username' => 'Developer',
+            'name' => 'Devel',
+            'surname' => 'Oper',
             'email' => 'devel@devel.com',
             'password' => bcrypt('devel')
         ]);
-        $roleDev = Role::create(['name' => 'Developer']);
-        $permissionsDev = array( 9 => 9, 13 => 13, 17 => 17, 18 => 18, 19 => 19, 20 => 20);
-        $roleDev->syncPermissions($permissionsDev);
+        $roleDev = Role::create(['name' => 'User']);
+        $roleDev->syncPermissions();
         $userDev->assignRole([$roleDev->id]);
-        
+
         $userCust = User::create([
-            'name' => 'Customer',
+            'username' => 'Customer',
+            'name' => 'Cust',
+            'surname' => 'Omer',
             'email' => 'cust@cust.com',
             'password' => bcrypt('cust')
         ]);
-        $roleCust = Role::create(['name' => 'Customer']);
-        $permissionsCust = array( 13 => 13, 14 => 14, 15 => 15, 16 => 16);
-        $roleCust->syncPermissions($permissionsCust);
-        $userCust->assignRole([$roleCust->id]);
+        $userCust->assignRole([$roleDev->id]);
     }
 }
