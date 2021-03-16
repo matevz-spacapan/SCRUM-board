@@ -5,11 +5,26 @@ namespace App\Policies;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SprintPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\User  $user
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(User $user, $ability)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -42,8 +57,7 @@ class SprintPolicy
      */
     public function create(User $user, Project $project)
     {
-        //TODO check if he can create
-        return true;
+        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
@@ -55,7 +69,8 @@ class SprintPolicy
      */
     public function update(User $user, Sprint $sprint)
     {
-        //
+        $project = $sprint->project;
+        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
