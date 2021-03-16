@@ -105,5 +105,6 @@
             </div>
         </footer>
     </div>
+    @include('popper::assets')
 </body>
 </html>

@@ -32,6 +32,7 @@ Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
 
 Route::post('/project/{project}/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
+Route::post('/project/{project}/stories', 'App\Http\Controllers\StoryController@update_stories')->name('story.update_stories');
 Route::get('/project/{project}/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
 Route::get('/project/{project}/story/{story}/edit', 'App\Http\Controllers\StoryController@edit')->name('story.edit'); #show the form
 Route::patch('/project/{project}/story/{story}', 'App\Http\Controllers\StoryController@update')->name('story.update'); #actual process of updating the record
