@@ -40,3 +40,5 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', 'App\Http\Controllers\RoleController');
     Route::resource('users', 'App\Http\Controllers\UserController');
 });
+
+Route::get('/project/create/' [ProjectController@create]);

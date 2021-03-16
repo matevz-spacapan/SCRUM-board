@@ -15,7 +15,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $projects= Project:all();
+
+        return view('project.index')->with('projects', $projects);
     }
 
     /**
@@ -25,7 +27,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::pluck('id', 'name');
+
+
+        return view('project.create', compact('id', 'users'));
     }
 
     /**
@@ -36,7 +41,40 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Form validation
+        $this->validate($request, [
+            'project_name' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            
+         ]);
+
+
+        // validate
+        $rules = array(
+            'project_name'  => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            
+        );
+        $validator = Validator::make(Input::all(), $rules);
+
+        // process the login
+        if ($validator->fails()) {
+            return Redirect::to('project/create')
+                ->withErrors($validator)
+                ->withInput(Input::except('password'));
+        } else {
+            // store
+            $project = new Project;
+            $project->name= Input::get('project_name');
+            $project->product_owner= Input::get('product_owner');
+            $project->srum_master= Input::get('scrum_master');
+
+
+            $project->save();
+
+            // redirect
+            Session::flash('message', 'Successfully created project!');
+
+            return redirect()->route('project.show', $project->id);
+        }    
     }
 
     /**
@@ -60,7 +98,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        $project = Project::findOrFail($project->id);
+        return view('project.edit', ['project' => $project]);
     }
 
     /**
@@ -83,6 +122,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return index();
     }
 }
