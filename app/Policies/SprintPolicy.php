@@ -13,6 +13,20 @@ class SprintPolicy
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param  \App\Models\User  $user
+     * @param  string  $ability
+     * @return void|bool
+     */
+    public function before(User $user, $ability)
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
@@ -43,8 +57,7 @@ class SprintPolicy
      */
     public function create(User $user, Project $project)
     {
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
-            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
@@ -57,8 +70,7 @@ class SprintPolicy
     public function update(User $user, Sprint $sprint)
     {
         $project = $sprint->project;
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
-            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**

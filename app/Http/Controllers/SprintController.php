@@ -102,6 +102,9 @@ class SprintController extends Controller
     public function edit(Project $project, Sprint $sprint)
     {
         Project::findOrFail($project->id);
+        if ($sprint->project_id != $project->id) {
+            abort(404);
+        }
         $this->authorize('update', [Sprint::class, $sprint]);
         return view('sprint.create', ['id' => $project->id, 'sprint'=>$sprint])
             ->with(['speed'=>$sprint->speed, 'start_date'=>$sprint->start_date]);
@@ -118,6 +121,7 @@ class SprintController extends Controller
     public function update(Request $request, Project $project, Sprint $sprint)
     {
         Project::findOrFail($project->id);
+        Project::findOrFail($sprint->id);
         $this->authorize('update', [Sprint::class, $sprint]);
         $request->request->add(['project_id' => $project->id]);
 

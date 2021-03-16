@@ -30,7 +30,7 @@
 
                                 <div class="col-md-6">
                                     <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
-                                           name="speed" value="{{ $sprint->speed ?? old('speed') }}" required autofocus min="1">
+                                           name="speed" value="{{ old('speed') ?? $sprint->speed }}" required autofocus min="1">
 
                                     @error('speed')
                                     <span class="invalid-feedback" role="alert">
@@ -45,7 +45,7 @@
 
                                 <div class="col-md-6">
                                     <input id="start_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror" name="start_date"
-                                           value="{{ $sprint->start_date ?? old('start_date') }}" required autofocus>
+                                           value="{{ old('start_date') ?? $sprint->start_date }}" required autofocus>
 
                                     @error('start_date')
                                     <span class="invalid-feedback" role="alert">
@@ -60,7 +60,7 @@
 
                                 <div class="col-md-6">
                                     <input id="end_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror" name="end_date"
-                                           value="{{ $sprint->end_date ??old('end_date') }}" required autofocus>
+                                           value="{{ old('end_date') ?? $sprint->end_date }}" required autofocus>
 
                                     @error('end_date')
                                     <span class="invalid-feedback" role="alert">
