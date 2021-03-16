@@ -73,7 +73,41 @@
             </div>
         </div>
         <div class="card-footer">
-            <a href="#" class="btn btn-primary">{{ __('Edit story') }}</a> <a href="#" class="btn btn-outline-danger">{{ __('Delete story') }}</a>
+            @can("update", [\App\Models\Story::class, $project])
+                <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary">{{ __('Edit story') }}</a>
+            @endcan
+            @can("delete", [\App\Models\Story::class, $project])
+                <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}">{{ __('Delete story') }}</a>
+            @endcan
+            @can("addTasks", [\App\Models\Story::class, $project])
+                <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
+            @endcan
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal{{$story->id}}" tabindex="-1" role="dialog" id="deleteModalLabel{{$story->id}}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel{{$story->id}}">Are you sure you want to delete this story?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" data-dismiss="modal">{{ __('Close') }}</a>
+                    <form method="POST" action="{{ route('story.destroy', [$project->id, $story->id]) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            {{ __('Delete') }}
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endforeach
