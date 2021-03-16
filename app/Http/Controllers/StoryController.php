@@ -110,7 +110,7 @@ class StoryController extends Controller
             'tests' => ['required', 'string'],
             'priority' => 'required',
             'business_value' => ['required', 'numeric', 'between:1,10'],
-            'hash' => ['numeric', 'unique:stories']
+            'hash' => ['numeric', 'required', 'unique:stories,hash,'.$story->id]
         ]);
 
         $story->update($data);
