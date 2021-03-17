@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SprintPolicy
@@ -82,7 +81,8 @@ class SprintPolicy
      */
     public function delete(User $user, Sprint $sprint)
     {
-        //
+        $project = $sprint->project;
+        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**

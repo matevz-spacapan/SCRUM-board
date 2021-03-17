@@ -60,6 +60,7 @@ class ProjectController extends Controller
         }
         $sprints = DB::select("SELECT * from sprints
                 WHERE project_id={$project->id}
+                and sprints.deleted_at IS NULL
                 and sprints.end_date >= CURDATE()");
         return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
     }

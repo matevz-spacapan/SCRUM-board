@@ -30,9 +30,21 @@
                             <b>End time: {!! nl2br($sprint->end_date) !!}</b>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-primary">{{__('Edit sprint')}}</a>
-                    </div>
+                    @can("update", [\App\Models\Sprint::class, $sprint])
+                        @can("delete",  [\App\Models\Sprint::class, $sprint])
+                            <div class="card-footer">
+                                <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}"
+                                   class="btn btn-primary">{{__('Edit sprint')}}</a>
+                                <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
+                                   class="btn btn-outline-danger">{{__('Delete sprint')}}</a>
+                                @error('in_progress')
+                                <div class="invalid-feedback error-no-bound-field" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                                @enderror
+                            </div>
+                        @endcan
+                    @endcan
                 </div>
             </div>
         @endforeach

@@ -20,17 +20,20 @@
                     <div class="card-body">
                         @if(isset($sprint))
                             <form method="POST" action="{{ route('sprint.update', [$id, $sprint->id]) }}">
-                        @else
-                            <form method="POST" action="{{ route('sprint.store', $id) }}">
-                        @endif
-                            @csrf
+                                @method("PUT")
+                                @else
+                                    <form method="POST" action="{{ route('sprint.store', $id) }}">
+                                        @endif
+                                        @csrf
 
-                            <div class="form-group row">
-                                <label for="speed" class="col-md-4 col-form-label text-md-right">{{ __('Speed') }}</label>
+                                        <div class="form-group row">
+                                            <label for="speed"
+                                                   class="col-md-4 col-form-label text-md-right">{{ __('Speed') }}</label>
 
-                                <div class="col-md-6">
-                                    @if(isset($sprint))
-                                        <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
+                                            <div class="col-md-6">
+                                                @if(isset($sprint))
+                                                    <input id="speed" type="number"
+                                                           class="form-control @error('speed') is-invalid @enderror"
                                                name="speed" value="{{ old('speed') ?? $sprint->speed }}" required autofocus min="1">
                                     @else
                                         <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
