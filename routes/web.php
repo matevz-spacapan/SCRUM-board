@@ -44,4 +44,4 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');
 });
 
-Route::get('/project/create/' [ProjectController@create]);
+Route::get('/project/create/', 'App\Http\Controllers\ProjectController@create')->name('project.create');
