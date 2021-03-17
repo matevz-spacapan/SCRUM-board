@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\Story;
+use Carbon\Carbon;
+use http\Exception\RuntimeException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 
@@ -55,11 +58,15 @@ class SprintController extends Controller
             'project_id' => ['required', 'numeric', 'min:0'],
             'speed' => 'required|numeric|min:1',
             'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($end_date, $start_date) {
-                $overlaps = Sprint::query()->whereBetween('start_date', [$start_date, $end_date])
-                    ->orWhereBetween('end_date', [$start_date, $end_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
-                    ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date])
+            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($project, $end_date, $start_date) {
+                $overlaps = Sprint::query()
+                    ->where(function($query) use ($end_date, $start_date) {
+                        $query->whereBetween('start_date', [$start_date, $end_date])
+                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date]);
+                        })
+                    ->where('project_id', $project->id)
                     ->first();
 
                 if ($overlaps) {
@@ -94,7 +101,13 @@ class SprintController extends Controller
      */
     public function edit(Project $project, Sprint $sprint)
     {
-        //
+        Project::findOrFail($project->id);
+        if ($sprint->project_id != $project->id) {
+            abort(404);
+        }
+        $this->authorize('update', [Sprint::class, $sprint]);
+        return view('sprint.create', ['id' => $project->id, 'sprint'=>$sprint])
+            ->with(['speed'=>$sprint->speed, 'start_date'=>$sprint->start_date]);
     }
 
     /**
@@ -107,7 +120,44 @@ class SprintController extends Controller
      */
     public function update(Request $request, Project $project, Sprint $sprint)
     {
-        //
+        Project::findOrFail($project->id);
+        Project::findOrFail($sprint->id);
+        $this->authorize('update', [Sprint::class, $sprint]);
+        $request->request->add(['project_id' => $project->id]);
+
+        if (Carbon::create($sprint->start_date) <= Carbon::now() && Carbon::parse($sprint->end_date) >= Carbon::now()) {
+            // sprint is in progress
+            return redirect()->back()->withErrors(['in_progress' => 'Sprint is in progress'])->withInput();
+        }
+
+        $start_date = $request->request->get('start_date');
+        $end_date = $request->request->get('end_date');
+
+        $data = $request->validate([
+            'project_id' => ['required', 'numeric', 'min:0'],
+            'speed' => 'required|numeric|min:1',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => ['required','date','after:start_date', function ($attribute, $value, $fail) use ($project, $sprint, $end_date, $start_date) {
+                $overlaps = Sprint::query()
+                    ->where(function($query) use ($end_date, $start_date) {
+                        $query->whereBetween('start_date', [$start_date, $end_date])
+                            ->orWhereBetween('end_date', [$start_date, $end_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$start_date])
+                            ->orWhereRaw('? BETWEEN start_date and end_date', [$end_date]);
+                        })
+                    ->where('id', '!=', $sprint->id)
+                    ->where('project_id', $project->id)
+                    ->first();
+
+                if ($overlaps) {
+                    $fail('The sprint overlaps with an existing sprint');
+                }
+            }]
+        ]);
+
+        $sprint->update($request->all());
+
+        return redirect()->route('project.show', $project->id);
     }
 
     /**

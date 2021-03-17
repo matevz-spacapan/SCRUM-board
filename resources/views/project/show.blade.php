@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="#" class="btn btn-primary">{{__('Edit sprint')}}</a>
+                        <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}" class="btn btn-primary">{{__('Edit sprint')}}</a>
                     </div>
                 </div>
             </div>
