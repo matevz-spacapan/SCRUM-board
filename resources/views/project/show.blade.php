@@ -37,7 +37,7 @@
                                    class="btn btn-primary">{{__('Edit sprint')}}</a>
                                 <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
                                    class="btn btn-outline-danger">{{__('Delete sprint')}}</a>
-                                @error('in_progress')
+                                @error('in_progress ' . $sprint->id)
                                 <div class="invalid-feedback error-no-bound-field" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </div>
