@@ -73,15 +73,18 @@
             </div>
         </div>
         <div class="card-footer">
-            @can("update", [\App\Models\Story::class, $project])
-                <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary">{{ __('Edit story') }}</a>
-            @endcan
-            @can("delete", [\App\Models\Story::class, $project])
-                <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}">{{ __('Delete story') }}</a>
-            @endcan
-            @can("addTasks", [\App\Models\Story::class, $project])
-                <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
-            @endcan
+            @if(!(count($active_sprint) > 0 && $story->sprint_id == $active_sprint[0]->id))
+                @can("update", [\App\Models\Story::class, $project])
+                    <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary">{{ __('Edit story') }}</a>
+                @endcan
+                @can("delete", [\App\Models\Story::class, $project])
+                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}">{{ __('Delete story') }}</a>
+                @endcan
+                @can("addTasks", [\App\Models\Story::class, $project])
+                    <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
+                @endcan
+            @endif
+
         </div>
     </div>
 
@@ -97,14 +100,7 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-primary" data-dismiss="modal">{{ __('Close') }}</a>
-                    <form method="POST" action="{{ route('story.destroy', [$project->id, $story->id]) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            {{ __('Delete') }}
-                        </button>
-                    </form>
-
+                    <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger">{{ __('Delete') }}</a>
                 </div>
             </div>
         </div>

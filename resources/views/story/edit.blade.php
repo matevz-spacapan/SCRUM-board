@@ -8,7 +8,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <div class="align-center"> {{ __('Edit story #') }}{{$story->id}} </div>
+                        <div class="align-center"> {{ __('Edit story: ') }}{{$story->title}} </div>
                         <a href="{{ route('project.show', $project->id) }}" class="btn btn-outline-primary float-right">{{ __('Back') }}</a>
 
                     </div>

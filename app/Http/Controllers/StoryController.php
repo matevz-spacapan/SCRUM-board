@@ -108,13 +108,19 @@ class StoryController extends Controller
     {
         $this->authorize('update', [Story::class, $project]);
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255',
+                Rule::unique('stories')->where(function ($query) use ($project, $story) {
+                    return $query->where('project_id', $project->id)
+                        ->where('id', '<>',    $story->id); })],
             #'project_id' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
             'business_value' => ['required', 'numeric', 'between:1,10'],
-            'hash' => ['numeric', 'required', 'unique:stories,hash,'.$story->id]
+            'hash' => ['nullable', 'numeric',
+                Rule::unique('stories')->where(function ($query) use ($project, $story) {
+                    return $query->where('project_id', $project->id)
+                                ->where('id', '<>',    $story->id); })],
         ]);
 
         $story->update($data);
