@@ -75,10 +75,10 @@
         <div class="card-footer">
             @if(!(count($active_sprint) > 0 && $story->sprint_id == $active_sprint[0]->id))
                 @can("update", [\App\Models\Story::class, $project])
-                    <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary">{{ __('Edit story') }}</a>
+                    <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary" {{ Popper::arrow()->position('right')->pop("Something wrong with story? Edit it here") }}>{{ __('Edit story') }}</a>
                 @endcan
                 @can("delete", [\App\Models\Story::class, $project])
-                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}">{{ __('Delete story') }}</a>
+                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}" {{ Popper::arrow()->position('right')->pop("Is this story all wrong? Delete it here") }}>{{ __('Delete story') }}</a>
                 @endcan
                 @can("addTasks", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
@@ -99,8 +99,8 @@
                     </button>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-primary" data-dismiss="modal">{{ __('Close') }}</a>
-                    <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger">{{ __('Delete') }}</a>
+                    <a class="btn btn-primary" data-dismiss="modal" {{ Popper::arrow()->position('right')->pop("Close this window, I changed my mind") }}>{{ __('Close') }}</a>
+                    <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger" {{ Popper::arrow()->position('right')->pop("Yes, im sure. Now delete it!") }}>{{ __('Delete') }}</a>
                 </div>
             </div>
         </div>

@@ -90,6 +90,10 @@ class StoryController extends Controller
         Project::findOrFail($project->id);
         Story::findOrFail($story->id);
 
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
         $this->authorize('update', [Story::class, $project]);
 
         return view('story.edit', ['story' => $story, 'project' => $project]);
@@ -106,6 +110,13 @@ class StoryController extends Controller
      */
     public function update(Request $request, Project $project, Story $story)
     {
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
         $this->authorize('update', [Story::class, $project]);
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255',
@@ -181,6 +192,19 @@ class StoryController extends Controller
      */
     public function destroy(Project $project, Story $story)
     {
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
+
+        if(count($active_sprint) > 0 && $story->sprint_id == $active_sprint[0]->id){
+            abort(403);
+        }
+
         $this->authorize('delete', [Story::class, $project]);
 
         $story->delete();
