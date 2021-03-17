@@ -29,8 +29,13 @@
                                 <label for="speed" class="col-md-4 col-form-label text-md-right">{{ __('Speed') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
-                                           name="speed" value="{{ old('speed') ?? $sprint->speed }}" required autofocus min="1">
+                                    @if(isset($sprint))
+                                        <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
+                                               name="speed" value="{{ old('speed') ?? $sprint->speed }}" required autofocus min="1">
+                                    @else
+                                        <input id="speed" type="number" class="form-control @error('speed') is-invalid @enderror"
+                                               name="speed" value="{{ old('speed') }}" required autofocus min="1">
+                                    @endif
 
                                     @error('speed')
                                     <span class="invalid-feedback" role="alert">
@@ -44,8 +49,11 @@
                                 <label for="start_date" class="col-md-4 col-form-label text-md-right">{{ __('Start date') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="start_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror" name="start_date"
-                                           value="{{ old('start_date') ?? $sprint->start_date }}" required autofocus>
+                                    @if(isset($sprint))
+                                        <input id="start_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror" name="start_date" value="{{ old('start_date') ?? $sprint->start_date }}" required>
+                                    @else
+                                        <input id="start_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror" name="start_date" value="{{ old('start_date') }}" required>
+                                    @endif
 
                                     @error('start_date')
                                     <span class="invalid-feedback" role="alert">
@@ -59,8 +67,11 @@
                                 <label for="end_date" class="col-md-4 col-form-label text-md-right">{{ __('End date') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="end_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror" name="end_date"
-                                           value="{{ old('end_date') ?? $sprint->end_date }}" required autofocus>
+                                    @if(isset($sprint))
+                                        <input id="end_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror" name="end_date" value="{{ old('end_date') ?? $sprint->end_date }}" required>
+                                    @else
+                                        <input id="end_date" type="date" class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror" name="end_date" value="{{ old('end_date') }}" required>
+                                    @endif
 
                                     @error('end_date')
                                     <span class="invalid-feedback" role="alert">
