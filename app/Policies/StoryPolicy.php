@@ -91,25 +91,27 @@ class StoryPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Story  $story
+     * @param \App\Models\User $user
+     * @param Project $project
      * @return mixed
      */
-    public function update(User $user, Story $story)
+    public function update(User $user, Project $project)
     {
-        //
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
+            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Story  $story
+     * @param \App\Models\User $user
+     * @param Project $project
      * @return mixed
      */
-    public function delete(User $user, Story $story)
+    public function delete(User $user, Project $project)
     {
-        //
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
+            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
     /**
