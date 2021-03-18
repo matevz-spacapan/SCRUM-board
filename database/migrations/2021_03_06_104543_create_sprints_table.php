@@ -20,6 +20,7 @@ class CreateSprintsTable extends Migration
             $table->date('end_date');
             $table->foreignId('project_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

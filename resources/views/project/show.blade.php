@@ -14,11 +14,10 @@
             ({{ __('Developer') }})
         @endif
     </h1>
-
     <h4 class="mt-2">{{ __('Project sprints') }}</h4>
 
     @can("create", [\App\Models\Sprint::class, $project])
-        <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-success mb-3">Add new sprint</a>
+        <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Start a new Sprint, then add some awesome stories to it!") }}>Add new sprint</a>
     @endcan
     <div class="row row-cols-3">
         @foreach($sprints as $sprint)
@@ -31,9 +30,18 @@
                             <b>End time: {!! nl2br($sprint->end_date) !!}</b>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <a href="#" class="btn btn-primary">{{__('Edit sprint')}}</a>
-                    </div>
+                    @can('isNotInProgress', [\App\Models\Sprint::class, $sprint])
+                        @can("update", [\App\Models\Sprint::class, $sprint])
+                            @can("delete",  [\App\Models\Sprint::class, $sprint])
+                                <div class="card-footer">
+                                    <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}"
+                                       class="btn btn-primary" {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }}>{{__('Edit sprint')}}</a>
+                                    <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
+                                       class="btn btn-outline-danger" {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }}>{{__('Delete sprint')}}</a>
+                                </div>
+                            @endcan
+                        @endcan
+                    @endcan
                 </div>
             </div>
         @endforeach
@@ -45,7 +53,7 @@
 
     <h4 class="mt-5">{{ __('Project stories') }}</h4>
     @can("create", [\App\Models\Story::class, $project])
-        <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3">{{ __('Add new story') }}</a>
+        <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Let's make something awesome! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new story') }}</a>
     @endcan
     <form method="POST" action="{{ route('story.update_stories', $project->id) }}">
         @csrf
@@ -58,11 +66,11 @@
         @else
             <div>
                 @can('update_time', [\App\Models\Story::class, $project])
-                    <button type="submit" name="time" class="btn btn-outline-secondary">{{ __('Update time estimates') }}</button>
+                    <button type="submit" name="time" class="btn btn-outline-secondary" {{ Popper::arrow()->pop('Input/Change time estimates for the stories on the list above.') }}>{{ __('Update time estimates') }} <i class="far fa-question-circle"></i></button>
                 @endcan
                 @can('update_sprints', [\App\Models\Story::class, $project])
                     @if(count($active_sprint) > 0)
-                        <button type="submit" name="sprint" class="btn btn-outline-primary">{{ __('Add selected to sprint') }}</button>
+                        <button type="submit" name="sprint" class="btn btn-outline-primary" {{ Popper::arrow()->position('right')->pop('Add check marks next to the story titles you wish to add to the active Sprint.') }}>{{ __('Add selected to sprint') }} <i class="far fa-question-circle"></i></button>
                     @else
                         <p class="mt-2">{{ __('A Sprint needs to be active, if you want to add stories to it.') }}</p>
                     @endif

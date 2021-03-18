@@ -7,6 +7,11 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+//FontAwesome
+@import '~@fortawesome/fontawesome-free/scss/brands';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
 
 
 #naslovVhodnaStran{
@@ -313,19 +318,23 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
     background-color: #1a202c;
     background-color: rgba(26, 32, 44, var(--bg-opacity));
 }
-.dark\:border-gray-700 {
-    --border-opacity: 1;
-    border-color: #4a5568;
-    border-color: rgba(74, 85, 104, var(--border-opacity));
+    .dark\:border-gray-700 {
+        --border-opacity: 1;
+        border-color: #4a5568;
+        border-color: rgba(74, 85, 104, var(--border-opacity));
+    }
+    .dark\:text-white {
+        --text-opacity: 1;
+        color: #fff;
+        color: rgba(255, 255, 255, var(--text-opacity));
+    }
+    .dark\:text-gray-400 {
+        --text-opacity: 1;
+        color: #cbd5e0;
+        color: rgba(203, 213, 224, var(--text-opacity));
+    }
 }
-.dark\:text-white {
-    --text-opacity: 1;
-    color: #fff;
-    color: rgba(255, 255, 255, var(--text-opacity));
-}
-.dark\:text-gray-400 {
-    --text-opacity: 1;
-    color: #cbd5e0;
-    color: rgba(203, 213, 224, var(--text-opacity));
-}
+
+.error-no-bound-field {
+    display: block;
 }
