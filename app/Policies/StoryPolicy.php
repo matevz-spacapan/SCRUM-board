@@ -91,8 +91,8 @@ class StoryPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Story  $story
+     * @param \App\Models\User $user
+     * @param Project $project
      * @return mixed
      */
     public function update(User $user, Project $project)
@@ -104,8 +104,8 @@ class StoryPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Story  $story
+     * @param \App\Models\User $user
+     * @param Project $project
      * @return mixed
      */
     public function delete(User $user, Project $project)

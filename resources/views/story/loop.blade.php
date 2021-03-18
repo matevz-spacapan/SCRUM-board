@@ -87,23 +87,24 @@
 
         </div>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="deleteModal{{$story->id}}" tabindex="-1" role="dialog" id="deleteModalLabel{{$story->id}}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel{{$story->id}}">Are you sure you want to delete this story?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-primary" data-dismiss="modal" {{ Popper::arrow()->position('right')->pop("Close this window, I changed my mind") }}>{{ __('Close') }}</a>
-                    <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger" {{ Popper::arrow()->position('right')->pop("Yes, im sure. Now delete it!") }}>{{ __('Delete') }}</a>
+    @can("delete", [\App\Models\Story::class, $project])
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal{{$story->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{$story->id}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{$story->id}}">Are you sure you want to delete this story?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" {{ Popper::arrow()->position('right')->pop("Close this window, I changed my mind") }}>{{ __('Close') }}</button>
+                        <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger" {{ Popper::arrow()->position('right')->pop("Yes, im sure. Now delete it!") }}>{{ __('Delete') }}</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endcan
 
 @endforeach

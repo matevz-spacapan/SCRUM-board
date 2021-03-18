@@ -123,7 +123,6 @@ class StoryController extends Controller
                 Rule::unique('stories')->where(function ($query) use ($project, $story) {
                     return $query->where('project_id', $project->id)
                         ->where('id', '<>',    $story->id); })],
-            #'project_id' => ['required', 'numeric', 'min:0'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
@@ -201,7 +200,7 @@ class StoryController extends Controller
 
         $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
 
-        if(count($active_sprint) > 0 && $story->sprint_id == $active_sprint[0]->id){
+        if(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id){
             abort(403);
         }
 

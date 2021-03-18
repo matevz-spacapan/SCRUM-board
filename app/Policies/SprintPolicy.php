@@ -85,7 +85,6 @@ class SprintPolicy
         //
     }
 
-
     /**
      * Determine whether the user can restore the model.
      *
