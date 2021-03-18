@@ -9,7 +9,7 @@
         @if($user->projects->where('id', $project->id)->pluck('product_owner')->contains(auth()->user()->id))
             ({{ __('Product owner') }})
         @elseif($user->projects->where('id', $project->id)->pluck('project_master')->contains(auth()->user()->id))
-            ({{ __('Project master') }})
+            ({{ __('Scrum master') }})
         @else
             ({{ __('Developer') }})
         @endif
