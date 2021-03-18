@@ -30,19 +30,16 @@
                             <b>End time: {!! nl2br($sprint->end_date) !!}</b>
                         </div>
                     </div>
-                    @can("update", [\App\Models\Sprint::class, $sprint])
-                        @can("delete",  [\App\Models\Sprint::class, $sprint])
-                            <div class="card-footer">
-                                <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}"
-                                   class="btn btn-primary" {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }}>{{__('Edit sprint')}}</a>
-                                <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
-                                   class="btn btn-outline-danger" {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }}>{{__('Delete sprint')}}</a>
-                                @error('in_progress ' . $sprint->id)
-                                <div class="invalid-feedback error-no-bound-field" role="alert">
-                                    <strong>{{ $message }}</strong>
+                    @can('isNotInProgress', [\App\Models\Sprint::class, $sprint])
+                        @can("update", [\App\Models\Sprint::class, $sprint])
+                            @can("delete",  [\App\Models\Sprint::class, $sprint])
+                                <div class="card-footer">
+                                    <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}"
+                                       class="btn btn-primary" {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }}>{{__('Edit sprint')}}</a>
+                                    <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
+                                       class="btn btn-outline-danger" {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }}>{{__('Delete sprint')}}</a>
                                 </div>
-                                @enderror
-                            </div>
+                            @endcan
                         @endcan
                     @endcan
                 </div>
