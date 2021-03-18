@@ -7,11 +7,11 @@
     <h1>
         {{$project->project_name}} -
         @if($user->projects->where('id', $project->id)->pluck('product_owner')->contains(auth()->user()->id))
-            ({{ __('Product owner') }})
+            {{ __('Product owner') }}
         @elseif($user->projects->where('id', $project->id)->pluck('project_master')->contains(auth()->user()->id))
-            ({{ __('Scrum master') }})
+            {{ __('Scrum master') }}
         @else
-            ({{ __('Developer') }})
+            {{ __('Developer') }}
         @endif
     </h1>
     <h4 class="mt-2">{{ __('Project sprints') }}</h4>
@@ -48,13 +48,21 @@
     </div>
     @if(count($sprints) === 0)
         <p>This project has no active sprints.</p>
+    @elseif(count($stories_sprint) > 0)
+        <h5>Stories in active sprint</h5>
+        @include('story.loop', ['stories_list' => $stories_sprint])
     @endif
-    @include('story.loop', ['stories_list' => $stories_sprint])
+    @if(count($stories_old) > 0)
+        <h5>Unapproved stories from previous sprint</h5>
+        @include('story.loop', ['stories_list' => $stories_old])
+    @endif
 
-    <h4 class="mt-5">{{ __('Project stories') }}</h4>
+
+    <h4 class="mt-5">{{ __('Other project stories') }}</h4>
     @can("create", [\App\Models\Story::class, $project])
         <a href="{{ route('story.create', $project->id) }}" class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Let's make something awesome! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new story') }}</a>
     @endcan
+    <a href="#" class="btn btn-outline-primary mb-3">{{ __('Accepted stories') }}</a>
     <form method="POST" action="{{ route('story.update_stories', $project->id) }}">
         @csrf
         @include('story.loop', ['stories_list' => $stories_project])

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Sprint;
+use App\Models\Story;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -51,13 +51,34 @@ class ProjectController extends Controller
     {
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
-        $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
+        $active_sprint = Sprint::query()
+                            ->where('project_id', $project->id)
+                            ->where('start_date', '<=', Carbon::now()->toDateString())
+                            ->where('end_date', '>=', Carbon::now()->toDateString())->get();
+
+        $a = Story::query()->where('project_id', $project->id)
+            ->where('accepted', 0)
+            ->where('priority', 4)
+            ->whereNull('sprint_id');
+        $stories_project = Story::query()->where('project_id', $project->id)
+            ->where('accepted', 0)
+            ->where('priority', '<>', 4)
+            ->whereNull('sprint_id')
+            ->union($a)->get();
+
         if (count($active_sprint) > 0) {
-            $stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4 AND (sprint_id IS NULL OR sprint_id != {$active_sprint[0]->id})) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4 AND (sprint_id IS NULL OR sprint_id != {$active_sprint[0]->id}))");
-            $stories_sprint = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND sprint_id = {$active_sprint[0]->id})");
+            $stories_sprint = Story::query()->where('project_id', $project->id)
+                ->where('accepted', 0)
+                ->where('sprint_id', $active_sprint[0]->id)->get();
+            $stories_old = Story::query()->where('project_id', $project->id)
+                ->where('accepted', 0)
+                ->whereNotNull('sprint_id')
+                ->where('sprint_id', '<>', $active_sprint[0]->id)->get();
         } else {
-            $stories_project = DB::select("(SELECT * from stories WHERE project_id={$project->id} AND priority != 4) UNION (SELECT * from stories WHERE project_id={$project->id} AND priority = 4)");
             $stories_sprint = [];
+            $stories_old = Story::query()->where('project_id', $project->id)
+                ->where('accepted', 0)
+                ->whereNotNull('sprint_id')->get();
         }
 
         $sprints = Sprint::query()
@@ -65,7 +86,7 @@ class ProjectController extends Controller
             ->where('deleted_at')
             ->where('end_date', '>=', Carbon::now())
             ->get();
-        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
+        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'stories_old' => $stories_old, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
     }
 
     /**

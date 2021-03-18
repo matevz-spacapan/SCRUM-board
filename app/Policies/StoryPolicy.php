@@ -6,7 +6,7 @@ use App\Models\Project;
 use App\Models\Story;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class StoryPolicy
 {
@@ -112,6 +112,45 @@ class StoryPolicy
     {
         return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
             $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+    }
+
+    /**
+     * Determine whether the user can reject/accept the story.
+     *
+     * @param \App\Models\User $user
+     * @param Story $story
+     * @param Project $project
+     * @return mixed
+     */
+    public function acceptReject(User $user, Story $story, Project $project)
+    {
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id);
+    }
+
+    /**
+     * Determine whether the story is in an active sprint.
+     *
+     * @param \App\Models\User $user
+     * @param Story $story
+     * @param Collection $sprint
+     * @return mixed
+     */
+    public function inActiveSprint(User $user, Story $story, Collection $sprint)
+    {
+        return count($sprint) > 0 && $story->sprint_id === $sprint[0]->id;
+    }
+
+    /**
+     * Determine whether the story has no past sprint dedicated.
+     *
+     * @param \App\Models\User $user
+     * @param Story $story
+     * @param Collection $sprint
+     * @return mixed
+     */
+    public function inNoSprint(User $user, Story $story, Collection $sprint)
+    {
+        return is_null($story->sprint_id);
     }
 
     /**
