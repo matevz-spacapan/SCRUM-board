@@ -117,7 +117,7 @@ class SprintController extends Controller
     public function update(Request $request, Project $project, Sprint $sprint)
     {
         Project::findOrFail($project->id);
-        Project::findOrFail($sprint->id);
+        Sprint::findOrFail($sprint->id);
         $this->authorize('update', [Sprint::class, $sprint]);
         $request->request->add(['project_id' => $project->id]);
 
@@ -167,7 +167,7 @@ class SprintController extends Controller
     public function destroy(Project $project, Sprint $sprint)
     {
         Project::findOrFail($project->id);
-        Project::findOrFail($sprint->id);
+        Sprint::findOrFail($sprint->id);
         $this->authorize('delete', [Sprint::class, $sprint]);
         if ($sprint->project_id != $project->id) {
             abort(404);

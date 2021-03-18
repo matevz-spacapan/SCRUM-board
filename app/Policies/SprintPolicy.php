@@ -68,8 +68,8 @@ class SprintPolicy
      */
     public function update(User $user, Sprint $sprint)
     {
-        $project = $sprint->project;
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        $project_id = $sprint->project_id;
+        return $user->projects->where('id', $project_id)->pluck('project_master')->contains($user->id);
     }
 
     /**
@@ -81,8 +81,8 @@ class SprintPolicy
      */
     public function delete(User $user, Sprint $sprint)
     {
-        $project = $sprint->project;
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        $project_id = $sprint->project_id;
+        return $user->projects->where('id', $project_id)->pluck('project_master')->contains($user->id);
     }
 
     /**
