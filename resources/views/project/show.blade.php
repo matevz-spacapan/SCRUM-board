@@ -34,9 +34,9 @@
                         @can("delete",  [\App\Models\Sprint::class, $sprint])
                             <div class="card-footer">
                                 <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}"
-                                   class="btn btn-primary">{{__('Edit sprint')}}</a>
+                                   class="btn btn-primary" {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }}>{{__('Edit sprint')}}</a>
                                 <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
-                                   class="btn btn-outline-danger">{{__('Delete sprint')}}</a>
+                                   class="btn btn-outline-danger" {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }}>{{__('Delete sprint')}}</a>
                                 @error('in_progress ' . $sprint->id)
                                 <div class="invalid-feedback error-no-bound-field" role="alert">
                                     <strong>{{ $message }}</strong>
