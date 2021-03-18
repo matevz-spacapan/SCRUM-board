@@ -47,7 +47,7 @@
                     <div>
                         Time estimate
                         @can('inNoSprint', [\App\Models\Story::class, $story, $active_sprint])
-                            @can('update_time', [\App\Models\Story::class, $project])
+                            @can('update_sprints', [\App\Models\Story::class, $project])
                                 <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
                             @else
                                 {{ $story->time_estimate ? "{$story->time_estimate} pts" : 'not set' }}

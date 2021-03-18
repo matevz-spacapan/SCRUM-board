@@ -63,19 +63,6 @@ class StoryPolicy
     }
 
     /**
-     * Determine whether the user can update time estimates of stories.
-     *
-     * @param \App\Models\User $user
-     * @param Project $project
-     * @return mixed
-     */
-    public function update_time(User $user, Project $project)
-    {
-        // TODO update this when #25 is implemented
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
-    }
-
-    /**
      * Determine whether the user can  add stories to the active Sprint.
      *
      * @param \App\Models\User $user

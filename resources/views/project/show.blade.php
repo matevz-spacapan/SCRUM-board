@@ -73,10 +73,8 @@
             <p>{{ __('This project has no other stories.') }}</p>
         @else
             <div>
-                @can('update_time', [\App\Models\Story::class, $project])
-                    <button type="submit" name="time" class="btn btn-outline-secondary" {{ Popper::arrow()->pop('Input/Change time estimates for the stories on the list above.') }}>{{ __('Update time estimates') }} <i class="far fa-question-circle"></i></button>
-                @endcan
                 @can('update_sprints', [\App\Models\Story::class, $project])
+                    <button type="submit" name="time" class="btn btn-outline-secondary" {{ Popper::arrow()->pop('Input/Change time estimates for the stories on the list above.') }}>{{ __('Update time estimates') }} <i class="far fa-question-circle"></i></button>
                     @if(count($active_sprint) > 0)
                         <button type="submit" name="sprint" class="btn btn-outline-primary" {{ Popper::arrow()->position('right')->pop('Add check marks next to the story titles you wish to add to the active Sprint.') }}>{{ __('Add selected to sprint') }} <i class="far fa-question-circle"></i></button>
                     @else
