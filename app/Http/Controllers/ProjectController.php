@@ -7,6 +7,7 @@ use App\Models\Sprint;
 use App\Models\Story;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -86,7 +87,15 @@ class ProjectController extends Controller
             ->where('deleted_at')
             ->where('end_date', '>=', Carbon::now())
             ->get();
-        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'stories_old' => $stories_old, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
+
+        if (count($active_sprint) > 0){
+            $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint[0]->id}")[0]->time_estimate;
+        }
+        else{
+            $sprint_sum = 0;
+        }
+
+        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'stories_old' => $stories_old, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint, 'sprint_sum' => $sprint_sum]);
     }
 
     /**

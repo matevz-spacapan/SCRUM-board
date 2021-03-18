@@ -32,7 +32,7 @@
                     @can('inNoSprint', [\App\Models\Story::class, $story, $active_sprint])
                         @can('update_sprints', [\App\Models\Story::class, $project])
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" {{ $story->time_estimate ? "name=to_sprint[] value={$story->id}" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
+                                <input class="form-check-input" type="checkbox" {{ is_numeric($story->time_estimate) && count($active_sprint) > 0 ? "name=to_sprint[] value={$story->id} onclick=calculate(this,{$story->time_estimate})" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
                             </div>
                         @endcan
                     @endcannot
