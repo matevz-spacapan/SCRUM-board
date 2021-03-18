@@ -52,7 +52,7 @@ class SprintPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
+     * @param \App\Models\User $user
      * @return mixed
      */
     public function create(User $user, Project $project)
@@ -60,17 +60,22 @@ class SprintPolicy
         return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
     }
 
+    public function isNotInProgress(User $user, Sprint $sprint)
+    {
+        return !(Carbon::create($sprint->start_date) <= Carbon::now() && Carbon::parse($sprint->end_date) >= Carbon::now());
+    }
+
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Sprint  $sprint
+     * @param \App\Models\User $user
+     * @param \App\Models\Sprint $sprint
      * @return mixed
      */
     public function update(User $user, Sprint $sprint)
     {
-        $project = $sprint->project;
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        $project_id = $sprint->project_id;
+        return $user->projects->where('id', $project_id)->pluck('project_master')->contains($user->id);
     }
 
     /**
@@ -82,7 +87,8 @@ class SprintPolicy
      */
     public function delete(User $user, Sprint $sprint)
     {
-        //
+        $project_id = $sprint->project_id;
+        return $user->projects->where('id', $project_id)->pluck('project_master')->contains($user->id);
     }
 
     /**
