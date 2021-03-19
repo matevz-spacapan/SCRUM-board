@@ -29,10 +29,10 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <div>
-                    @if(count($active_sprint) > 0 && (is_null($story->sprint_id) || $story->sprint_id != $active_sprint[0]->id))
+                    @if(is_null($story->sprint_id))
                         @can('update_sprints', [\App\Models\Story::class, $project])
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" {{ $story->time_estimate ? "name=to_sprint[] value={$story->id}" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
+                                <input class="form-check-input" type="checkbox" {{ is_numeric($story->time_estimate) && count($active_sprint) > 0 ? "name=to_sprint[] value={$story->id} onclick=calculate(this,{$story->time_estimate})" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
                             </div>
                         @endcan
                     @endif
@@ -46,8 +46,8 @@
                 <div class="text-right">
                     <div>
                         Time estimate
-                        @if(!(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id))
-                            @can('update_time', [\App\Models\Story::class, $project])
+                        @if(is_null($story->sprint_id))
+                            @can('update_sprints', [\App\Models\Story::class, $project])
                                 <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
                             @else
                                 {{ $story->time_estimate ? "{$story->time_estimate} pts" : 'not set' }}
@@ -56,8 +56,8 @@
                             {{ $story->time_estimate }} pts
                         @endif
                     </div>
-                    @if(!is_null($story->sprint_id))
-<!--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>-->
+                    @if(is_numeric($story->sprint_id))
+{{--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>--}}
                     @endif
                 </div>
             </div>
@@ -73,9 +73,15 @@
             </div>
         </div>
         <div class="card-footer">
-            @if(!(count($active_sprint) > 0 && $story->sprint_id == $active_sprint[0]->id))
+            @if(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id)
+                @can('acceptReject', [\App\Models\Story::class, $story, $project])
+                    <button type="button" class="btn btn-success" disabled>Accept</button>
+                    <button type="button" class="btn btn-warning">Reject</button>
+                    <i class="text-muted">(DEBUG: Active sprint)</i>
+                @endcan
+            @elseif(is_null($story->sprint_id))
                 @can("update", [\App\Models\Story::class, $project])
-                    <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary" {{ Popper::arrow()->position('right')->pop("Something wrong with story? Edit it here") }}>{{ __('Edit story') }}</a>
+                    <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary" {{ Popper::arrow()->position('right')->pop("Something wrong with this story? Edit it here") }}>{{ __('Edit story') }}</a>
                 @endcan
                 @can("delete", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}" {{ Popper::arrow()->position('right')->pop("Is this story all wrong? Delete it here") }}>{{ __('Delete story') }}</a>
@@ -83,28 +89,35 @@
                 @can("addTasks", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
                 @endcan
+            @else
+                @can('acceptReject', [\App\Models\Story::class, $story, $project])
+                    <button type="button" class="btn btn-success" disabled>Accept</button>
+                    <button type="button" class="btn btn-warning">Reject</button>
+                    <i class="text-muted">(DEBUG: Old sprint)</i>
+                @endcan
             @endif
-
         </div>
     </div>
     @can("delete", [\App\Models\Story::class, $project])
-        <!-- Modal -->
-        <div class="modal fade" id="deleteModal{{$story->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{$story->id}}" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel{{$story->id}}">Are you sure you want to delete this story?</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" {{ Popper::arrow()->position('right')->pop("Close this window, I changed my mind") }}>{{ __('Close') }}</button>
-                        <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger" {{ Popper::arrow()->position('right')->pop("Yes, im sure. Now delete it!") }}>{{ __('Delete') }}</a>
+        @if(is_null($story->sprint_id))
+            <!-- Modal -->
+            <div class="modal fade" id="deleteModal{{$story->id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{$story->id}}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel{{$story->id}}">Are you sure you want to delete this story?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" {{ Popper::arrow()->position('right')->pop("Close this window, I changed my mind") }}>{{ __('Close') }}</button>
+                            <a href="{{ route('story.destroy', [$project->id, $story->id]) }}" class="btn btn-danger" {{ Popper::arrow()->position('right')->pop("Yes, im sure. Now delete it!") }}>{{ __('Delete') }}</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     @endcan
 
 @endforeach

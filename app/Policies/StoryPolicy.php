@@ -6,7 +6,7 @@ use App\Models\Project;
 use App\Models\Story;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class StoryPolicy
 {
@@ -63,19 +63,6 @@ class StoryPolicy
     }
 
     /**
-     * Determine whether the user can update time estimates of stories.
-     *
-     * @param \App\Models\User $user
-     * @param Project $project
-     * @return mixed
-     */
-    public function update_time(User $user, Project $project)
-    {
-        // TODO update this when #25 is implemented
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
-    }
-
-    /**
      * Determine whether the user can  add stories to the active Sprint.
      *
      * @param \App\Models\User $user
@@ -112,6 +99,19 @@ class StoryPolicy
     {
         return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
             $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+    }
+
+    /**
+     * Determine whether the user can reject/accept the story.
+     *
+     * @param \App\Models\User $user
+     * @param Story $story
+     * @param Project $project
+     * @return mixed
+     */
+    public function acceptReject(User $user, Story $story, Project $project)
+    {
+        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id);
     }
 
     /**
