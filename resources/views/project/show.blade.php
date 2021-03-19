@@ -18,10 +18,14 @@
         </div>
         <div class="row">
             <div class="col-sm-2">
-                <h4 class="mx-auto text-center">{{ __('Currently active sprint') }}</h4>
-                @include('sprint.card', ['sprint' => $active_sprint])
+                <div class="mx-auto">
+                    <h4 class="text-center">{{ __('Currently active sprint') }}</h4>
+                    @include('sprint.card', ['sprint' => $active_sprint])
+                    <a href="{{ route('sprint.index', $project->id) }}"
+                       class="btn btn-success mt-1" {{ Popper::arrow()->position('right')->pop("What are the sprints for this project?") }}>{{ __('See sprints') }}</a>
+                </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm">
                 @include('story.loop', ['stories_list' => $stories_sprint])
 
                 <h4 class="mt-5">{{ __('Project stories') }}</h4>

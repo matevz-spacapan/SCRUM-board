@@ -65,11 +65,6 @@ class ProjectController extends Controller
             $stories_sprint = [];
         }
 
-//        $sprints = Sprint::query()
-//            ->where('project_id', $project->id)
-//            ->where('deleted_at')
-//            ->where('end_date', '>=', Carbon::now())
-//            ->get();
         return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project,
             'user' => auth()->user(), 'active_sprint' => $active_sprint]);
     }

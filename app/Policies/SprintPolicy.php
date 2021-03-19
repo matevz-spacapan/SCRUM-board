@@ -34,7 +34,7 @@ class SprintPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -46,7 +46,7 @@ class SprintPolicy
      */
     public function view(User $user, Sprint $sprint)
     {
-        //
+        return true;
     }
 
     /**

@@ -16525,5 +16525,9 @@ video {
   }
 }
 .error-no-bound-field {
-    display: block;
+  display: block;
+}
+
+.card-disabled {
+  background-color: lightgray;
 }

@@ -338,3 +338,7 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
 .error-no-bound-field {
     display: block;
 }
+
+.card-disabled {
+    background-color: lightgray;
+}

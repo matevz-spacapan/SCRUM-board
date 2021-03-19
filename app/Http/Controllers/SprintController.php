@@ -17,7 +17,24 @@ class SprintController extends Controller
      */
     public function index(Project $project)
     {
-        //
+        Project::findOrFail($project->id);
+        $this->authorize('viewAny', [Sprint::class, $project]);
+
+        $sprints = Sprint::query()
+            ->where('project_id', $project->id)
+            ->orderByRaw('end_date < CURDATE(), end_date ASC') // expired at the end
+            ->get();
+
+        foreach ($sprints as $sprint) {
+            if (Carbon::parse($sprint->end_date) < Carbon::now()) {
+                // sprint has ended
+                $sprint->has_ended = true;
+            } else {
+                $sprint->has_ended = false;
+            }
+        }
+
+        return view('sprint.show', ['project' => $project, 'sprints' => $sprints, 'user' => auth()->user()]);
     }
 
     /**
