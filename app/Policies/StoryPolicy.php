@@ -115,32 +115,6 @@ class StoryPolicy
     }
 
     /**
-     * Determine whether the story is in an active sprint.
-     *
-     * @param \App\Models\User $user
-     * @param Story $story
-     * @param Collection $sprint
-     * @return mixed
-     */
-    public function inActiveSprint(User $user, Story $story, Collection $sprint)
-    {
-        return count($sprint) > 0 && $story->sprint_id === $sprint[0]->id;
-    }
-
-    /**
-     * Determine whether the story has no past sprint dedicated.
-     *
-     * @param \App\Models\User $user
-     * @param Story $story
-     * @param Collection $sprint
-     * @return mixed
-     */
-    public function inNoSprint(User $user, Story $story, Collection $sprint)
-    {
-        return is_null($story->sprint_id);
-    }
-
-    /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
