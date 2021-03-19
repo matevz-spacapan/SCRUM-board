@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
-use App\Models\Sprint;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -60,12 +58,13 @@ class ProjectController extends Controller
             $stories_sprint = [];
         }
 
-        $sprints = Sprint::query()
-            ->where('project_id', $project->id)
-            ->where('deleted_at')
-            ->where('end_date', '>=', Carbon::now())
-            ->get();
-        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint]);
+//        $sprints = Sprint::query()
+//            ->where('project_id', $project->id)
+//            ->where('deleted_at')
+//            ->where('end_date', '>=', Carbon::now())
+//            ->get();
+        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'project' => $project,
+            'user' => auth()->user(), 'active_sprint' => $active_sprint]);
     }
 
     /**

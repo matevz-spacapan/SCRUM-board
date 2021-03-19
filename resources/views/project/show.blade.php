@@ -14,41 +14,7 @@
             ({{ __('Developer') }})
         @endif
     </h1>
-    <h4 class="mt-2">{{ __('Project sprints') }}</h4>
 
-    @can("create", [\App\Models\Sprint::class, $project])
-        <a href="{{ route('sprint.create', $project->id) }}" class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Start a new Sprint, then add some awesome stories to it!") }}>Add new sprint</a>
-    @endcan
-    <div class="row row-cols-3">
-        @foreach($sprints as $sprint)
-            <div class="col my-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="card-text mb-2">
-                            <b>Speed: {!! nl2br($sprint->speed) !!}</b><br>
-                            <b>Start time: {!! nl2br($sprint->start_date) !!} </b><br>
-                            <b>End time: {!! nl2br($sprint->end_date) !!}</b>
-                        </div>
-                    </div>
-                    @can('isNotInProgress', [\App\Models\Sprint::class, $sprint])
-                        @can("update", [\App\Models\Sprint::class, $sprint])
-                            @can("delete",  [\App\Models\Sprint::class, $sprint])
-                                <div class="card-footer">
-                                    <a href="{{ route('sprint.edit', [$project->id, $sprint->id]) }}"
-                                       class="btn btn-primary" {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }}>{{__('Edit sprint')}}</a>
-                                    <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
-                                       class="btn btn-outline-danger" {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }}>{{__('Delete sprint')}}</a>
-                                </div>
-                            @endcan
-                        @endcan
-                    @endcan
-                </div>
-            </div>
-        @endforeach
-    </div>
-    @if(count($sprints) === 0)
-        <p>This project has no active sprints.</p>
-    @endif
     @include('story.loop', ['stories_list' => $stories_sprint])
 
     <h4 class="mt-5">{{ __('Project stories') }}</h4>

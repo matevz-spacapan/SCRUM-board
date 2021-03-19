@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+require('js-year-calendar')
 
 window.Vue = require('vue').default;
 
