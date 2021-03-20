@@ -18,12 +18,14 @@
             </h1>
         </div>
 
-        @can("create", [\App\Models\Sprint::class, $project])
-            <a href="{{ route('sprint.create', $project->id) }}"
-               class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Start a new Sprint, then add some awesome stories to it!") }}>Add
-                new sprint</a>
-        @endcan
         <div class="container">
+            @can("create", [\App\Models\Sprint::class, $project])
+                <div class="row">
+                    <a href="{{ route('sprint.create', $project->id) }}"
+                       class="btn btn-success mb-1 mr-auto ml-auto" {{ Popper::arrow()->position('right')->pop("Start a new Sprint, then add some awesome stories to it!") }}>Add
+                        new sprint</a>
+                </div>
+            @endcan
             <div class="row">
                 @foreach($sprints as $sprint)
                     @include('sprint.card', ['sprint' => $sprint, 'showFooter' => true])

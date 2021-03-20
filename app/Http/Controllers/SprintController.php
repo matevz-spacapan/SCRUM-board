@@ -90,7 +90,7 @@ class SprintController extends Controller
 
         Sprint::create($data);
 
-        return redirect()->route('project.show', $project->id);
+        return redirect()->route('sprint.index', $project->id);
     }
 
     /**
@@ -170,7 +170,7 @@ class SprintController extends Controller
 
         $sprint->update($request->all());
 
-        return redirect()->route('project.show', $project->id);
+        return redirect()->route('sprint.index', $project->id);
     }
 
     /**

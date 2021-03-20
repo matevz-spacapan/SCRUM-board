@@ -17,7 +17,7 @@
             </h1>
         </div>
         <div class="row">
-            <div class="col-sm-2">
+            <div class="col-lg-2">
                 <div class="mx-auto">
                     <h4 class="text-center">{{ __('Currently active sprint') }}</h4>
                     @include('sprint.card', ['sprint' => $active_sprint])
@@ -25,7 +25,7 @@
                        class="btn btn-success mt-1" {{ Popper::arrow()->position('right')->pop("What are the sprints for this project?") }}>{{ __('See sprints') }}</a>
                 </div>
             </div>
-            <div class="col-sm">
+            <div class="col-lg">
                 @include('story.loop', ['stories_list' => $stories_sprint])
 
                 <h4 class="mt-5">{{ __('Project stories') }}</h4>
