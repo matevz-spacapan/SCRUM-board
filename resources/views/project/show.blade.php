@@ -20,7 +20,11 @@
             <div class="col-lg-2">
                 <div class="mx-auto">
                     <h4 class="text-center">{{ __('Currently active sprint') }}</h4>
-                    @include('sprint.card', ['sprint' => $active_sprint])
+                    @if($active_sprint)
+                        @include('sprint.card', ['sprint' => $active_sprint])
+                    @else
+                        <p class="text-center">{{ __('No currently active sprint') }}</p>
+                    @endif
                     <a href="{{ route('sprint.index', $project->id) }}"
                        class="btn btn-success mt-1" {{ Popper::arrow()->position('right')->pop("What are the sprints for this project?") }}>{{ __('See sprints') }}</a>
                 </div>
