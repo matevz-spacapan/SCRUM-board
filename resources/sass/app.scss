@@ -342,6 +342,10 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
     display: block;
 }
 
+.card-current-sprint {
+    border: 2px solid lightblue;
+}
+
 .card-disabled {
     background-color: lightgray;
 }

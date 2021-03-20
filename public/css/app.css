@@ -16811,6 +16811,10 @@ video {
   display: block;
 }
 
+.card-current-sprint {
+  border: 2px solid lightblue;
+}
+
 .card-disabled {
   background-color: lightgray;
 }

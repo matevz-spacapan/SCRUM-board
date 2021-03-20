@@ -55,50 +55,51 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="start_date"
-                                       class="col-md-4 col-form-label text-md-right">{{ __('Start date') }}
-                                    <i class="far fa-question-circle" {{ Popper::arrow()->pop('The sprint start date.') }}></i></label>
+                                <div class="form-group row">
+                                    <label for="start_date"
+                                           class="col-md-4 col-form-label text-md-right">{{ __('Start date') }}
+                                        <i class="far fa-question-circle" {{ Popper::arrow()->pop('The sprint start date.') }}></i></label>
 
-                                <div class="col-md-6">
-                                    @if(isset($sprint))
-                                        <input id="start_date" type="text"
-                                               class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
-                                               name="start_date"
-                                               value="{{ old('start_date') ?? $sprint->start_date }}"
-                                               required>
-                                    @else
-                                        <input id="start_date" type="text"
-                                               class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
-                                               name="start_date" value="{{ old('start_date') }}" required>
-                                    @endif
+                                    <div class="col-md-6">
+                                        @if(isset($sprint))
+                                            <input id="start_date" type="text" @if($sprint->in_progress) disabled
+                                                   @endcan
+                                                   class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
+                                                   name="start_date"
+                                                   value="{{ old('start_date') ?? $sprint->start_date }}"
+                                                   required>
+                                        @else
+                                            <input id="start_date" type="text"
+                                                   class="form-control @error('in_progress') is-invalid @enderror @error('start_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
+                                                   name="start_date" value="{{ old('start_date') }}" required>
+                                        @endif
 
                                     @error('start_date')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label for="end_date"
-                                       class="col-md-4 col-form-label text-md-right">{{ __('End date') }} <i
-                                        class="far fa-question-circle" {{ Popper::arrow()->pop('The sprint end date.') }}></i></label>
+                                <div class="form-group row">
+                                    <label for="end_date"
+                                           class="col-md-4 col-form-label text-md-right">{{ __('End date') }} <i
+                                            class="far fa-question-circle" {{ Popper::arrow()->pop('The sprint end date.') }}></i></label>
 
-                                <div class="col-md-6">
-                                    @if(isset($sprint))
-                                        <input id="end_date" type="text"
-                                               class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
-                                               name="end_date"
-                                               value="{{ old('end_date') ?? $sprint->end_date }}" required>
-                                    @else
-                                        <input id="end_date" type="text"
-                                               class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
-                                               name="end_date" value="{{ old('end_date') }}" required>
-                                    @endif
+                                    <div class="col-md-6">
+                                        @if(isset($sprint))
+                                            <input id="end_date" type="text" @if($sprint->in_progress) disabled @endcan
+                                            class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
+                                                   name="end_date"
+                                                   value="{{ old('end_date') ?? $sprint->end_date }}" required>
+                                        @else
+                                            <input id="end_date" type="text"
+                                                   class="form-control @error('in_progress') is-invalid @enderror @error('end_date') is-invalid @enderror @error('overlaps') is-invalid @enderror"
+                                                   name="end_date" value="{{ old('end_date') }}" required>
+                                        @endif
 
-                                    @error('end_date')
+                                        @error('end_date')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
