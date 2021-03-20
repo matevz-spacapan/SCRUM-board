@@ -31,7 +31,7 @@
                 <div>
                     @if(is_null($story->sprint_id))
                         @can('update_sprints', [\App\Models\Story::class, $project])
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
                                 <input class="form-check-input" type="checkbox" {{ is_numeric($story->time_estimate) && count($active_sprint) > 0 ? "name=to_sprint[] value={$story->id} onclick=calculate(this,{$story->time_estimate})" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
                             </div>
                         @endcan
@@ -48,7 +48,7 @@
                         Time estimate
                         @if(is_null($story->sprint_id))
                             @can('update_sprints', [\App\Models\Story::class, $project])
-                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
+                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}  {{ ($taskView) == "1" ? 'disabled' : '' }}> pts
                             @else
                                 {{ $story->time_estimate ? "{$story->time_estimate} pts" : 'not set' }}
                             @endcan
@@ -72,7 +72,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
             @if(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id)
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
@@ -86,8 +86,8 @@
                 @can("delete", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}" {{ Popper::arrow()->position('right')->pop("Is this story all wrong? Delete it here") }}>{{ __('Delete story') }}</a>
                 @endcan
-                @can("addTasks", [\App\Models\Story::class, $project])
-                    <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
+                @can("viewAny", [\App\Models\Task::class])
+                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-success float-right">{{ __('Tasks') }}</a>
                 @endcan
             @else
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
