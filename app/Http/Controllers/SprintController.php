@@ -53,7 +53,7 @@ class SprintController extends Controller
     {
         Project::findOrFail($project->id);
         $this->authorize('create', [Sprint::class, $project]);
-        return view('sprint.create', ['id' => $project->id]);
+        return view('sprint.create', ['id' => $project->id, 'project' => $project]);
     }
 
     /**
@@ -130,7 +130,7 @@ class SprintController extends Controller
             $sprint->in_progress = false;
         }
         $this->authorize('update', [Sprint::class, $sprint]);
-        return view('sprint.create', ['id' => $project->id, 'sprint' => $sprint]);
+        return view('sprint.create', ['id' => $project->id, 'sprint' => $sprint, 'project' => $project]);
     }
 
     /**

@@ -12,9 +12,17 @@
             <div class="col-md-8">
                 <div class="card">
                     @if(isset($sprint))
-                        <div class="card-header">{{ __('Update sprint') }}</div>
+                        <div class="card-header d-flex justify-content-between align-items-baseline">
+                            <div>{{ __('Update sprint') }}</div>
+                            <a class="btn btn-link"
+                               href="{{ route('sprint.index', $project->id) }}" {{ Popper::arrow()->position('bottom')->pop('Discard the form and return to the sprint view.') }}>{{ __('Go back') }}</a>
+                        </div>
                     @else
-                        <div class="card-header">{{ __('Add sprint') }}</div>
+                        <div class="card-header d-flex justify-content-between align-items-baseline">
+                            <div>{{ __('Add sprint') }}</div>
+                            <a class="btn btn-link"
+                               href="{{ route('sprint.index', $project->id) }}" {{ Popper::arrow()->position('bottom')->pop('Discard the form and return to the sprint view.') }}>{{ __('Go back') }}</a>
+                        </div>
                     @endif
 
                     <div class="card-body">

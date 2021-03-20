@@ -19,13 +19,15 @@
         </div>
 
         <div class="container">
-            @can("create", [\App\Models\Sprint::class, $project])
-                <div class="row">
+            <div class="row justify-content-center mb-1">
+                @can("create", [\App\Models\Sprint::class, $project])
                     <a href="{{ route('sprint.create', $project->id) }}"
-                       class="btn btn-success mb-1 mr-auto ml-auto" {{ Popper::arrow()->position('right')->pop("Start a new Sprint, then add some awesome stories to it!") }}>Add
+                       class="btn btn-success" {{ Popper::arrow()->position('right')->pop("Start a new Sprint, then add some awesome stories to it!") }}>Add
                         new sprint</a>
-                </div>
-            @endcan
+                @endcan
+                <a class="btn btn-link"
+                   href="{{ route('project.show', $project->id) }}" {{ Popper::arrow()->position('bottom')->pop('Discard the form and return to the Project.') }}>{{ __('Go back') }}</a>
+            </div>
             <div class="row">
                 @foreach($sprints as $sprint)
                     @include('sprint.card', ['sprint' => $sprint, 'showFooter' => true])
