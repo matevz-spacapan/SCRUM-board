@@ -26,6 +26,18 @@ class StorySeeder extends Seeder
             'time_estimate' => random_int(1, 10)
         ]);
         Story::create([
+            'title' => 'Potrjena zgodba',
+            'project_id' => 1,
+            'description' => "Produktni vodja in skrbnik metodologije lahko vnašata nove uporabniške zgodbe v že obstoječ projekt.\nZa vsako zgodbo lahko določita njeno ime, besedilo, sprejemne teste, prioriteto (must have, could have, should have, won't have this time) in poslovno vrednost.",
+            'tests' => "Preveri regularen potek.\nPreveri podvajanje imena uporabniške zgodbe.\nPreveri ustrezno določitev prioritete uporabniške zgodbe.\nPreveri za neregularen vnos poslovne vrednosti.",
+            'priority' => random_int(1, 4),
+            'business_value' => random_int(1, 10),
+            'sprint_id' => 2,
+            'accepted' => true,
+            'hash' => 42,
+            'time_estimate' => random_int(1, 10)
+        ]);
+        Story::create([
             'title' => 'Pregledovanje in spreminjanje časovnega poteka dela',
             'project_id' => 1,
             'description' => "Član skupine lahko pregleduje in dopolnjuje preglednico svojega dela na nalogah v tekočem dnevu in v preteklih dnevih.\nLahko popravlja število vloženih ur na posamezni nalogi za posamezni dan. Prav tako lahko po svoji presoji določa potrebno število ur za dokončanje naloge.",
@@ -33,7 +45,7 @@ class StorySeeder extends Seeder
             'priority' => random_int(1, 3),
             'business_value' => random_int(1, 10),
             'hash' => 2,
-            'sprint_id' => 1,
+            'sprint_id' => 4,
             'time_estimate' => random_int(1, 10)
         ]);
         Story::create([

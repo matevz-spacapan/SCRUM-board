@@ -148,10 +148,10 @@ class StoryController extends Controller
     public function update_stories(Request $request, Project $project)
     {
         Project::findOrFail($project->id);
+        $this->authorize('update_sprints', [Story::class, $project]);
 
         // update time estimates for stories
         if($request->has('time')){
-            $this->authorize('update_time', [Story::class, $project]);
             $validator = Validator::make($request->all(), [
                 'time_estimate.*' => ['nullable', 'numeric', 'between:1,10'],
             ])->validate();
@@ -165,7 +165,6 @@ class StoryController extends Controller
         }
         // add selected stories to active sprint
         elseif ($request->has('sprint')){
-            $this->authorize('update_sprints', [Story::class, $project]);
             $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
             if(count($active_sprint) === 0){
                 abort(403, 'No active sprint.');
