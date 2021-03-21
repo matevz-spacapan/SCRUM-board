@@ -30,7 +30,9 @@
             </div>
             <div class="row">
                 @foreach($sprints as $sprint)
-                    @include('sprint.card', ['sprint' => $sprint, 'showFooter' => true])
+                    <div class="mx-1">
+                        @include('sprint.card', ['sprint' => $sprint, 'showFooter' => true])
+                    </div>
                 @endforeach
             </div>
         </div>

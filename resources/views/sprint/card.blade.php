@@ -13,11 +13,12 @@
             @can("delete",  [\App\Models\Sprint::class, $sprint])
                 <div class="card-footer text-center">
                     <input type=button onClick="location.href='{{ route('sprint.edit', [$project->id, $sprint->id]) }}'"
-                           class="btn btn-primary"
+                           class="btn btn-primary" @if($sprint->has_ended)  disabled
+                           @endif
                            {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }} value="{{__('Edit sprint')}}"/>
                     <input type=button
                            onClick="location.href='{{ route('sprint.delete', [$project->id, $sprint->id]) }}'"
-                           class="btn btn-outline-danger" @if($sprint->in_progress)  disabled
+                           class="btn btn-outline-danger" @if($sprint->in_progress || $sprint->has_ended)  disabled
                            @endif {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }} value="{{__('Delete sprint')}}"/>
 
                 </div>
