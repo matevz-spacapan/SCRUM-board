@@ -9,11 +9,11 @@
             <h1 class="mx-auto">
                 {{$project->project_name}} -
                 @if($user->projects->where('id', $project->id)->pluck('product_owner')->contains(auth()->user()->id))
-                    ({{ __('Product owner') }})
+                    {{ __('Product owner') }}
                 @elseif($user->projects->where('id', $project->id)->pluck('project_master')->contains(auth()->user()->id))
-                    ({{ __('Project master') }})
+                    {{ __('Project master') }}
                 @else
-                    ({{ __('Developer') }})
+                    {{ __('Developer') }}
                 @endif
             </h1>
         </div>
