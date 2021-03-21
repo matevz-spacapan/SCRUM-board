@@ -44,8 +44,9 @@ Route::get('/project/{project}/sprint/{sprint}/edit', 'App\Http\Controllers\Spri
 Route::put('/project/{project}/sprint/{sprint}', 'App\Http\Controllers\SprintController@update')->name('sprint.update');
 Route::get('/project/{project}/sprint/{sprint}', 'App\Http\Controllers\SprintController@destroy')->name('sprint.delete');
 
-
-Route::get('/project/{project}/story/{story}/tasks', 'App\Http\Controllers\TaskController@show')->name('task.show');
+Route::get('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@show')->name('task.show');
+Route::post('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@store')->name('task.store');
+Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers\TaskController@create')->name('task.create');
 
 
 Route::group(['middleware' => ['auth']], function () {

@@ -79,6 +79,9 @@
                     <button type="button" class="btn btn-warning">Reject</button>
                     <i class="text-muted">(DEBUG: Active sprint)</i>
                 @endcan
+                @can("viewAny", [\App\Models\Task::class])
+                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-success float-right">{{ __('Tasks') }}</a>
+                @endcan
             @elseif(is_null($story->sprint_id))
                 @can("update", [\App\Models\Story::class, $project])
                     <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary" {{ Popper::arrow()->position('right')->pop("Something wrong with this story? Edit it here") }}>{{ __('Edit story') }}</a>
@@ -86,9 +89,7 @@
                 @can("delete", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}" {{ Popper::arrow()->position('right')->pop("Is this story all wrong? Delete it here") }}>{{ __('Delete story') }}</a>
                 @endcan
-                @can("viewAny", [\App\Models\Task::class])
-                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-success float-right">{{ __('Tasks') }}</a>
-                @endcan
+
             @else
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>

@@ -17,9 +17,9 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->text('description');
             $table->integer('time_estimate');
-            $table->boolean('accepted')->default(false);
-            $table->foreignId('story_id')->nullable()->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->smallInteger('accepted')->default(0);
+            $table->foreignId('user_id')->nullable()->constrained();
+            $table->foreignId('story_id')->constrained();
             $table->timestamps();
         });
     }

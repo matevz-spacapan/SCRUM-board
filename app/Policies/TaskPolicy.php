@@ -41,7 +41,7 @@ class TaskPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
