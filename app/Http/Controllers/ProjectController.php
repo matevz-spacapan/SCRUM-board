@@ -70,11 +70,11 @@ class ProjectController extends Controller
         if ($active_sprint) {
             $stories_sprint = Story::query()->where('project_id', $project->id)
                 ->where('accepted', 0)
-                ->where('sprint_id', $active_sprint[0]->id)->get();
+                ->where('sprint_id', $active_sprint->id)->get();
             $stories_old = Story::query()->where('project_id', $project->id)
                 ->where('accepted', 0)
                 ->whereNotNull('sprint_id')
-                ->where('sprint_id', '<>', $active_sprint[0]->id)->get();
+                ->where('sprint_id', '<>', $active_sprint->id)->get();
         } else {
             $stories_sprint = [];
             $stories_old = Story::query()->where('project_id', $project->id)
@@ -89,7 +89,7 @@ class ProjectController extends Controller
             ->get();
 
         if ($active_sprint){
-            $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint[0]->id}")[0]->time_estimate;
+            $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint->id}")[0]->time_estimate;
         }
         else{
             $sprint_sum = 0;
