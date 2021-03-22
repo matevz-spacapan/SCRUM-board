@@ -40,7 +40,6 @@ class TaskController extends Controller
         //$this->authorize('create', [Story::class, $project]);
 
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
-
         $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
             ->where('user_id', '<>', $a[0])->get();
 
@@ -58,11 +57,9 @@ class TaskController extends Controller
     {
         Story::findOrFail($story->id);
         Project::findOrFail($project->id);
-
         $this->authorize('create', [Task::class]);
+
         $request->request->add(['story_id' => $story->id]);
-
-
         $data = $request->validate([
             'description' => ['required', 'string'],
             'user_id' => ['numeric', 'nullable'],
@@ -75,14 +72,8 @@ class TaskController extends Controller
 
         Task::create($data);
 
-
-        $a = Project::query()->where('id', $project->id)->pluck('product_owner');
-
-        $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
-            ->where('user_id', '<>', $a[0])->get();
-
-
-        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => [], 'tasks'=>Task::all(), 'user_list'=>$user_list]);
+/*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks, 'user_list'=>$user_list]);*/
+        return redirect()->route('task.show', [$project->id, $story->id]);
     }
 
     /**
@@ -95,14 +86,12 @@ class TaskController extends Controller
     public function show(Project $project, Story $story, Task $task)
     {
         Story::findOrFail($story->id);
+        $tasks = Task::all()->where('story_id', $story->id);
 
         $active_sprint = Sprint::query()
             ->where('project_id', $project->id)
             ->where('start_date', '<=', Carbon::now()->toDateString())
             ->where('end_date', '>=', Carbon::now()->toDateString())->get();
-
-        $tasks = Task::all();
-
 
         return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks]);
     }
@@ -139,8 +128,16 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Story $story, Task $task)
+    public function destroy(Project $project, Story $story, Task $task)
     {
-        //
+        Project::findOrFail($project->id);
+        Task::findOrFail($task->id);
+        Story::findOrFail($story->id);
+
+        $task->delete();
+
+/*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
+        return redirect()->route('task.show', [$project->id, $story->id]);
+
     }
 }

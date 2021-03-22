@@ -44,17 +44,20 @@
                     <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
                 </div>
                 <div class="text-right">
-                    <div>
+                    <div {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
                         Time estimate
                         @if(is_null($story->sprint_id))
                             @can('update_sprints', [\App\Models\Story::class, $project])
-                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}  {{ ($taskView) == "1" ? 'disabled' : '' }}> pts
+                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
                             @else
                                 {{ $story->time_estimate ? "{$story->time_estimate} pts" : 'not set' }}
                             @endcan
                         @else
                             {{ $story->time_estimate }} pts
                         @endif
+                    </div>
+                    <div {{ ($taskView) == "0" ? 'style=display:none' : '' }}>
+                        <a href="{{ route('project.show', $project->id) }}" class="btn btn-link" {{ Popper::arrow()->position('right')->pop("Back on project view") }}>{{ __('Go back') }}</a>
                     </div>
                     @if(is_numeric($story->sprint_id))
 {{--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>--}}
@@ -79,9 +82,6 @@
                     <button type="button" class="btn btn-warning">Reject</button>
                     <i class="text-muted">(DEBUG: Active sprint)</i>
                 @endcan
-                @can("viewAny", [\App\Models\Task::class])
-                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-success float-right">{{ __('Tasks') }}</a>
-                @endcan
             @elseif(is_null($story->sprint_id))
                 @can("update", [\App\Models\Story::class, $project])
                     <a href="{{ route('story.edit' , [$project->id, $story->id]) }}" class="btn btn-primary" {{ Popper::arrow()->position('right')->pop("Something wrong with this story? Edit it here") }}>{{ __('Edit story') }}</a>
@@ -89,7 +89,6 @@
                 @can("delete", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}" {{ Popper::arrow()->position('right')->pop("Is this story all wrong? Delete it here") }}>{{ __('Delete story') }}</a>
                 @endcan
-
             @else
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
@@ -97,6 +96,9 @@
                     <i class="text-muted">(DEBUG: Old sprint)</i>
                 @endcan
             @endif
+                @can("viewAny", [\App\Models\Task::class])
+                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-primary float-right">{{ __('View tasks') }}</a>
+                @endcan
         </div>
     </div>
     @can("delete", [\App\Models\Story::class, $project])

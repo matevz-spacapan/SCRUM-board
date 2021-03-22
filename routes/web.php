@@ -47,6 +47,7 @@ Route::get('/project/{project}/sprint/{sprint}', 'App\Http\Controllers\SprintCon
 Route::get('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@show')->name('task.show');
 Route::post('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@store')->name('task.store');
 Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers\TaskController@create')->name('task.create');
+Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
 
 
 Route::group(['middleware' => ['auth']], function () {
