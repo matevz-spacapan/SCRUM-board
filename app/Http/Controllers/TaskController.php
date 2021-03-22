@@ -37,7 +37,7 @@ class TaskController extends Controller
     {
         Project::findOrFail($project->id);
         Story::findOrFail($story->id);
-        //$this->authorize('create', [Task::class, $project]);
+            $this->authorize('create', [Task::class, $project]);
 
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
         $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
