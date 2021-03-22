@@ -5,9 +5,14 @@
 
     @include('story.loop', ['stories_list' => $story_list, 'taskView'=>"1"])
 
-        <div class="card mb-3">
-            <div class="card-header">
-                <h5>Existing tasks</h5>
+        <div class="card mb-3 align-middle">
+            <div class="card-header d-flex">
+                <div class="align-self-center"><h5 class="mb-0">Tasks</h5></div>
+                @if($active_sprint)
+                    @can("create", [\App\Models\Task::class, $project])
+                        <a href="{{ route('task.create', [$project->id, $story->id]) }}" class="btn btn-success ml-3" {{ Popper::arrow()->position('right')->pop("Let's add some tasks! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new task') }}</a>
+                    @endcan
+                @endif
             </div>
             <div class="card-body px-0 py-0">
                 <table class="table table-bordered mb-0">
@@ -41,17 +46,17 @@
                             @default
                         @endswitch
                     <tr>
-                            <td width="40%">{{ $task->description }}</td>
-                            <td width="15%" style="text-align: center">{{ $task->time_estimate }}</td>
-                            <td width="15%" style="text-align: center">
+                            <td width="40%" class="align-middle">{{ $task->description }}</td>
+                            <td width="15%" style="text-align: center" class="align-middle">{{ $task->time_estimate }}</td>
+                            <td width="15%" style="text-align: center" class="align-middle">
                                 @if(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>
                                     @else
                                     {{ \App\Models\User::where(['id' => $task->user_id])->pluck('username')->first() }}
                                 @endif
                             </td>
-                            <td width="15%" style="text-align: center " class="{{ $color }}">
-                                @if($task->user_id && $task->accepted != 0)<b><i>{{ $text }}</b></i>
+                            <td width="15%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
+                                @if($task->user_id && $task->accepted != 0 || Auth::User()->id != $task->user_id && $task->user_id)<b><i>{{ $text }}</b></i>
                                 @endif
                                 @if(Auth::User()->id == $task->user_id && $task->accepted == 0)
                                     <button type="button" class="btn btn-success"><i class="fas fa-check"></i></button>
@@ -61,7 +66,7 @@
                                     <i class="fas fa-minus"></i>
                                 @endif
                             </td>
-                            <td width="15%" style="text-align: center">
+                            <td width="15%" style="text-align: center" class="align-middle">
                                 <a class="btn btn-outline-primary" href="#">Edit</a>
                                 <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</a>
                             </td>
@@ -88,13 +93,6 @@
                 </table>
             </div>
         </div>
-
-        <h4 class="mt-5">{{ __('Other tasks') }}</h4>
-        @if($active_sprint)
-            @can("create", [\App\Models\Task::class, $project])
-                <a href="{{ route('task.create', [$project->id, $story->id]) }}" class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Let's add some tasks! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new task') }}</a>
-            @endcan
-        @endif
     </div>
 
 @endsection
