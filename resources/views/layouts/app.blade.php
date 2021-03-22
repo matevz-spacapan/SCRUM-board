@@ -10,7 +10,8 @@
     <title>{{ config('app.name') }} @yield('title')</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}" ></script>
+	<script src="{{ asset('js/select2.min.js') }}" ></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,6 +20,14 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+	
+	
+	<!-- select2 -->
+	
+	
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	
+	
 </head>
 <body>
     <div id="app">
@@ -106,5 +115,12 @@
         </footer>
     </div>
     @include('popper::assets')
+	
+	
+
+  	<script src="{{ asset('js/project_select2.js') }}" defer></script>
+	
+	
+	
 </body>
 </html>

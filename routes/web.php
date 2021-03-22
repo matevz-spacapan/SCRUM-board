@@ -28,6 +28,8 @@ Route::get('/admin/user/create', 'App\Http\Controllers\UserController@create')->
 Route::get('/user/settings', 'App\Http\Controllers\UserController@edit')->name('user.edit');
 Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name('user.update');
 
+Route::post('/ajax-get-users', 'App\Http\Controllers\ProjectController@userdataAjax')->name('project.userdataAjax');
+Route::resource('/project', 'App\Http\Controllers\ProjectController');
 
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
 
@@ -44,4 +46,3 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');
 });
 
-Route::get('/project/create/', 'App\Http\Controllers\ProjectController@create')->name('project.create');

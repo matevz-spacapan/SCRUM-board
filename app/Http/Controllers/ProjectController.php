@@ -6,6 +6,8 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\User;
+
 class ProjectController extends Controller
 {
     /**
@@ -13,11 +15,11 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects= Project:all();
-
-        return view('project.index')->with('projects', $projects);
+        $data = Project::orderBy('id','ASC')->paginate(5);
+        return view('project.index',compact('data'))
+            ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -27,10 +29,37 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::pluck('id', 'name');
+        $users = User::pluck( 'username', 'id' )->all();
 
 
-        return view('project.create', compact('id', 'users'));
+        return view('project.create', compact('users'));
+    }
+
+
+    /**
+     * Show the application dataAjax.
+     *
+     * 
+     */
+    public function userdataAjax(Request $request)
+    {
+        $search = $request->search;
+
+        if($search == ''){
+            $users = User::orderby('username','asc')->select('id','username')->limit(5)->get();
+        }else{
+            $users = User::orderby('username','asc')->select('id','username')->where('username', 'like', '%' .$search . '%')->limit(7)->get();
+        }
+
+        $response = array();
+        foreach($users as $user){
+            $response[] = array(
+                "id"=>$user->username,  //->id
+                "text"=>$user->username
+            );
+        }
+
+        return json_encode($response);
     }
 
     /**
@@ -64,8 +93,19 @@ class ProjectController extends Controller
             // store
             $project = new Project;
             $project->name= Input::get('project_name');
-            $project->product_owner= Input::get('product_owner');
-            $project->srum_master= Input::get('scrum_master');
+
+            $project_owner= User::where('username', Input::get('project_owner'))->first();
+            $project->product_owner= $project_owner;
+
+            $project_master= User::where('username', Input::get('project_master'))->first();
+            $project->project_master= $project_master;
+
+            $developers = $request->name_pud;
+
+            foreach($developers as $username) {
+                $temp_user= User::where('username', Input::get($username))->first();
+                project->users()->attach($temp_user->id);
+            }
 
 
             $project->save();
@@ -111,7 +151,10 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $project = Project::findOrFail($project->id);
-        return view('project.edit', ['project' => $project]);
+
+        $developers= $project->users();
+
+        return view('project.edit', ['project' => $project, 'developers' => $developers]);
     }
 
     /**
