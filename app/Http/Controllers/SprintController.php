@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Sprint;
+use App\Models\Story;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -185,6 +186,15 @@ class SprintController extends Controller
                 'project_id' => ['required', 'numeric', 'min:0'],
                 'speed' => 'required|numeric|min:1'
             ]);
+        }
+
+        $new_speed = $request->request->get('speed');
+        $sprint_stories_points = Story::query()
+            ->where('sprint_id', $sprint->id)
+            ->sum('time_estimate');
+
+        if ($new_speed < $sprint_stories_points) {
+            return redirect()->back()->withErrors(['speed' => 'Speed can not be less than the combined time estimate for all stories in this sprint'])->withInput();
         }
 
         $sprint->update($request->all());

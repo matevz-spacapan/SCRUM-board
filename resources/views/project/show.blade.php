@@ -63,7 +63,7 @@
                        class="btn btn-success mt-1" {{ Popper::arrow()->position('right')->pop("What are the sprints for this project?") }}>{{ __('See sprints') }}</a>
                 </div>
             </div>
-            <div class="col-lg">
+            <div class="col-lg-8">
                 @if(count($stories_sprint) > 0)
                     <h5>Stories in active sprint (<b>{{ $sprint_sum }}</b> <i
                             class="far fa-question-circle" {{ Popper::arrow()->pop('This includes already accepted stories.') }}></i>
