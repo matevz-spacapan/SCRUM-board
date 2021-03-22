@@ -7,6 +7,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// datepicker
+@import '~js-datepicker/src/datepicker';
+
 //FontAwesome
 @import '~@fortawesome/fontawesome-free/scss/brands';
 @import '~@fortawesome/fontawesome-free/scss/regular';
@@ -337,4 +340,12 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
 
 .error-no-bound-field {
     display: block;
+}
+
+.card-current-sprint {
+    border: 2px solid lightblue;
+}
+
+.card-disabled {
+    background-color: lightgray;
 }

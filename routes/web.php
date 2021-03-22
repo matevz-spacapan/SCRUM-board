@@ -40,9 +40,10 @@ Route::get('/project/{project}/story/{story}/destroy', 'App\Http\Controllers\Sto
 
 Route::post('/project/{project}/sprint', 'App\Http\Controllers\SprintController@store')->name('sprint.store');
 Route::get('/project/{project}/sprint/create', 'App\Http\Controllers\SprintController@create')->name('sprint.create');
+Route::get('/project/{project}/sprint/index', 'App\Http\Controllers\SprintController@index')->name('sprint.index');
 Route::get('/project/{project}/sprint/{sprint}/edit', 'App\Http\Controllers\SprintController@edit')->name('sprint.edit');
 Route::put('/project/{project}/sprint/{sprint}', 'App\Http\Controllers\SprintController@update')->name('sprint.update');
-Route::get('/project/{project}/sprint/{sprint}', 'App\Http\Controllers\SprintController@destroy')->name('sprint.delete');
+Route::get('/project/{project}/sprint/{sprint}/delete', 'App\Http\Controllers\SprintController@destroy')->name('sprint.delete');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');

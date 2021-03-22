@@ -32,7 +32,7 @@
                     @if(is_null($story->sprint_id))
                         @can('update_sprints', [\App\Models\Story::class, $project])
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" {{ is_numeric($story->time_estimate) && count($active_sprint) > 0 ? "name=to_sprint[] value={$story->id} onclick=calculate(this,{$story->time_estimate})" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
+                                <input class="form-check-input" type="checkbox" {{ is_numeric($story->time_estimate) && $active_sprint ? "name=to_sprint[] value={$story->id} onclick=calculate(this,{$story->time_estimate})" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
                             </div>
                         @endcan
                     @endif
@@ -41,7 +41,8 @@
                     @else
                         <div class="d-inline-block lead {{ $color }}">{{ $story->title }}</div>
                     @endif
-                    <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
+                    <div>Priority: <b><i>{{ $text }}</i></b> | Business value:
+                        <b><i>{{ $story->business_value }}</i></b></div>
                 </div>
                 <div class="text-right">
                     <div>
@@ -73,7 +74,7 @@
             </div>
         </div>
         <div class="card-footer">
-            @if(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id)
+            @if($active_sprint && $story->sprint_id === $active_sprint->id)
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
                     <button type="button" class="btn btn-warning">Reject</button>

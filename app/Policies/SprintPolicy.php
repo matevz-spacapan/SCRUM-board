@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SprintPolicy
@@ -34,7 +33,7 @@ class SprintPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -46,7 +45,7 @@ class SprintPolicy
      */
     public function view(User $user, Sprint $sprint)
     {
-        //
+        return true;
     }
 
     /**
@@ -58,11 +57,6 @@ class SprintPolicy
     public function create(User $user, Project $project)
     {
         return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
-    }
-
-    public function isNotInProgress(User $user, Sprint $sprint)
-    {
-        return !(Carbon::create($sprint->start_date) <= Carbon::now() && Carbon::parse($sprint->end_date) >= Carbon::now());
     }
 
     /**

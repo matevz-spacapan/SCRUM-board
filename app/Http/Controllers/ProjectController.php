@@ -55,7 +55,7 @@ class ProjectController extends Controller
         $active_sprint = Sprint::query()
                             ->where('project_id', $project->id)
                             ->where('start_date', '<=', Carbon::now()->toDateString())
-                            ->where('end_date', '>=', Carbon::now()->toDateString())->get();
+                            ->where('end_date', '>=', Carbon::now()->toDateString())->first();
 
         $a = Story::query()->where('project_id', $project->id)
             ->where('accepted', 0)
@@ -67,14 +67,14 @@ class ProjectController extends Controller
             ->whereNull('sprint_id')
             ->union($a)->get();
 
-        if (count($active_sprint) > 0) {
+        if ($active_sprint) {
             $stories_sprint = Story::query()->where('project_id', $project->id)
                 ->where('accepted', 0)
-                ->where('sprint_id', $active_sprint[0]->id)->get();
+                ->where('sprint_id', $active_sprint->id)->get();
             $stories_old = Story::query()->where('project_id', $project->id)
                 ->where('accepted', 0)
                 ->whereNotNull('sprint_id')
-                ->where('sprint_id', '<>', $active_sprint[0]->id)->get();
+                ->where('sprint_id', '<>', $active_sprint->id)->get();
         } else {
             $stories_sprint = [];
             $stories_old = Story::query()->where('project_id', $project->id)
@@ -88,8 +88,8 @@ class ProjectController extends Controller
             ->where('end_date', '>=', Carbon::now())
             ->get();
 
-        if (count($active_sprint) > 0){
-            $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint[0]->id}")[0]->time_estimate;
+        if ($active_sprint){
+            $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint->id}")[0]->time_estimate;
         }
         else{
             $sprint_sum = 0;
