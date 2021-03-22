@@ -57,7 +57,7 @@ class TaskController extends Controller
     {
         Story::findOrFail($story->id);
         Project::findOrFail($project->id);
-        $this->authorize('create', [Task::class]);
+        $this->authorize('create', [Task::class, $project]);
 
         $request->request->add(['story_id' => $story->id]);
         $data = $request->validate([
