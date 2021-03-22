@@ -91,7 +91,12 @@ class TaskController extends Controller
         $active_sprint = Sprint::query()
             ->where('project_id', $project->id)
             ->where('start_date', '<=', Carbon::now()->toDateString())
-            ->where('end_date', '>=', Carbon::now()->toDateString())->get();
+            ->where('end_date', '>=', Carbon::now()->toDateString())->first();
+
+        if($active_sprint->id != $story->sprint_id)
+            $active_sprint = [];
+
+        /*    ->join('sprint','id', '=', 'stories.sprint_id')->where('id', $story->id)*/
 
         return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks]);
     }

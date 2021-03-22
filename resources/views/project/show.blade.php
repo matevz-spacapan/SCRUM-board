@@ -68,11 +68,11 @@
                     <h5>Stories in active sprint (<b>{{ $sprint_sum }}</b> <i
                             class="far fa-question-circle" {{ Popper::arrow()->pop('This includes already accepted stories.') }}></i>
                         pts / <b>{{ $active_sprint->speed }}</b> pts)</h5>
-                    @include('story.loop', ['stories_list' => $stories_sprint])
+                    @include('story.loop', ['stories_list' => $stories_sprint, 'taskView'=>"0"])
                 @endif
                 @if(count($stories_old) > 0)
                     <h5>Unapproved stories from previous sprint</h5>
-                    @include('story.loop', ['stories_list' => $stories_old])
+                    @include('story.loop', ['stories_list' => $stories_old, 'taskView'=>"0"])
                 @endif
 
                 <h4 class="mt-5">{{ __('Other project stories') }}</h4>
@@ -83,7 +83,7 @@
                     <a href="#" class="btn btn-outline-primary mb-3">{{ __('Accepted stories') }}</a>
                     <form method="POST" action="{{ route('story.update_stories', $project->id) }}">
                     @csrf
-                    @include('story.loop', ['stories_list' => $stories_project])
+                    @include('story.loop', ['stories_list' => $stories_project, 'taskView'=>"0"])
 
                     @if(count($stories_project) === 0 && count($stories_sprint) === 0)
                         <p>{{ __('This project has no stories.') }}</p>

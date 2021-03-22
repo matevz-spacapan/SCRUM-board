@@ -76,7 +76,7 @@
             </div>
         </div>
         <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
-            @if(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id)
+            @if($active_sprint && $story->sprint_id === $active_sprint->id)
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
                     <button type="button" class="btn btn-warning">Reject</button>

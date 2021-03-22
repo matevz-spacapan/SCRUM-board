@@ -90,7 +90,7 @@
         </div>
 
         <h4 class="mt-5">{{ __('Other tasks') }}</h4>
-        @if(count($active_sprint)>0)
+        @if($active_sprint)
             @can("create", [\App\Models\Task::class, $project])
                 <a href="{{ route('task.create', [$project->id, $story->id]) }}" class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Let's add some tasks! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new task') }}</a>
             @endcan
