@@ -31,7 +31,7 @@
                 <div>
                     @if(is_null($story->sprint_id))
                         @can('update_sprints', [\App\Models\Story::class, $project])
-                            <div class="form-check form-check-inline">
+                            <div class="form-check form-check-inline"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
                                 <input class="form-check-input" type="checkbox" {{ is_numeric($story->time_estimate) && $active_sprint ? "name=to_sprint[] value={$story->id} onclick=calculate(this,{$story->time_estimate})" : 'disabled' }} {{ Popper::arrow()->pop('Select to add to the active Sprint.') }}>
                             </div>
                         @endcan
@@ -41,11 +41,10 @@
                     @else
                         <div class="d-inline-block lead {{ $color }}">{{ $story->title }}</div>
                     @endif
-                    <div>Priority: <b><i>{{ $text }}</i></b> | Business value:
-                        <b><i>{{ $story->business_value }}</i></b></div>
+                    <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
                 </div>
                 <div class="text-right">
-                    <div>
+                    <div {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
                         Time estimate
                         @if(is_null($story->sprint_id))
                             @can('update_sprints', [\App\Models\Story::class, $project])
@@ -56,6 +55,9 @@
                         @else
                             {{ $story->time_estimate }} pts
                         @endif
+                    </div>
+                    <div {{ ($taskView) == "0" ? 'style=display:none' : '' }}>
+                        <a href="{{ route('project.show', $project->id) }}" class="btn btn-link" {{ Popper::arrow()->position('right')->pop("Back on project view") }}>{{ __('Go back') }}</a>
                     </div>
                     @if(is_numeric($story->sprint_id))
 {{--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>--}}
@@ -73,7 +75,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
             @if($active_sprint && $story->sprint_id === $active_sprint->id)
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
@@ -97,6 +99,9 @@
                     <i class="text-muted">(DEBUG: Old sprint)</i>
                 @endcan
             @endif
+                @can("viewAny", [\App\Models\Task::class, $project])
+                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-primary float-right">{{ __('View tasks') }}</a>
+                @endcan
         </div>
     </div>
     @can("delete", [\App\Models\Story::class, $project])
