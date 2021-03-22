@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    @yield('page_specific_scripts')
     @yield('count_sprints')
 
     <!-- Fonts -->

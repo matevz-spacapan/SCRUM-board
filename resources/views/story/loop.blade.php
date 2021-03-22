@@ -89,6 +89,9 @@
                 @can("delete", [\App\Models\Story::class, $project])
                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$story->id}}" {{ Popper::arrow()->position('right')->pop("Is this story all wrong? Delete it here") }}>{{ __('Delete story') }}</a>
                 @endcan
+                @can("addTasks", [\App\Models\Story::class, $project])
+                    <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
+                @endcan
             @else
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>

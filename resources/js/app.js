@@ -5,6 +5,8 @@
  */
 
 require('./bootstrap');
+require('js-year-calendar');
+window.datepicker = require('js-datepicker')
 
 window.Vue = require('vue').default;
 
