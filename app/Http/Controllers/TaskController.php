@@ -37,7 +37,7 @@ class TaskController extends Controller
     {
         Project::findOrFail($project->id);
         Story::findOrFail($story->id);
-        //$this->authorize('create', [Story::class, $project]);
+        //$this->authorize('create', [Task::class, $project]);
 
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
         $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
@@ -87,6 +87,8 @@ class TaskController extends Controller
     {
         Story::findOrFail($story->id);
         $tasks = Task::all()->where('story_id', $story->id);
+
+        $this->authorize('viewAny', [Task::class, $project]);
 
         $active_sprint = Sprint::query()
             ->where('project_id', $project->id)

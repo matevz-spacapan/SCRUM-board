@@ -99,7 +99,7 @@
                     <i class="text-muted">(DEBUG: Old sprint)</i>
                 @endcan
             @endif
-                @can("viewAny", [\App\Models\Task::class])
+                @can("viewAny", [\App\Models\Task::class, $project])
                     <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-primary float-right">{{ __('View tasks') }}</a>
                 @endcan
         </div>

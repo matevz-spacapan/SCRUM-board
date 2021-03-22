@@ -17,9 +17,14 @@ class TaskPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Project $project)
     {
-        return true;
+        $a = Project::query()->where('id', $project->id)->pluck('product_owner');
+        $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
+            ->where('user_id', '<>', $a[0])->get();
+
+        return $user_list->contains($user->id);
+
     }
 
     /**
