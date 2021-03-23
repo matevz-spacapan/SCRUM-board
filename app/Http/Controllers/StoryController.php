@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Story;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -172,10 +173,12 @@ class StoryController extends Controller
             $validator = Validator::make($request->all(), [
                 'to_sprint.*' => ['numeric']
             ])->validate();
-            foreach ($validator['to_sprint'] as $id => $value){
-                $story = Story::find($value);
-                $story->sprint_id = $active_sprint[0]->id;
-                $story->save();
+            if(Arr::has($validator, 'to_sprint')){
+                foreach ($validator['to_sprint'] as $id => $value){
+                    $story = Story::find($value);
+                    $story->sprint_id = $active_sprint[0]->id;
+                    $story->save();
+                }
             }
         }
         return redirect()->route('project.show', $project->id);
