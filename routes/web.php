@@ -36,6 +36,7 @@ Route::post('/project/{project}/stories', 'App\Http\Controllers\StoryController@
 Route::get('/project/{project}/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
 Route::get('/project/{project}/story/{story}/edit', 'App\Http\Controllers\StoryController@edit')->name('story.edit'); #show the form
 Route::patch('/project/{project}/story/{story}', 'App\Http\Controllers\StoryController@update')->name('story.update'); #actual process of updating the record
+Route::post('/project/{project}/story/{story}/reject', 'App\Http\Controllers\StoryController@reject')->name('story.reject'); #actual process of updating the record
 Route::get('/project/{project}/story/{story}/destroy', 'App\Http\Controllers\StoryController@destroy')->name('story.destroy');
 
 Route::post('/project/{project}/sprint', 'App\Http\Controllers\SprintController@store')->name('sprint.store');

@@ -21,6 +21,7 @@ class Story extends Model
         'hash',
         'time_estimate',
         'to_sprint',
+        'comment',
     ];
 
     public function project()

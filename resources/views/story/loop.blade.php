@@ -74,12 +74,18 @@
                     @endforeach
                 </ul>
             </div>
+            @if($story->comment)
+                <div class="text-muted">
+                    {{ __('Rejection comment: ') }} <i>{{ $story->comment }}</i>
+                </div>
+            @endif
         </div>
         <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
             @if($active_sprint && $story->sprint_id === $active_sprint->id)
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
-                    <button type="button" class="btn btn-warning">Reject</button>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectModal{{ $story->id }}">Reject</button>
+                    @include('story.reject', ['story' => $story])
                     <i class="text-muted">(DEBUG: Active sprint)</i>
                 @endcan
             @elseif(is_null($story->sprint_id))
@@ -95,7 +101,8 @@
             @else
                 @can('acceptReject', [\App\Models\Story::class, $story, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
-                    <button type="button" class="btn btn-warning">Reject</button>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectModal{{ $story->id }}">Reject</button>
+                    @include('story.reject', ['story' => $story])
                     <i class="text-muted">(DEBUG: Old sprint)</i>
                 @endcan
             @endif
