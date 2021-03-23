@@ -18,17 +18,17 @@ class ProjectSeeder extends Seeder
         Project::create([
             'project_name' => 'First project',
             'product_owner' => 1,
-            'project_master' => 2
+            'project_master' => 3
         ]);
         Project::create([
             'project_name' => 'Second project',
-            'product_owner' => 3,
+            'product_owner' => 2,
             'project_master' => 1
         ]);
         Project::create([
             'project_name' => 'Third project',
-            'product_owner' => 2,
-            'project_master' => 3
+            'product_owner' => 3,
+            'project_master' => 2
         ]);
 
         DB::table('project_user')->insert([
