@@ -43,7 +43,7 @@
                     <ul class="navbar-nav mr-auto">
                         @auth
 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('project.show', 1) }}">{{ __('Project 1') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('project.index') }}">{{ __('Projects') }}</a></li>
 
 
                             @can('users-list') {{--<!--IS ADMIN-->--}}
