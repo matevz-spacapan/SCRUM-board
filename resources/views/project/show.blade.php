@@ -18,21 +18,17 @@
                 if (counter > sprint_max) {
                     document.getElementById("sprint_btn").disabled = true;
                 ctr_div.classList.add("text-danger");
+                }
+                else{
+                    document.getElementById("sprint_btn").disabled=false;
+                    ctr_div.classList.remove("text-danger");
+                }
+                ctr_div.innerHTML = counter;
+                if(document.querySelectorAll('input[type="checkbox"]:checked').length === 0){
+                    document.getElementById("sprint_btn").disabled = true;
+                }
             }
-            else{
-                document.getElementById("sprint_btn").disabled=false;
-                ctr_div.classList.remove("text-danger");
-            }
-            ctr_div.innerHTML = counter;
-
-        }
-        function add(val){
-            counter = counter + val;
-        }
-        function remove(val){
-            counter = counter - val;
-        }
-    </script>
+        </script>
 @endif
 @endsection
 
@@ -94,7 +90,7 @@
                                 @can('update_sprints', [\App\Models\Story::class, $project])
                                     @if($active_sprint)
                                         <button type="submit" name="sprint" id="sprint_btn"
-                                                class="btn btn-outline-primary" {{ Popper::arrow()->position('right')->pop('Add check marks next to the story titles you wish to add to the active Sprint.') }}>{{ __('Add selected to sprint') }}
+                                                class="btn btn-outline-primary" {{ Popper::arrow()->position('right')->pop('Add check marks next to the story titles you wish to add to the active Sprint.') }} disabled>{{ __('Add selected to sprint') }}
                                             <i class="far fa-question-circle"></i></button>
                                     @else
                                         <div
