@@ -21,9 +21,8 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Project::orderBy('id','ASC')->paginate(5);
-        return view('project.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        $data = Project::query()->orderBy('id')->paginate(5);
+        return view('project.index', ['data' => $data]);
     }
 
     /**
@@ -79,7 +78,7 @@ class ProjectController extends Controller
         $this->authorize('create', Project::class);
 
         $data = $request->validate([
-            'project_name' => ['required', 'string', 'max:255'],
+            'project_name' => ['required', 'string', 'max:255', 'unique:projects,project_name'],
             'product_owner' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->project_master])],
             'project_master' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],
             'developers.*' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],

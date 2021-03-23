@@ -10,30 +10,24 @@
                 {{ __('Project management') }}
                 </div>
                 <div class="card-body">
-                    <a class="btn btn-success mb-2" href="{{ route('project.create') }}">{{ __('Create New Project') }}</a>
-                    
-                    @if ($message = Session::get('success'))
-                    <div class="alert alert-success">
-                        <p>{{ $message }}</p>
-                    </div>
-                    @endif
-                    
+                    <a class="btn btn-success mb-2" href="{{ route('project.create') }}"><i class="fas fa-plus"></i> {{ __('Create New Project') }}</a>
+
                     <table class="table table-bordered">
                         <tr>
                             <th>No</th>
                             <th>Project name</th>
                             <th>Project owner</th>
                             <th>Scrum master</th>
-							<th>Team size</th>
-                            <th width="280px">Action</th>
+							<th>Team size <i class="far fa-question-circle" {{ Popper::arrow()->pop('This includes only developers.') }}></i></th>
+                            <th>Actions</th>
                         </tr>
-                        @foreach ($data as $key => $project)
+                        @foreach ($data as $project)
                         <tr>
-                            <td>{{ ++$i }}</td>
-                            <td>{{ $project->project_name }}</td>
-                            <td>{{ $project->project_owner }}</td>
-                            <td>{{ $project->scrum_master }}</td>
-                            <td>{{ $project->team_size }}</td>
+                            <td>{{ $project->id }}</td>
+                            <td><a href="{{ route('project.show', $project->id) }}" style="text-decoration: underline;">{{ $project->project_name }}</a></td>
+                            <td>{{ \App\Models\User::where(['id' => $project->product_owner])->pluck('username')->first() }}</td>
+                            <td>{{ \App\Models\User::where(['id' => $project->project_master])->pluck('username')->first() }}</td>
+                            <td>{{ count($project->users) }}</td>
                             <td>
                                 {{--<!--<a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>-->--}}
                                 <a class="btn btn-primary" href="{{ route('project.edit', $project->id) }}">Edit</a>
@@ -44,10 +38,12 @@
                         </tr>
                         @endforeach
                     </table>
+                    <div class="d-flex justify-content-center">
+                        {{ $data->onEachSide(5)->links() }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    {!! $data->render() !!}
 </div>
 @endsection
