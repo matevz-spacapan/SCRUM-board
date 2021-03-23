@@ -48,6 +48,17 @@ class ProjectPolicy
     }
 
     /**
+     * Determine whether the user can create models.
+     *
+     * @param \App\Models\User $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user

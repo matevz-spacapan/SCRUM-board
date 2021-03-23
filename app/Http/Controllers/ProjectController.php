@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
@@ -42,13 +43,15 @@ class ProjectController extends Controller
     /**
      * Show the application dataAjax.
      *
-     * 
+     * @param Request $request
+     * @return false|string
+     * @throws \JsonException
      */
     public function userdataAjax(Request $request)
     {
         $search = $request->search;
 
-        if($search == ''){
+        if($search === ''){
             $users = User::orderby('username','asc')->select('id','username')->limit(5)->get();
         }else{
             $users = User::orderby('username','asc')->select('id','username')->where('username', 'like', '%' .$search . '%')->limit(7)->get();
@@ -62,62 +65,46 @@ class ProjectController extends Controller
             );
         }
 
-        return json_encode($response);
+        return json_encode($response, JSON_THROW_ON_ERROR);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        // Form validation
-        $this->validate($request, [
-            'project_name' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
-            
-         ]);
+        $this->authorize('create', Project::class);
 
+        $data = $request->validate([
+            'project_name' => ['required', 'string', 'max:255'],
+            'product_owner' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->project_master])],
+            'project_master' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],
+            'developers.*' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],
+        ]);
 
-        // validate
-        $rules = array(
-            'project_name'  => 'required|regex:/^[a-zA-Z0-9\s]+$/',
-            
-        );
-        $validator = Validator::make(Input::all(), $rules);
+        //insert data that we can do straight away (into the projects table)
+        $project = new Project;
+        $project->project_name = $data['project_name'];
+        $product_owner = User::where('username', $data['product_owner'])->first();
+        $project->product_owner = $product_owner->id;
+        $project_master= User::where('username', $data['project_master'])->first();
+        $project->project_master = $project_master->id;
 
-        // process the login
-        if ($validator->fails()) {
-            return Redirect::to('project/create')
-                ->withErrors($validator)
-                ->withInput(Input::except('password'));
-        } else {
-            // store
-            $project = new Project;
-            $project->name= Input::get('project_name');
+        //get IDs of the usernames
+        $usr_ids = [];
+        foreach($data['developers'] as $username) {
+            $user = User::where('username', $username)->first();
+            $usr_ids[] = $user->id;
+        }
 
-            $project_owner= User::where('username', Input::get('project_owner'))->first();
-            $project->product_owner= $project_owner;
+        //save the project and developer IDs
+        $project->save();
+        $project->users()->attach($usr_ids);
 
-            $project_master= User::where('username', Input::get('project_master'))->first();
-            $project->project_master= $project_master;
-
-            $developers = $request->name_pud;
-
-            foreach($developers as $username) {
-                $temp_user= User::where('username', Input::get($username))->first();
-                project->users()->attach($temp_user->id);
-            }
-
-
-            $project->save();
-
-            // redirect
-            Session::flash('message', 'Successfully created project!');
-
-            return redirect()->route('project.show', $project->id);
-        }    
+        return redirect()->route('project.show', $project->id);
     }
 
     /**

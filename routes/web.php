@@ -29,7 +29,11 @@ Route::get('/user/settings', 'App\Http\Controllers\UserController@edit')->name('
 Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name('user.update');
 
 Route::post('/ajax-get-users', 'App\Http\Controllers\ProjectController@userdataAjax')->name('project.userdataAjax');
-Route::resource('/project', 'App\Http\Controllers\ProjectController');
+Route::get('/project', 'App\Http\Controllers\ProjectController@index')->name('project.index');
+Route::get('/project/create', 'App\Http\Controllers\ProjectController@create')->name('project.create');
+Route::post('/project', 'App\Http\Controllers\ProjectController@store')->name('project.store');
+Route::get('/project/{project}/edit', 'App\Http\Controllers\ProjectController@edit')->name('project.edit');
+Route::delete('/project/{project}', 'App\Http\Controllers\ProjectController@destroy')->name('project.destroy');
 
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
 
