@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Story;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -87,7 +88,17 @@ class StoryController extends Controller
      */
     public function edit(Project $project, Story $story)
     {
-        //
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('update', [Story::class, $project]);
+
+        return view('story.edit', ['story' => $story, 'project' => $project]);
+
     }
 
     /**
@@ -100,7 +111,32 @@ class StoryController extends Controller
      */
     public function update(Request $request, Project $project, Story $story)
     {
-        //
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('update', [Story::class, $project]);
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255',
+                Rule::unique('stories')->where(function ($query) use ($project, $story) {
+                    return $query->where('project_id', $project->id)
+                        ->where('id', '<>',    $story->id); })],
+            'description' => ['required', 'string'],
+            'tests' => ['required', 'string'],
+            'priority' => 'required',
+            'business_value' => ['required', 'numeric', 'between:1,10'],
+            'hash' => ['nullable', 'numeric',
+                Rule::unique('stories')->where(function ($query) use ($project, $story) {
+                    return $query->where('project_id', $project->id)
+                                ->where('id', '<>',    $story->id); })],
+        ]);
+
+        $story->update($data);
+
+        return redirect()->route('project.show', $project->id);
     }
 
     /**
@@ -113,10 +149,10 @@ class StoryController extends Controller
     public function update_stories(Request $request, Project $project)
     {
         Project::findOrFail($project->id);
+        $this->authorize('update_sprints', [Story::class, $project]);
 
         // update time estimates for stories
         if($request->has('time')){
-            $this->authorize('update_time', [Story::class, $project]);
             $validator = Validator::make($request->all(), [
                 'time_estimate.*' => ['nullable', 'numeric', 'between:1,10'],
             ])->validate();
@@ -130,7 +166,6 @@ class StoryController extends Controller
         }
         // add selected stories to active sprint
         elseif ($request->has('sprint')){
-            $this->authorize('update_sprints', [Story::class, $project]);
             $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
             if(count($active_sprint) === 0){
                 abort(403, 'No active sprint.');
@@ -138,10 +173,12 @@ class StoryController extends Controller
             $validator = Validator::make($request->all(), [
                 'to_sprint.*' => ['numeric']
             ])->validate();
-            foreach ($validator['to_sprint'] as $id => $value){
-                $story = Story::find($value);
-                $story->sprint_id = $active_sprint[0]->id;
-                $story->save();
+            if(Arr::has($validator, 'to_sprint')){
+                foreach ($validator['to_sprint'] as $id => $value){
+                    $story = Story::find($value);
+                    $story->sprint_id = $active_sprint[0]->id;
+                    $story->save();
+                }
             }
         }
         return redirect()->route('project.show', $project->id);
@@ -156,6 +193,22 @@ class StoryController extends Controller
      */
     public function destroy(Project $project, Story $story)
     {
-        //
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $active_sprint = DB::select("SELECT * from sprints WHERE project_id={$project->id} AND start_date <= DATE(NOW()) AND end_date >= DATE(NOW())");
+
+        if(count($active_sprint) > 0 && $story->sprint_id === $active_sprint[0]->id){
+            abort(403);
+        }
+
+        $this->authorize('delete', [Story::class, $project]);
+
+        $story->delete();
+        return redirect()->route('project.show', $project->id);
     }
 }

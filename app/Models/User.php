@@ -50,6 +50,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class)->withTimestamps();
     }
 
+    public function tasks(){
+        return $this->hasMany(Task::class);
+    }
+
     /**
      * Returns true if the logged in user's account has ID equal to 1 (ADMIN account).
      *
