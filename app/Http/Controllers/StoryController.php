@@ -61,9 +61,9 @@ class StoryController extends Controller
                 Rule::unique('stories')->where(function ($query) use ($project) {
                     return $query->where('project_id', $project->id); })],
         ]);
-        
+
         $lowTitle = array_map("strtolower", [$request->title]);
-        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM stories WHERE LOWER(stories.title) LIKE '".$lowTitle[0]."' AND '".$story['title']."' != stories.title") );
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM stories WHERE LOWER(stories.title) LIKE '".$lowTitle[0]."'") );
         if($stevilo[0]->stevilka > 0){
             return redirect()->back()->withErrors(['title' => 'Story with same title already exists'])->withInput();
         }

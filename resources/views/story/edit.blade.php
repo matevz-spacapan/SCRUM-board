@@ -22,7 +22,7 @@
                                 <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter an optional story number and the story title.') }}></i></label>
 
                                 <div class="col-md-6">
-                                    <div class="input-group" @error('title') is-invalid @enderror>
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">#</span>
                                         </div>

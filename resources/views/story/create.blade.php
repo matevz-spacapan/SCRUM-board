@@ -73,7 +73,7 @@
                             <label for="priority" class="col-md-4 col-form-label text-md-right">{{ __('Priority') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Select the story priority.') }}></i></label>
 
                             <div class="col-md-6">
-                                <select id="priority" class="form-control @error('title') is-invalid @enderror" name="priority">
+                                <select id="priority" class="form-control @error('priority') is-invalid @enderror" name="priority">
                                     <option value="1">{{__('1 - Must have')}}</option>
                                     <option value="2">{{__('2 - Should have')}}</option>
                                     <option value="3">{{__('3 - Could have')}}</option>
