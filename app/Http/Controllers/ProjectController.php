@@ -109,6 +109,8 @@ class ProjectController extends Controller
      */
     public function accepted_stories(Project $project)
     {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
         $stories = Story::query()->where('project_id', $project->id)
             ->where('accepted', 1)->get();
         if(count($stories) === 0){
