@@ -11,7 +11,6 @@ class Project extends Model
 
     protected $fillable = [
         'project_name', //unique
-
     ];
 
     public function users() {

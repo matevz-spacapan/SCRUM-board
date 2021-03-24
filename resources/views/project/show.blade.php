@@ -37,10 +37,10 @@
         <div class="row">
             <h1 class="mx-auto">
                 {{$project->project_name}} -
-                @if($user->projects->where('id', $project->id)->pluck('product_owner')->contains(auth()->user()->id))
+                @if($project->product_owner === auth()->user()->id)
                     {{ __('Product owner') }}
-                @elseif($user->projects->where('id', $project->id)->pluck('project_master')->contains(auth()->user()->id))
-                    {{ __('Project master') }}
+                @elseif($project->project_master === auth()->user()->id)
+                    {{ __('Scrum master') }}
                 @else
                     {{ __('Developer') }}
                 @endif
@@ -95,18 +95,19 @@
                                                 class="btn btn-outline-primary" {{ Popper::arrow()->position('right')->pop('Add check marks next to the story titles you wish to add to the active Sprint.') }} disabled>{{ __('Add selected to sprint') }}
                                             <i class="far fa-question-circle"></i></button>
                                     @else
-                                        <div
-                                            class="mt-2">{{ __('A Sprint needs to be active, if you want to add stories to it.') }}</div>
+                                        <div class="mt-2">{{ __('A Sprint needs to be active, if you want to add stories to it.') }}</div>
                                     @endif
                                     <button type="submit" name="time"
                                             class="btn btn-outline-secondary ml-1" {{ Popper::arrow()->pop('Input/Change time estimates for the stories on the list above.') }}>{{ __('Update time estimates') }}
                                         <i class="far fa-question-circle"></i></button>
                                 @endcan
                             </div>
-                            <div class="mt-2">The sum of stories in the sprint and the selected stories is <b
-                                    id="new_sprint_count">{{ $sprint_sum }}</b>. The sprint speed is
-                                <b>{{ $active_sprint->speed }}</b>.
-                            </div>
+                            @if($active_sprint)
+                                <div class="mt-2">The sum of stories in the sprint and the selected stories is <b
+                                        id="new_sprint_count">{{ $sprint_sum }}</b>. The sprint speed is
+                                    <b>{{ $active_sprint->speed }}</b>.
+                                </div>
+                            @endif
                         @endif
                     </form>
             </div>
