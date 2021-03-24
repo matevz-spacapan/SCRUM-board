@@ -66,6 +66,8 @@ class ProjectController extends Controller
             ->where('priority', '<>', 4)
             ->whereNull('sprint_id')
             ->union($a)->get();
+        $accepted_stories = Story::query()->where('project_id', $project->id)
+            ->where('accepted', 1)->get();
 
         if ($active_sprint) {
             $stories_sprint = Story::query()->where('project_id', $project->id)
@@ -95,7 +97,24 @@ class ProjectController extends Controller
             $sprint_sum = 0;
         }
 
-        return view('project.show', ['stories_project' => $stories_project, 'stories_sprint' => $stories_sprint, 'stories_old' => $stories_old, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint, 'sprint_sum' => $sprint_sum]);
+        return view('project.show', ['stories_project' => $stories_project, 'accepted_stories' => $accepted_stories, 'stories_sprint' => $stories_sprint, 'stories_old' => $stories_old, 'project' => $project, 'sprints' => $sprints, 'user' => auth()->user(), 'active_sprint' => $active_sprint, 'sprint_sum' => $sprint_sum]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function accepted_stories(Project $project)
+    {
+        $stories = Story::query()->where('project_id', $project->id)
+            ->where('accepted', 1)->get();
+        if(count($stories) === 0){
+            abort(403, 'No accepted stories to show');
+        }
+        return view('story.accepted', ['project' => $project, 'stories' => $stories, 'user' => auth()->user()]);
     }
 
     /**

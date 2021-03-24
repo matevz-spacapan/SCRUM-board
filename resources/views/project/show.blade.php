@@ -76,7 +76,9 @@
                     <a href="{{ route('story.create', $project->id) }}"
                        class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Let's make something awesome! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new story') }}</a>
                 @endcan
-                    <a href="#" class="btn btn-outline-primary mb-3">{{ __('Accepted stories') }}</a>
+                    @if(count($accepted_stories) > 0)
+                        <a href="{{ route('story.accepted', $project->id) }}" class="btn btn-outline-primary mb-3">{{ __('Accepted stories') }}</a>
+                    @endif
                     <form method="POST" action="{{ route('story.update_stories', $project->id) }}">
                     @csrf
                     @include('story.loop', ['stories_list' => $stories_project, 'taskView'=>"0"])
