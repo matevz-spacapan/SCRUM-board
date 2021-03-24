@@ -121,7 +121,7 @@ class StoryPolicy
      * @param Project $project
      * @return mixed
      */
-    public function acceptReject(User $user, Story $story, Project $project)
+    public function acceptReject(User $user, Project $project)
     {
         return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id);
     }
