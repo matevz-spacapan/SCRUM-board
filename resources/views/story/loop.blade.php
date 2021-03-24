@@ -74,13 +74,21 @@
                     @endforeach
                 </ul>
             </div>
+            @if($story->comment)
+                <div class="text-muted">
+                    {{ __('Rejection comment: ') }} <i>{{ $story->comment }}</i>
+                </div>
+            @endif
         </div>
         <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
             @if($active_sprint && $story->sprint_id === $active_sprint->id)
                 @can('acceptReject', [\App\Models\Story::class, $project])
-                    <button type="button" class="btn btn-success" disabled>Accept</button>
-                    <button type="button" class="btn btn-warning">Reject</button>
-                    <i class="text-muted">(DEBUG: Active sprint)</i>
+                    @if($story->accepted === 0)
+                        <button type="button" class="btn btn-success" disabled>Accept</button>
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectModal{{ $story->id }}">Reject</button>
+                        @include('story.reject', ['story' => $story])
+                        <i class="text-muted">(DEBUG: Active sprint)</i>
+                    @endif
                 @endcan
             @elseif(is_null($story->sprint_id))
                 @can("update", [\App\Models\Story::class, $project])
@@ -94,9 +102,12 @@
                 @endcan
             @else
                 @can('acceptReject', [\App\Models\Story::class, $project])
-                    <button type="button" class="btn btn-success" disabled>Accept</button>
-                    <button type="button" class="btn btn-warning">Reject</button>
-                    <i class="text-muted">(DEBUG: Old sprint)</i>
+                    @if($story->accepted === 0)
+                        <button type="button" class="btn btn-success" disabled>Accept</button>
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectModal{{ $story->id }}">Reject</button>
+                        @include('story.reject', ['story' => $story])
+                        <i class="text-muted">(DEBUG: Old sprint)</i>
+                    @endif
                 @endcan
             @endif
                 @can("viewAny", [\App\Models\Task::class, $project])

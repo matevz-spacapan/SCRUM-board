@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Story;
 use Illuminate\Http\Request;
@@ -137,7 +138,7 @@ class StoryController extends Controller
             'hash' => ['nullable', 'numeric',
                 Rule::unique('stories')->where(function ($query) use ($project, $story) {
                     return $query->where('project_id', $project->id)
-                                ->where('id', '<>',    $story->id); })],
+                        ->where('id', '<>',    $story->id); })],
         ]);
 
         $lowTitle = array_map("strtolower", [$request->title]);
@@ -147,6 +148,34 @@ class StoryController extends Controller
         }
 
         $story->update($data);
+
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
+     * Reject the story.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function reject(Request $request, Project $project, Story $story)
+    {
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('update', [Story::class, $project]);
+        $data = $request->validate([
+            'comment' => ['nullable', 'string']
+        ]);
+        $story->update($data);
+        $story->sprint_id = null;
+        $story->save();
 
         return redirect()->route('project.show', $project->id);
     }
@@ -189,6 +218,7 @@ class StoryController extends Controller
                 foreach ($validator['to_sprint'] as $id => $value){
                     $story = Story::find($value);
                     $story->sprint_id = $active_sprint[0]->id;
+                    $story->comment = null;
                     $story->save();
                 }
             }

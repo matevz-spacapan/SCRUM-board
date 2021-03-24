@@ -25,6 +25,7 @@ class CreateStoriesTable extends Migration
             $table->integer('time_estimate')->nullable();
             $table->foreignId('sprint_id')->nullable()->constrained();
             $table->boolean('accepted')->default(false);
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
