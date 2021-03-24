@@ -93,6 +93,12 @@ class ProjectController extends Controller
             return redirect()->back()->withErrors(['developers' => 'Product owner must not be a developer.'])->withInput();
         }
 
+        $lowTitle = array_map("strtolower", [$request->project_name]);
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM projects WHERE LOWER(project_name) LIKE '".$lowTitle[0]."'") );
+        if($stevilo[0]->stevilka > 0){
+            return redirect()->back()->withErrors(['project_name' => 'A project with same name already exists.'])->withInput();
+        }
+
         //insert data that we can do straight away (into the projects table)
         $project = new Project;
         $project->project_name = $data['project_name'];
