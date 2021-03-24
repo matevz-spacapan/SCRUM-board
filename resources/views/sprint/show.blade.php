@@ -8,10 +8,10 @@
         <div class="row">
             <h1 class="mx-auto">
                 {{$project->project_name}} -
-                @if($user->projects->where('id', $project->id)->pluck('product_owner')->contains(auth()->user()->id))
+                @if($project->product_owner === auth()->user()->id)
                     {{ __('Product owner') }}
-                @elseif($user->projects->where('id', $project->id)->pluck('project_master')->contains(auth()->user()->id))
-                    {{ __('Project master') }}
+                @elseif($project->project_master === auth()->user()->id)
+                    {{ __('Scrum master') }}
                 @else
                     {{ __('Developer') }}
                 @endif
@@ -26,7 +26,7 @@
                         new sprint</a>
                 @endcan
                 <a class="btn btn-link"
-                   href="{{ route('project.show', $project->id) }}" {{ Popper::arrow()->position('bottom')->pop('Discard the form and return to the Project.') }}>{{ __('Go back') }}</a>
+                   href="{{ route('project.show', $project->id) }}" {{ Popper::arrow()->position('bottom')->pop('Return to the Project.') }}>{{ __('Go back') }}</a>
             </div>
             <div class="row">
                 @foreach($sprints as $sprint)

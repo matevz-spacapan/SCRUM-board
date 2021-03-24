@@ -77,7 +77,7 @@
         </div>
         <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
             @if($active_sprint && $story->sprint_id === $active_sprint->id)
-                @can('acceptReject', [\App\Models\Story::class, $story, $project])
+                @can('acceptReject', [\App\Models\Story::class, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
                     <button type="button" class="btn btn-warning">Reject</button>
                     <i class="text-muted">(DEBUG: Active sprint)</i>
@@ -93,7 +93,7 @@
                     <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
                 @endcan
             @else
-                @can('acceptReject', [\App\Models\Story::class, $story, $project])
+                @can('acceptReject', [\App\Models\Story::class, $project])
                     <button type="button" class="btn btn-success" disabled>Accept</button>
                     <button type="button" class="btn btn-warning">Reject</button>
                     <i class="text-muted">(DEBUG: Old sprint)</i>
