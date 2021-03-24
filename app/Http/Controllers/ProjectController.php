@@ -32,8 +32,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $users = User::pluck( 'username', 'id' )->all();
+        $this->authorize('create', Project::class);
 
+        $users = User::pluck( 'username', 'id' )->all();
 
         return view('project.create', compact('users'));
     }
@@ -77,12 +78,20 @@ class ProjectController extends Controller
     {
         $this->authorize('create', Project::class);
 
+        if(!isset($request->developers)){
+            return redirect()->back()->withErrors(['developers' => 'Select at least one developer.'])->withInput();
+        }
+
         $data = $request->validate([
             'project_name' => ['required', 'string', 'max:255', 'unique:projects,project_name'],
             'product_owner' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->project_master])],
             'project_master' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],
-            'developers.*' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],
+            'developers.*' => ['required', 'string', 'max:255', 'exists:users,username'],
         ]);
+
+        if(in_array($request->product_owner, $request->developers, true)){
+            return redirect()->back()->withErrors(['developers' => 'Product owner must not be a developer.'])->withInput();
+        }
 
         //insert data that we can do straight away (into the projects table)
         $project = new Project;
@@ -154,6 +163,9 @@ class ProjectController extends Controller
 
         if ($active_sprint){
             $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint->id}")[0]->time_estimate;
+            if(!$sprint_sum){
+                $sprint_sum = 0;
+            }
         }
         else{
             $sprint_sum = 0;

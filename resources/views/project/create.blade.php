@@ -73,7 +73,7 @@
 
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
-                                    <select id="s2n3" class="form-control" name="developers[]" multiple>
+                                    <select id="s2n3" class="form-control @error('developers') is-invalid @enderror" name="developers[]" multiple>
                                     </select>
 
                                     @error('developers')

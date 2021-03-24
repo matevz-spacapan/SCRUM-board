@@ -58,8 +58,8 @@ class StoryPolicy
      */
     public function create(User $user, Project $project)
     {
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
-            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $project->product_owner === $user->id ||
+            $project->project_master === $user->id;
     }
 
     /**
@@ -72,7 +72,7 @@ class StoryPolicy
     public function update_sprints(User $user, Project $project)
     {
         // TODO update this when #25 is implemented
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $project->project_master === $user->id;
     }
 
     /**
@@ -84,8 +84,8 @@ class StoryPolicy
      */
     public function update(User $user, Project $project)
     {
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
-            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $project->product_owner === $user->id ||
+            $project->project_master === $user->id;
     }
 
     /**
@@ -97,8 +97,8 @@ class StoryPolicy
      */
     public function delete(User $user, Project $project)
     {
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id) ||
-            $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $project->product_owner === $user->id ||
+            $project->project_master === $user->id;
     }
 
     /**
@@ -109,9 +109,9 @@ class StoryPolicy
      * @param Project $project
      * @return mixed
      */
-    public function acceptReject(User $user, Story $story, Project $project)
+    public function acceptReject(User $user, Project $project)
     {
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id);
+        return $project->product_owner === $user->id;
     }
 
     /**

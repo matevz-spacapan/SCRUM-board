@@ -44,7 +44,9 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project)
     {
-        return $user->projects->pluck('id')->contains($project->id);
+        return $user->projects->pluck('id')->contains($project->id) ||
+            $project->product_owner === $user->id ||
+            $project->project_master === $user->id;
     }
 
     /**
