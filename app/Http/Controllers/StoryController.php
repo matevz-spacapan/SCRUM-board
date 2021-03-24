@@ -118,6 +118,12 @@ class StoryController extends Controller
             abort(404);
         }
 
+        $lowTitle = array_map("strtolower", [$request->title]);
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM stories WHERE LOWER(stories.title) LIKE '".$lowTitle[0]."' AND '".$story['title']."' != stories.title") );
+        if($stevilo[0]->stevilka > 0){
+            return redirect()->back()->withErrors(['title' => 'Story with same title already exists'])->withInput();
+        }
+
         $this->authorize('update', [Story::class, $project]);
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255',

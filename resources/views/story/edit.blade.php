@@ -22,7 +22,7 @@
                                 <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter an optional story number and the story title.') }}></i></label>
 
                                 <div class="col-md-6">
-                                    <div class="input-group">
+                                    <div class="input-group" @error('title') is-invalid @enderror>
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">#</span>
                                         </div>
@@ -76,7 +76,7 @@
                                 <label for="priority" class="col-md-4 col-form-label text-md-right">{{ __('Priority') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Select the story priority.') }}></i></label>
 
                                 <div class="col-md-6">
-                                    <select id="priority" class="form-control @error('title') is-invalid @enderror" name="priority" >
+                                    <select id="priority" class="form-control @error('priority') is-invalid @enderror" name="priority" >
                                         <option {{ ($story->priority) == "1" ? 'selected' : '' }} value="1">{{__('1 - Must have')}}</option>
                                         <option {{ ($story->priority) == "2" ? 'selected' : '' }} value="2">{{__('2 - Should have')}}</option>
                                         <option {{ ($story->priority) == "3" ? 'selected' : '' }} value="3">{{__('3 - Could have')}}</option>
