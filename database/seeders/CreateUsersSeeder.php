@@ -18,8 +18,8 @@ class CreateUsersSeeder extends Seeder
     {
         $userAdmin = User::create([
             'username' => 'Administrator',
-            'name' => 'Admin',
-            'surname' => 'Istrator',
+            'name' => 'Site',
+            'surname' => 'Administrator',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin')
         ]);
@@ -29,22 +29,40 @@ class CreateUsersSeeder extends Seeder
         $userAdmin->assignRole([$roleAdmin->id]);
 
         $userDev = User::create([
-            'username' => 'Developer',
-            'name' => 'Devel',
-            'surname' => 'Oper',
-            'email' => 'devel@devel.com',
-            'password' => bcrypt('devel')
+            'username' => 'matjaz',
+            'name' => 'Matjaž',
+            'surname' => 'Rupnik',
+            'email' => 'matjaz@none.com',
+            'password' => bcrypt('mrupnik')
         ]);
         $roleDev = Role::create(['name' => 'User']);
         $roleDev->syncPermissions();
         $userDev->assignRole([$roleDev->id]);
 
         $userCust = User::create([
-            'username' => 'Customer',
-            'name' => 'Cust',
-            'surname' => 'Omer',
-            'email' => 'cust@cust.com',
-            'password' => bcrypt('cust')
+            'username' => 'blaz',
+            'name' => 'Blaž',
+            'surname' => 'Ličen',
+            'email' => 'blaz@none.com',
+            'password' => bcrypt('blicen')
+        ]);
+        $userCust->assignRole([$roleDev->id]);
+
+        $userCust = User::create([
+            'username' => 'klemen',
+            'name' => 'Klemen',
+            'surname' => 'Kobau',
+            'email' => 'klemen@none.com',
+            'password' => bcrypt('kkobau')
+        ]);
+        $userCust->assignRole([$roleDev->id]);
+
+        $userCust = User::create([
+            'username' => 'matevz',
+            'name' => 'Matevž',
+            'surname' => 'Špacapan',
+            'email' => 'matevz@none.com',
+            'password' => bcrypt('mspacapan')
         ]);
         $userCust->assignRole([$roleDev->id]);
     }

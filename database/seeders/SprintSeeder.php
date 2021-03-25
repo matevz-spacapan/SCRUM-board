@@ -16,7 +16,7 @@ class SprintSeeder extends Seeder
     {
         Sprint::create([
             'project_id' => 1,
-            'speed' => 33,
+            'speed' => 15,
             'start_date' => '2021-04-01',
             'end_date' => '2021-04-10'
         ]);
@@ -28,7 +28,7 @@ class SprintSeeder extends Seeder
         ]);
         Sprint::create([
             'project_id' => 1,
-            'speed' => 10,
+            'speed' => 30,
             'start_date' => '2021-05-01',
             'end_date' => '2021-05-28'
         ]);
