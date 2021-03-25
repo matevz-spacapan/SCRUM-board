@@ -56,9 +56,6 @@
                             {{ $story->time_estimate }} pts
                         @endif
                     </div>
-                    <div {{ ($taskView) == "0" ? 'style=display:none' : '' }}>
-                        <a href="{{ route('project.show', $project->id) }}" class="btn btn-link" {{ Popper::arrow()->position('right')->pop("Back on project view") }}>{{ __('Go back') }}</a>
-                    </div>
                     @if(is_numeric($story->sprint_id))
 {{--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>--}}
                     @endif

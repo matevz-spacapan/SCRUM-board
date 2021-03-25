@@ -42,9 +42,7 @@
 
                     <ul class="navbar-nav mr-auto">
                         @auth
-
-                            <li class="nav-item"><a class="nav-link" href="{{ route('project.index') }}">{{ __('Projects') }}</a></li>
-
+                            <li class="nav-item"><a class="nav-link" href="{{ route('project.index') }}">{{ __('All projects') }}</a></li>
 
                             @can('users-list') {{--<!--IS ADMIN-->--}}
                                 <li class="nav-item"> <a class="nav-link" href="/admin/dashboard">{{ __('Admin Dashboard') }}</a></li>
@@ -61,13 +59,6 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-
-                            <!-- Registracije ni, samo admin lahko doda uporabnika!
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif-->
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -94,6 +85,48 @@
                 </div>
             </div>
         </nav>
+        @if(Request::segment(1) === 'project' && is_numeric(Request::segment(2)))
+            @auth
+                <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
+                    <div class="container">
+                        <div class="navbar-brand">
+                            {{ $project->project_name }} |
+                            <small>
+                                @if($project->product_owner === auth()->user()->id)
+                                    {{ __('Product owner') }}
+                                @elseif($project->project_master === auth()->user()->id)
+                                    {{ __('Scrum master') }}
+                                @else
+                                    {{ __('Developer') }}
+                                @endif
+                            </small>
+                        </div>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown">
+                                        <a id="productBacklog" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>{{ __('Product backlog') }}</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="productBacklog">
+                                            <a class="dropdown-item" href="{{ route('project.show', Request::segment(2)) }}">{{ __('Unfinished stories') }}</a>
+                                            @if(count(\App\Models\Story::query()->where('project_id', Request::segment(2))->where('accepted', 1)->get()) > 0)
+                                                <a class="dropdown-item" href="{{ route('story.accepted', Request::segment(2)) }}">{{ __('Finished stories') }}</a>
+                                            @else
+                                                <div class="dropdown-item disabled">{{__('Finished stories')}}</div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                </ul>
+                                <li class="nav-item"><a href="{{ route('sprint.index', $project->id) }}" class="nav-link">{{ __('Sprint list') }}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            @endauth
+        @endif
         <div id="footerDown">
             <main class="py-4">
                 @yield('content')

@@ -16414,10 +16414,6 @@ readers do not read off random characters that represent icons */
   width: auto;
 }
 
-#naslovVhodnaStran {
-  font-size: 5rem;
-}
-
 #app {
   position: relative;
   min-height: 100vh;
