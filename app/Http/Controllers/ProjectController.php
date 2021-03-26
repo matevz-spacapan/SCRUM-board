@@ -33,39 +33,8 @@ class ProjectController extends Controller
     public function create()
     {
         $this->authorize('create', Project::class);
-
-        $users = User::pluck( 'username', 'id' )->all();
-
+        $users = User::orderby('username','asc')->select('id','username')->get();
         return view('project.create', compact('users'));
-    }
-
-
-    /**
-     * Show the application dataAjax.
-     *
-     * @param Request $request
-     * @return false|string
-     * @throws \JsonException
-     */
-    public function userdataAjax(Request $request)
-    {
-        $search = $request->search;
-
-        if($search === ''){
-            $users = User::orderby('username','asc')->select('id','username')->limit(5)->get();
-        }else{
-            $users = User::orderby('username','asc')->select('id','username')->where('username', 'like', '%' .$search . '%')->limit(7)->get();
-        }
-
-        $response = array();
-        foreach($users as $user){
-            $response[] = array(
-                "id"=>$user->username,  //->id
-                "text"=>$user->username
-            );
-        }
-
-        return json_encode($response, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -84,9 +53,9 @@ class ProjectController extends Controller
 
         $data = $request->validate([
             'project_name' => ['required', 'string', 'max:255', 'unique:projects,project_name'],
-            'product_owner' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->project_master])],
-            'project_master' => ['required', 'string', 'max:255', 'exists:users,username', Rule::notIn([$request->product_owner])],
-            'developers.*' => ['required', 'string', 'max:255', 'exists:users,username'],
+            'product_owner' => ['required', 'numeric', 'exists:users,id', Rule::notIn([$request->project_master])],
+            'project_master' => ['required', 'numeric', 'exists:users,id', Rule::notIn([$request->product_owner])],
+            'developers.*' => ['required', 'numeric', 'max:255', 'exists:users,id'],
         ]);
 
         if(in_array($request->product_owner, $request->developers, true)){
@@ -102,21 +71,12 @@ class ProjectController extends Controller
         //insert data that we can do straight away (into the projects table)
         $project = new Project;
         $project->project_name = $data['project_name'];
-        $product_owner = User::where('username', $data['product_owner'])->first();
-        $project->product_owner = $product_owner->id;
-        $project_master= User::where('username', $data['project_master'])->first();
-        $project->project_master = $project_master->id;
-
-        //get IDs of the usernames
-        $usr_ids = [];
-        foreach($data['developers'] as $username) {
-            $user = User::where('username', $username)->first();
-            $usr_ids[] = $user->id;
-        }
+        $project->product_owner = $data['product_owner'];
+        $project->project_master = $data['project_master'];
 
         //save the project and developer IDs
         $project->save();
-        $project->users()->attach($usr_ids);
+        $project->users()->attach($data['developers']);
 
         return redirect()->route('project.show', $project->id);
     }

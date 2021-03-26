@@ -35,8 +35,11 @@
 
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
-                                    <select id="s2n1" class="form-control @error('product_owner') is-invalid @enderror" name="product_owner">
-                                        <option disabled>-- Select user --</option>
+                                    <select id="s2n1" class="s2 form-control @error('product_owner') is-invalid @enderror" name="product_owner">
+                                        <option disabled {{ is_null(old('product_owner')) ? 'selected':'' }}>-- Select user --</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" {{ old('product_owner') == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                        @endforeach
                                     </select>
 
                                     @error('product_owner')
@@ -53,8 +56,11 @@
 
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
-                                    <select id="s2n2" class="form-control @error('project_master') is-invalid @enderror" name="project_master">
-                                        <option disabled>-- Select user --</option>
+                                    <select id="s2n2" class="s2 form-control @error('project_master') is-invalid @enderror" name="project_master">
+                                        <option disabled {{ is_null(old('project_master')) ? 'selected':'' }}>-- Select user --</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" {{ old('project_master') == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                        @endforeach
                                     </select>
 
                                     @error('project_master')
@@ -73,7 +79,10 @@
 
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
-                                    <select id="s2n3" class="form-control @error('developers') is-invalid @enderror" name="developers[]" multiple>
+                                    <select id="s2n3" class="s2 form-control @error('developers') is-invalid @enderror" name="developers[]" multiple>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" {{ (old('developers') && in_array($user->id, old('developers'))) ? 'selected':'' }}>{{ $user->username }}</option>
+                                        @endforeach
                                     </select>
 
                                     @error('developers')
