@@ -35,18 +35,6 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <h1 class="mx-auto">
-                {{$project->project_name}} -
-                @if($project->product_owner === auth()->user()->id)
-                    {{ __('Product owner') }}
-                @elseif($project->project_master === auth()->user()->id)
-                    {{ __('Scrum master') }}
-                @else
-                    {{ __('Developer') }}
-                @endif
-            </h1>
-        </div>
-        <div class="row">
             <div class="col-lg-2">
                 <div class="mx-auto">
                     <h4 class="text-center">{{ __('Currently active sprint') }}</h4>
@@ -55,8 +43,6 @@
                     @else
                         <p class="text-center">{{ __('No currently active sprint') }}</p>
                     @endif
-                    <a href="{{ route('sprint.index', $project->id) }}"
-                       class="btn btn-success mt-1" {{ Popper::arrow()->position('right')->pop("What are the sprints for this project?") }}>{{ __('See sprints') }}</a>
                 </div>
             </div>
             <div class="col-lg-8">
@@ -65,20 +51,22 @@
                             class="far fa-question-circle" {{ Popper::arrow()->pop('This includes already accepted stories.') }}></i>
                         pts / <b>{{ $active_sprint->speed }}</b> pts)</h5>
                     @include('story.loop', ['stories_list' => $stories_sprint, 'taskView'=>"0"])
+                    <div class="mb-4"></div>
                 @endif
                 @if(count($stories_old) > 0)
                     <h5>Unapproved stories from previous sprint</h5>
                     @include('story.loop', ['stories_list' => $stories_old, 'taskView'=>"0"])
+                    <div class="mb-4"></div>
                 @endif
 
-                <h4 class="mt-5">{{ __('Other project stories') }}</h4>
-                @can("create", [\App\Models\Story::class, $project])
-                    <a href="{{ route('story.create', $project->id) }}"
-                       class="btn btn-success mb-3" {{ Popper::arrow()->position('right')->pop("Let's make something awesome! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new story') }}</a>
-                @endcan
-                    @if(count($accepted_stories) > 0)
-                        <a href="{{ route('story.accepted', $project->id) }}" class="btn btn-outline-primary mb-3">{{ __('Accepted stories') }}</a>
-                    @endif
+                <div class="d-flex flex-row align-items-center mb-3">
+                    <h4 class="mr-2 mt-2">{{ __('Other project stories') }}</h4>
+                    @can("create", [\App\Models\Story::class, $project])
+                        <a href="{{ route('story.create', $project->id) }}"
+                           class="btn btn-success" {{ Popper::arrow()->position('right')->pop("Let's make something awesome! <i class='far fa-smile-beam'></i>") }}><i class="fas fa-plus"></i> {{ __('Add new') }}</a>
+                    @endcan
+                </div>
+
                     <form method="POST" action="{{ route('story.update_stories', $project->id) }}">
                     @csrf
                     @include('story.loop', ['stories_list' => $stories_project, 'taskView'=>"0"])
