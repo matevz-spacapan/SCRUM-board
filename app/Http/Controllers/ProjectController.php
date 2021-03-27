@@ -19,7 +19,7 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $data = Project::query()->orderBy('id')->paginate(5);
         return view('project.index', ['data' => $data]);

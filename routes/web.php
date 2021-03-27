@@ -41,7 +41,7 @@ Route::get('/project/{project}/accepted', 'App\Http\Controllers\ProjectControlle
 Route::get('/project/{project}/story/create', 'App\Http\Controllers\StoryController@create')->name('story.create');
 Route::get('/project/{project}/story/{story}/edit', 'App\Http\Controllers\StoryController@edit')->name('story.edit'); #show the form
 Route::patch('/project/{project}/story/{story}', 'App\Http\Controllers\StoryController@update')->name('story.update'); #actual process of updating the record
-Route::post('/project/{project}/story/{story}/reject', 'App\Http\Controllers\StoryController@reject')->name('story.reject'); #actual process of updating the record
+Route::post('/project/{project}/story/{story}/reject', 'App\Http\Controllers\StoryController@reject')->name('story.reject');
 Route::get('/project/{project}/story/{story}/destroy', 'App\Http\Controllers\StoryController@destroy')->name('story.destroy');
 
 Route::post('/project/{project}/sprint', 'App\Http\Controllers\SprintController@store')->name('sprint.store');
@@ -56,6 +56,10 @@ Route::post('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskC
 Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers\TaskController@create')->name('task.create');
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
 
+
+Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');
+Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallController@create')->name('wall.create');
+Route::post('/project/{project}/wall', 'App\Http\Controllers\WallController@store')->name('wall.store');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');
