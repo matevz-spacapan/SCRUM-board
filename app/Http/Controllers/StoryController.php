@@ -169,12 +169,43 @@ class StoryController extends Controller
             abort(404);
         }
 
-        $this->authorize('update', [Story::class, $project]);
+        $this->authorize('acceptReject', [Story::class, $project]);
         $data = $request->validate([
             'comment' => ['nullable', 'string']
         ]);
         $story->update($data);
         $story->sprint_id = null;
+        $story->save();
+
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
+     * Accept the story.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function accept(Request $request, Project $project, Story $story)
+    {
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('acceptReject', [Story::class, $project]);
+
+        $all = $story->tasks()->where('story_id', $story->id)->count();
+        $accepted = $story->tasks()->where('story_id', $story->id)->where('accepted', 3)->count();
+        if($all === 0 || $all !== $accepted){
+            abort(403);
+        }
+
+        $story->accepted = 1;
         $story->save();
 
         return redirect()->route('project.show', $project->id);

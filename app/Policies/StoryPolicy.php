@@ -102,18 +102,6 @@ class StoryPolicy
     }
 
     /**
-     * Determine whether the user can reject stories.
-     *
-     * @param \App\Models\User $user
-     * @param Project $project
-     * @return mixed
-     */
-    public function reject(User $user, Project $project)
-    {
-        return $user->projects->where('id', $project->id)->pluck('product_owner')->contains($user->id);
-    }
-
-    /**
      * Determine whether the user can reject/accept the story.
      *
      * @param \App\Models\User $user

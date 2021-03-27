@@ -65,11 +65,10 @@
                                 @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
                                     <button type="button" class="btn btn-success"><i class="fas fa-check"></i></button>
                                     <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                @elseif(is_null($task->user_id))
+                                    <i class="fas fa-minus"></i>
                                 @else
                                     <b><i>{{ $text }}</b></i>
-                                @endif
-                                @if(is_null($task->user_id))
-                                    <i class="fas fa-minus"></i>
                                 @endif
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
