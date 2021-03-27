@@ -34,13 +34,19 @@
                             @case(1)
                             @php
                                 $text = __('Accepted');
-                                $color='text-success';
+                                $color='text-primary';
                             @endphp
                             @break
                             @case(2)
                             @php
                                 $text = __('Declined');
                                 $color='text-danger';
+                            @endphp
+                            @break
+                            @case(3)
+                            @php
+                                $text = __('Finished');
+                                $color='text-success';
                             @endphp
                             @break
                             @default
@@ -56,11 +62,11 @@
                                 @endif
                             </td>
                             <td width="15%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
-                                @if($task->user_id && $task->accepted != 0 || Auth::User()->id != $task->user_id && $task->user_id)<b><i>{{ $text }}</b></i>
-                                @endif
-                                @if(Auth::User()->id == $task->user_id && $task->accepted == 0)
+                                @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
                                     <button type="button" class="btn btn-success"><i class="fas fa-check"></i></button>
                                     <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                @else
+                                    <b><i>{{ $text }}</b></i>
                                 @endif
                                 @if(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>
