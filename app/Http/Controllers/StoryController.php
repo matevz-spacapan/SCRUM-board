@@ -53,7 +53,7 @@ class StoryController extends Controller
             'title' => ['required', 'string', 'max:255',
                 Rule::unique('stories')->where(function ($query) use ($project) {
                 return $query->where('project_id', $project->id); })],
-            'project_id' => ['required', 'numeric', 'min:0'],
+            'project_id' => ['required', 'numeric'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',

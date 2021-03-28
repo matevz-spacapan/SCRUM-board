@@ -21,6 +21,10 @@ class Project extends Model
         return $this->hasMany(Story::class);
     }
 
+    public function wall_posts(){
+        return $this->hasMany(Wall::class);
+    }
+
     public function sprints() {
         return $this->hasMany(Sprint::class);
     }

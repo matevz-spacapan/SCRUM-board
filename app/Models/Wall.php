@@ -5,21 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Story extends Model
+class Wall extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
-        'tests',
-        'priority',
-        'business_value',
+        'post',
         'project_id',
-        'hash',
-        'time_estimate',
-        'to_sprint',
-        'comment',
+        'user_id',
     ];
 
     public function project()
@@ -27,7 +20,8 @@ class Story extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function tasks(){
-        return $this->hasMany(Task::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

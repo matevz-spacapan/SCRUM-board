@@ -121,6 +121,7 @@
                                     </li>
                                 </ul>
                                 <li class="nav-item"><a href="{{ route('sprint.index', $project->id) }}" class="nav-link">{{ __('Sprint list') }}</a></li>
+                                <li class="nav-item"><a href="{{ route('wall.index', $project->id) }}" class="nav-link">{{ __('Project wall') }}</a></li>
                             </ul>
                         </div>
                     </div>

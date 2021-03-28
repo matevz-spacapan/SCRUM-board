@@ -58,6 +58,10 @@ Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
 
 
+Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');
+Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallController@create')->name('wall.create');
+Route::post('/project/{project}/wall', 'App\Http\Controllers\WallController@store')->name('wall.store');
+
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');
 });
