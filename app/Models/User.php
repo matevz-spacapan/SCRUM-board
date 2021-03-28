@@ -54,6 +54,10 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
 
+    public function wall_posts(){
+        return $this->hasMany(Wall::class);
+    }
+
     /**
      * Returns true if the logged in user's account has ID equal to 1 (ADMIN account).
      *
