@@ -15,46 +15,45 @@ class StorySeeder extends Seeder
     public function run()
     {
         Story::create([
-            'title' => 'Dodajanje uporabniških zgodb',
+            'title' => 'Make a route',
             'project_id' => 1,
-            'description' => "Produktni vodja in skrbnik metodologije lahko vnašata nove uporabniške zgodbe v že obstoječ projekt.\nZa vsako zgodbo lahko določita njeno ime, besedilo, sprejemne teste, prioriteto (must have, could have, should have, won't have this time) in poslovno vrednost.",
-            'tests' => "Preveri regularen potek.\nPreveri podvajanje imena uporabniške zgodbe.\nPreveri ustrezno določitev prioritete uporabniške zgodbe.\nPreveri za neregularen vnos poslovne vrednosti.",
-            'priority' => random_int(1, 4),
-            'business_value' => random_int(1, 10),
+            'description' => "The user can select a start and end point and a route is calculated and shown between the two points.",
+            'tests' => "Check validity of each point.\nDisplay the shortest route.\nCheck that invalid points show an error.",
+            'priority' => 1,
+            'business_value' => 10,
             'sprint_id' => 2,
             'hash' => 1,
-            'time_estimate' => random_int(1, 10)
+            'time_estimate' => 7
         ]);
         Story::create([
-            'title' => 'Potrjena zgodba',
+            'title' => 'Display map',
             'project_id' => 1,
-            'description' => "Produktni vodja in skrbnik metodologije lahko vnašata nove uporabniške zgodbe v že obstoječ projekt.\nZa vsako zgodbo lahko določita njeno ime, besedilo, sprejemne teste, prioriteto (must have, could have, should have, won't have this time) in poslovno vrednost.",
-            'tests' => "Preveri regularen potek.\nPreveri podvajanje imena uporabniške zgodbe.\nPreveri ustrezno določitev prioritete uporabniške zgodbe.\nPreveri za neregularen vnos poslovne vrednosti.",
-            'priority' => random_int(1, 4),
-            'business_value' => random_int(1, 10),
+            'description' => "Display the map with an initial zoom level.",
+            'tests' => "Check the initial display level is used.\nAllow scrolling out.\nAllow scrolling in.",
+            'priority' => 1,
+            'business_value' => 10,
             'sprint_id' => 2,
             'accepted' => true,
-            'hash' => 42,
-            'time_estimate' => random_int(1, 10)
-        ]);
-        Story::create([
-            'title' => 'Pregledovanje in spreminjanje časovnega poteka dela',
-            'project_id' => 1,
-            'description' => "Član skupine lahko pregleduje in dopolnjuje preglednico svojega dela na nalogah v tekočem dnevu in v preteklih dnevih.\nLahko popravlja število vloženih ur na posamezni nalogi za posamezni dan. Prav tako lahko po svoji presoji določa potrebno število ur za dokončanje naloge.",
-            'tests' => "Preveri regularen potek.\nPreveri veljavnost vnesenega časa.\nPreveri za zgodbo, ki je razvijalec ni sprejel.\nPreveri za že zaključene zgodbe.",
-            'priority' => random_int(1, 3),
-            'business_value' => random_int(1, 10),
             'hash' => 2,
-            'sprint_id' => 4,
-            'time_estimate' => random_int(1, 10)
+            'time_estimate' => 9
         ]);
         Story::create([
-            'title' => 'Ustvarjanje novega Sprinta',
+            'title' => 'Address search',
             'project_id' => 1,
-            'description' => "Skrbnik metodologije lahko ustvari nov Sprint. Določi mu začetni in končni datum ter pričakovano hitrost.",
-            'tests' => "Preveri običajen potek: dodaj nov Sprint, določi mu začetni in končni datum (v prihodnosti) in nastavi začetno hitrost.\nPreveri za primer, ko je končni datum pred začetnim.\nPreveri za primer, ko je začetni datum v preteklosti.\nPreveri za neregularno vrednost hitrosti Sprinta.\nPreveri za primer, ko se dodani Sprint prekriva s katerim od obstoječih.",
-            'priority' => random_int(1, 4),
-            'business_value' => random_int(1, 10)
+            'description' => "The user can search for an address. It is then displayed on the map.",
+            'tests' => "Check validity of search query.\nCheck the correct address is shown.\nCheck what happens when an invalid address is given.",
+            'priority' => 2,
+            'business_value' => 8,
+            'sprint_id' => 4,
+            'time_estimate' => 5
+        ]);
+        Story::create([
+            'title' => 'Parse robots.txt',
+            'project_id' => 2,
+            'description' => "When the crawler visits the web page for the first time, it should parse the robots.txt file.",
+            'tests' => "Check what happens when page is visited for the first time.\nCheck what happens on any other visit.\nCheck the file is parsed correctly.\nCheck if no such file exists.",
+            'priority' => 3,
+            'business_value' => 2
         ]);
     }
 }

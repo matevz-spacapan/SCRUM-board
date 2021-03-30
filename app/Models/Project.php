@@ -11,7 +11,6 @@ class Project extends Model
 
     protected $fillable = [
         'project_name', //unique
-
     ];
 
     public function users() {
@@ -20,6 +19,10 @@ class Project extends Model
 
     public function stories(){
         return $this->hasMany(Story::class);
+    }
+
+    public function wall_posts(){
+        return $this->hasMany(Wall::class);
     }
 
     public function sprints() {

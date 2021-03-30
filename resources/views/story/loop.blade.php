@@ -56,11 +56,8 @@
                             {{ $story->time_estimate }} pts
                         @endif
                     </div>
-                    <div {{ ($taskView) == "0" ? 'style=display:none' : '' }}>
-                        <a href="{{ route('project.show', $project->id) }}" class="btn btn-link" {{ Popper::arrow()->position('right')->pop("Back on project view") }}>{{ __('Go back') }}</a>
-                    </div>
                     @if(is_numeric($story->sprint_id))
-{{--                        <div>Tasks: <b data-toggle="tooltip" title="Complete / All"><i>1 / 7</i></b> | Work: <b data-toggle="tooltip" title="Spent / Remaining"><i>13h / 20h</i></b></div>--}}
+                        <div>Tasks: <b {{ Popper::arrow()->pop('Completed / All') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() }} / {{ \App\Models\Task::query()->where('story_id', $story->id)->count() }}</i> <i class="far fa-question-circle"></i></b> | Work: <b {{ Popper::arrow()->pop('Actual / Estimated') }}><i>13h / 20h</i> <i class="far fa-question-circle"></i></b></div>
                     @endif
                 </div>
             </div>
@@ -74,13 +71,27 @@
                     @endforeach
                 </ul>
             </div>
+            @if($story->comment)
+                <div class="text-muted">
+                    {{ __('Rejection comment: ') }} <i>{{ $story->comment }}</i>
+                </div>
+            @endif
         </div>
         <div class="card-footer"  {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
             @if($active_sprint && $story->sprint_id === $active_sprint->id)
-                @can('acceptReject', [\App\Models\Story::class, $story, $project])
-                    <button type="button" class="btn btn-success" disabled>Accept</button>
-                    <button type="button" class="btn btn-warning">Reject</button>
-                    <i class="text-muted">(DEBUG: Active sprint)</i>
+                @can('acceptReject', [\App\Models\Story::class, $project])
+                    @if($story->accepted === 0)
+                        @if(\App\Models\Task::query()->where('story_id', $story->id)->count() > 0 && \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() === \App\Models\Task::query()->where('story_id', $story->id)->count())
+                            <form method="POST" action="{{ route('story.accept', [$project->id, $story->id]) }}" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-success" >Accept</button>
+                            </form>
+                        @else
+                            <button type="submit" class="btn btn-success" disabled>Accept</button>
+                        @endif
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectModal{{ $story->id }}">Reject</button>
+                        @include('story.reject', ['story' => $story])
+                    @endif
                 @endcan
             @elseif(is_null($story->sprint_id))
                 @can("update", [\App\Models\Story::class, $project])
@@ -93,10 +104,19 @@
                     <a href="#" class="btn btn-success float-right">{{ __('Add tasks') }}</a>
                 @endcan
             @else
-                @can('acceptReject', [\App\Models\Story::class, $story, $project])
-                    <button type="button" class="btn btn-success" disabled>Accept</button>
-                    <button type="button" class="btn btn-warning">Reject</button>
-                    <i class="text-muted">(DEBUG: Old sprint)</i>
+                @can('acceptReject', [\App\Models\Story::class, $project])
+                    @if($story->accepted === 0)
+                        @if(\App\Models\Task::query()->where('story_id', $story->id)->count() > 0 && \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() === \App\Models\Task::query()->where('story_id', $story->id)->count())
+                            <form method="POST" action="{{ route('story.accept', [$project->id, $story->id]) }}" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-success" >Accept</button>
+                            </form>
+                        @else
+                            <button type="submit" class="btn btn-success" disabled>Accept</button>
+                        @endif
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#rejectModal{{ $story->id }}">Reject</button>
+                        @include('story.reject', ['story' => $story])
+                    @endif
                 @endcan
             @endif
                 @can("viewAny", [\App\Models\Task::class, $project])

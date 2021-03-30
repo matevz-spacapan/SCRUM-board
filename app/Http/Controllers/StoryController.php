@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Story;
 use Illuminate\Http\Request;
@@ -52,7 +53,7 @@ class StoryController extends Controller
             'title' => ['required', 'string', 'max:255',
                 Rule::unique('stories')->where(function ($query) use ($project) {
                 return $query->where('project_id', $project->id); })],
-            'project_id' => ['required', 'numeric', 'min:0'],
+            'project_id' => ['required', 'numeric'],
             'description' => ['required', 'string'],
             'tests' => ['required', 'string'],
             'priority' => 'required',
@@ -61,6 +62,12 @@ class StoryController extends Controller
                 Rule::unique('stories')->where(function ($query) use ($project) {
                     return $query->where('project_id', $project->id); })],
         ]);
+
+        $lowTitle = array_map("strtolower", [$request->title]);
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM stories WHERE LOWER(stories.title) LIKE '".$lowTitle[0]."'") );
+        if($stevilo[0]->stevilka > 0){
+            return redirect()->back()->withErrors(['title' => 'Story with same title already exists'])->withInput();
+        }
 
         Story::create($data);
 
@@ -131,10 +138,75 @@ class StoryController extends Controller
             'hash' => ['nullable', 'numeric',
                 Rule::unique('stories')->where(function ($query) use ($project, $story) {
                     return $query->where('project_id', $project->id)
-                                ->where('id', '<>',    $story->id); })],
+                        ->where('id', '<>',    $story->id); })],
         ]);
 
+        $lowTitle = array_map("strtolower", [$request->title]);
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM stories WHERE LOWER(stories.title) LIKE '".$lowTitle[0]."' AND '".$story['title']."' != stories.title") );
+        if($stevilo[0]->stevilka > 0){
+            return redirect()->back()->withErrors(['title' => 'Story with same title already exists'])->withInput();
+        }
+
         $story->update($data);
+
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
+     * Reject the story.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function reject(Request $request, Project $project, Story $story)
+    {
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('acceptReject', [Story::class, $project]);
+        $data = $request->validate([
+            'comment' => ['nullable', 'string']
+        ]);
+        $story->update($data);
+        $story->sprint_id = null;
+        $story->save();
+
+        return redirect()->route('project.show', $project->id);
+    }
+
+    /**
+     * Accept the story.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Story  $story
+     * @return \Illuminate\Http\Response
+     */
+    public function accept(Request $request, Project $project, Story $story)
+    {
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+
+        if ($story->project_id != $project->id) {
+            abort(404);
+        }
+
+        $this->authorize('acceptReject', [Story::class, $project]);
+
+        $all = $story->tasks()->where('story_id', $story->id)->count();
+        $accepted = $story->tasks()->where('story_id', $story->id)->where('accepted', 3)->count();
+        if($all === 0 || $all !== $accepted){
+            abort(403);
+        }
+
+        $story->accepted = 1;
+        $story->save();
 
         return redirect()->route('project.show', $project->id);
     }
@@ -177,6 +249,7 @@ class StoryController extends Controller
                 foreach ($validator['to_sprint'] as $id => $value){
                     $story = Story::find($value);
                     $story->sprint_id = $active_sprint[0]->id;
+                    $story->comment = null;
                     $story->save();
                 }
             }

@@ -13,6 +13,9 @@
                 <div class="card-body">
                     <a href="{{ route('users.index') }}" class="btn btn-success">{{ __('Manage Users') }}</a>
                 </div>
+				<div class="card-body">
+                    <a href="{{ route('project.index') }}" class="btn btn-success">{{ __('Manage Projects') }}</a>
+                </div>
             </div>
         </div>
     </div>

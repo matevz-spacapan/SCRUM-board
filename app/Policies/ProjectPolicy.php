@@ -44,7 +44,20 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project)
     {
-        return $user->projects->pluck('id')->contains($project->id);
+        return $user->projects->pluck('id')->contains($project->id) ||
+            $project->product_owner === $user->id ||
+            $project->project_master === $user->id;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param \App\Models\User $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        return $user->isAdmin();
     }
 
     /**
