@@ -28,12 +28,13 @@ class SprintPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
+     * @param User $user
+     * @param Project $project
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Project $project)
     {
-        return true;
+        return $user->projects->contains($project);
     }
 
     /**
