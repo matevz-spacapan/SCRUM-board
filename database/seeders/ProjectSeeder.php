@@ -38,7 +38,7 @@ class ProjectSeeder extends Seeder
             ['project_id' => 2, 'user_id' => 4],
             ['project_id' => 2, 'user_id' => 2],
             ['project_id' => 3, 'user_id' => 2],
-            ['project_id' => 3, 'user_id' => 5],
+            ['project_id' => 3, 'user_id' => 4],
         ]);
     }
 }
