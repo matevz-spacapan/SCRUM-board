@@ -218,6 +218,10 @@ class SprintController extends Controller
             abort(404);
         }
 
+        if (Carbon::parse($sprint->end_date) < Carbon::now()) {
+            abort(403, 'Sprint has ended.');
+        }
+
         if (Carbon::create($sprint->start_date) <= Carbon::now() && Carbon::parse($sprint->end_date) >= Carbon::now()) {
             // sprint is in progress
             return redirect()->back()->withErrors(['in_progress ' . $sprint->id => 'Sprint is in progress'])->withInput();
