@@ -16,8 +16,7 @@
                            class="btn btn-primary" @if($sprint->has_ended)  disabled
                            @endif
                            {{ Popper::arrow()->position('left')->pop("Edit the sprint.") }} value="{{__('Edit sprint')}}"/>
-                    <input type=button
-                           onClick="location.href='{{ route('sprint.delete', [$project->id, $sprint->id]) }}'"
+                    <input type=button data-toggle="modal" data-target="#deleteModal{{$sprint->id}}"
                            class="btn btn-outline-danger" @if($sprint->in_progress || $sprint->has_ended)  disabled
                            @endif {{ Popper::arrow()->position('right')->pop("Delete the sprint.") }} value="{{__('Delete sprint')}}"/>
 
@@ -27,3 +26,28 @@
     @endif
 </div>
 
+@if(isset($showFooter))
+    @can("delete", [\App\Models\Sprint::class, $sprint])
+        <!-- Modal -->
+        <div class="modal fade" id="deleteModal{{$sprint->id}}" tabindex="-1" role="dialog"
+             aria-labelledby="deleteModalLabel{{$sprint->id}}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel{{$sprint->id}}">Are you sure you want to delete
+                            this sprint?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary"
+                                data-dismiss="modal" {{ Popper::arrow()->position('left')->pop("Close this window, I changed my mind") }}>{{ __('Close') }}</button>
+                        <a href="{{ route('sprint.delete', [$project->id, $sprint->id]) }}"
+                           class="btn btn-danger" {{ Popper::arrow()->position('right')->pop("Yes, im sure. Now delete it!") }}>{{ __('Delete') }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endcan
+@endif
