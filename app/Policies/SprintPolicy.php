@@ -34,7 +34,8 @@ class SprintPolicy
      */
     public function viewAny(User $user, Project $project)
     {
-        return $user->projects->contains($project);
+        return $user->projects->contains($project) || $project->project_master === $user->id ||
+            $project->product_owner === $user->id;
     }
 
     /**
@@ -57,7 +58,7 @@ class SprintPolicy
      */
     public function create(User $user, Project $project)
     {
-        return $user->projects->where('id', $project->id)->pluck('project_master')->contains($user->id);
+        return $project->project_master === $user->id;
     }
 
     /**
@@ -69,8 +70,7 @@ class SprintPolicy
      */
     public function update(User $user, Sprint $sprint)
     {
-        $project_id = $sprint->project_id;
-        return $user->projects->where('id', $project_id)->pluck('project_master')->contains($user->id);
+        return $sprint->project->project_master === $user->id;
     }
 
     /**
@@ -82,8 +82,7 @@ class SprintPolicy
      */
     public function delete(User $user, Sprint $sprint)
     {
-        $project_id = $sprint->project_id;
-        return $user->projects->where('id', $project_id)->pluck('project_master')->contains($user->id);
+        return $sprint->project->project_master === $user->id;
     }
 
     /**
