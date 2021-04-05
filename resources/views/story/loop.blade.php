@@ -41,7 +41,11 @@
                     @else
                         <div class="d-inline-block lead {{ $color }}">{{ $story->title }}</div>
                     @endif
-                    <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b></div>
+                    <div>Priority: <b><i>{{ $text }}</i></b> | Business value: <b><i>{{ $story->business_value }}</i></b>
+                        @if($story->accepted)
+                             | Finished in: <b><i>Sprint {{ $story->sprint_id }}</i></b>
+                        @endif
+                    </div>
                 </div>
                 <div class="text-right">
                     <div {{ ($taskView) == "1" ? 'style=display:none' : '' }}>
@@ -119,9 +123,9 @@
                     @endif
                 @endcan
             @endif
-                @can("viewAny", [\App\Models\Task::class, $project])
-                    <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-primary float-right">{{ __('View tasks') }}</a>
-                @endcan
+            @can("viewAny", [\App\Models\Task::class, $project])
+                <a href="{{ route('task.show', [$project->id, $story->id]) }}" class="btn btn-primary float-right">{{ __('View tasks') }}</a>
+            @endcan
         </div>
     </div>
     @can("delete", [\App\Models\Story::class, $project])

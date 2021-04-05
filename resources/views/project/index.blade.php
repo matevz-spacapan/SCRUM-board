@@ -19,7 +19,7 @@
                         <tr>
                             <th>No</th>
                             <th>Project name</th>
-                            <th>Project owner</th>
+                            <th>Product owner</th>
                             <th>Scrum master</th>
 							<th>Team size <i class="far fa-question-circle" {{ Popper::arrow()->pop('This includes only developers.') }}></i></th>
                             <th>Actions</th>

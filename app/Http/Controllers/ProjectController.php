@@ -154,7 +154,7 @@ class ProjectController extends Controller
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
         $stories = Story::query()->where('project_id', $project->id)
-            ->where('accepted', 1)->get();
+            ->where('accepted', 1)->orderByDesc('sprint_id')->get();
         if(count($stories) === 0){
             abort(403, 'No accepted stories to show');
         }
