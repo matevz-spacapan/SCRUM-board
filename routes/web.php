@@ -32,6 +32,7 @@ Route::get('/project', 'App\Http\Controllers\ProjectController@index')->name('pr
 Route::post('/project', 'App\Http\Controllers\ProjectController@store')->name('project.store');
 Route::get('/project/create', 'App\Http\Controllers\ProjectController@create')->name('project.create');
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
+Route::get('/project/{project}/docs', 'App\Http\Controllers\ProjectController@viewDocs')->name('project.docs');
 Route::delete('/project/{project}', 'App\Http\Controllers\ProjectController@destroy')->name('project.destroy');
 Route::get('/project/{project}/edit', 'App\Http\Controllers\ProjectController@edit')->name('project.edit');
 

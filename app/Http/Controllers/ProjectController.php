@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\Story;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-use App\Models\User;
 use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
@@ -131,11 +130,10 @@ class ProjectController extends Controller
 
         if ($active_sprint){
             $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint->id}")[0]->time_estimate;
-            if(!$sprint_sum){
+            if (!$sprint_sum) {
                 $sprint_sum = 0;
             }
-        }
-        else{
+        } else {
             $sprint_sum = 0;
         }
 
@@ -143,10 +141,21 @@ class ProjectController extends Controller
     }
 
     /**
+     * View the projects documentation
+     */
+    public function viewDocs(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        return view('project.docs', ['project' => $project]);
+    }
+
+    /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Project  $project
-     * @param  \App\Models\Story  $story
+     * @param \App\Models\Project $project
+     * @param \App\Models\Story $story
      * @return \Illuminate\Http\Response
      */
     public function accepted_stories(Project $project)
