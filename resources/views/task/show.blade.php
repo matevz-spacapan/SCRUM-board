@@ -18,9 +18,9 @@
                 <table class="table table-bordered mb-0">
                     <tr>
                         <th width="40%">Description</th>
-                        <th width="15%" style="text-align: center">Time estimate</th>
+                        <th width="10%" style="text-align: center">Time estimate</th>
                         <th width="15%" style="text-align: center">Asigned user</th>
-                        <th width="15%" style="text-align: center">Status</th>
+                        <th width="20%" style="text-align: center">Status</th>
                         <th width="15%" style="text-align: center">Actions</th>
                     </tr>
                     @foreach($tasks as $task)
@@ -53,7 +53,7 @@
                         @endswitch
                     <tr>
                             <td width="40%" class="align-middle">{{ $task->description }}</td>
-                            <td width="15%" style="text-align: center" class="align-middle">{{ $task->time_estimate }}</td>
+                            <td width="10%" style="text-align: center" class="align-middle">{{ $task->time_estimate }}</td>
                             <td width="15%" style="text-align: center" class="align-middle">
                                 @if(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>
@@ -61,7 +61,7 @@
                                     {{ \App\Models\User::where(['id' => $task->user_id])->pluck('username')->first() }}
                                 @endif
                             </td>
-                            <td width="15%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
+                            <td width="20%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
                                 @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
                                     <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-check"></i></a>
                                     <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
@@ -69,6 +69,11 @@
                                     <i class="fas fa-minus"></i>
                                 @else
                                     <b><i>{{ $text }}</b></i>
+                                @endif
+                                @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
+                                    &nbsp;
+                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-check"></i></a>
+                                    <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
                                 @endif
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">

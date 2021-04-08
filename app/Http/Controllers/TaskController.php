@@ -141,15 +141,16 @@ class TaskController extends Controller
         Story::findOrFail($story->id);
 
         $izBaze = Task::query()
-            ->where('id', $task->id)->pluck('user_id');
+            ->where('id', $task->id);
 
         //dd($izBaze[0]);
 
-        if(Auth::user()->id === $izBaze[0])
-            Task::where('id', $task->id)->update(array('accepted' => 1));
-        else
+        if(Auth::user()->id !== $izBaze->pluck('user_id')[0])
             abort(403, 'You are not the assigned user');
-
+        elseif($story->id !== $izBaze->pluck('story_id')[0])
+            abort(403, 'You are not located on correct story');
+        else
+            Task::where('id', $task->id)->update(array('accepted' => 1));
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
