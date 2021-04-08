@@ -141,14 +141,29 @@ class ProjectController extends Controller
     }
 
     /**
-     * View the projects documentation
+     * View the project's documentation
      */
-    public function viewDocs(Project $project)
+    public function view_docs(Project $project)
     {
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
 
         return view('project.docs', ['project' => $project]);
+    }
+
+    /**
+     * Download the project's documentation
+     */
+    public function download_docs(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        header("Content-type: text/markdown");
+        header("Cache-Control: no-store, no-cache");
+        header('Content-Disposition: attachment; filename="docs.m"');
+        $file = fopen('php://output', 'w');
+        fwrite($file, $project->documentation);
     }
 
     /**
