@@ -3,5 +3,7 @@
 @section('title', __(' - Documentation'))
 
 @section('content')
-    @markdown($project->documentation)
+    <div class="container card p-6">
+        @markdown($project->documentation)
+    </div>
 @endsection
