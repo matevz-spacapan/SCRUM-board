@@ -63,7 +63,7 @@
                             </td>
                             <td width="15%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
                                 @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
-                                    <button type="button" class="btn btn-success"><i class="fas fa-check"></i></button>
+                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-check"></i></a>
                                     <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
                                 @elseif(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>

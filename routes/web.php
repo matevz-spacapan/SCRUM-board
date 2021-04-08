@@ -56,6 +56,7 @@ Route::get('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskCo
 Route::post('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@store')->name('task.store');
 Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers\TaskController@create')->name('task.create');
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
+Route::get('/project/{project}/story/{story}/task/{task}/accept', 'App\Http\Controllers\TaskController@accept')->name('task.accept');
 
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');

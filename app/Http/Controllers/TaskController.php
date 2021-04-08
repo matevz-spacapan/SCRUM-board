@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -132,6 +133,29 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
+
+    public function accept(Project $project, Story $story, Task $task)
+    {
+        Project::findOrFail($project->id);
+        Task::findOrFail($task->id);
+        Story::findOrFail($story->id);
+
+        $izBaze = Task::query()
+            ->where('id', $task->id)->pluck('user_id');
+
+        //dd($izBaze[0]);
+
+        if(Auth::user()->id === $izBaze[0])
+            Task::where('id', $task->id)->update(array('accepted' => 1));
+        else
+            abort(403, 'You are not the assigned user');
+
+
+        return redirect()->route('task.show', [$project->id, $story->id]);
+
+    }
+
+
     public function destroy(Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);
