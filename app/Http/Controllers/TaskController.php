@@ -118,6 +118,9 @@ class TaskController extends Controller
             abort(404);
         }
 
+        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 3)
+            abort(403, 'Task was already completed');
+
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
         $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
             ->where('user_id', '<>', $a[0])->get();
@@ -200,10 +203,10 @@ class TaskController extends Controller
 
        // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
 
-        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 0)
-            $task->delete();
-        else
+        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] != 1)
             abort(403, 'Task was already accepted');
+        else
+            $task->delete();
 
 /*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
         return redirect()->route('task.show', [$project->id, $story->id]);

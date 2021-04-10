@@ -77,7 +77,11 @@
                                 @endif
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
-                                <a class="btn btn-outline-primary" href="{{ route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
+                                @if($task->accepted != 3)
+                                    <a class="btn btn-outline-primary" href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
+                                @else
+                                    <button class="btn btn-outline-primary" disabled>Edit</button>
+                                @endif
                                 <button href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }} {{($task->accepted) != 1 ? '' : 'disabled' }}>{{ __('Delete') }}</button>
                             </td>
                         </tr>
