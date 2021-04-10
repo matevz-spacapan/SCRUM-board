@@ -59,6 +59,7 @@ Route::get('/project/{project}/story/{story}/task/{task}/edit', 'App\Http\Contro
 Route::patch('/project/{project}/story/{story}/task/{task}', 'App\Http\Controllers\TaskController@update')->name('task.update'); #actual process of updating the record
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
 Route::get('/project/{project}/story/{story}/task/{task}/accept', 'App\Http\Controllers\TaskController@accept')->name('task.accept');
+Route::get('/project/{project}/story/{story}/task/{task}/complete', 'App\Http\Controllers\TaskController@complete')->name('task.complete');
 
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');

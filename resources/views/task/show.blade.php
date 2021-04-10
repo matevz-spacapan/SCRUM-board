@@ -18,7 +18,7 @@
                 <table class="table table-bordered mb-0">
                     <tr>
                         <th width="40%">Description</th>
-                        <th width="10%" style="text-align: center">Time estimate</th>
+                        <th width="10%" style="text-align: center">Time estimate [h]</th>
                         <th width="15%" style="text-align: center">Asigned user</th>
                         <th width="20%" style="text-align: center">Status</th>
                         <th width="15%" style="text-align: center">Actions</th>
@@ -45,7 +45,7 @@
                             @break
                             @case(3)
                             @php
-                                $text = __('Finished');
+                                $text = __('Completed');
                                 $color='text-success';
                             @endphp
                             @break
@@ -72,7 +72,7 @@
                                 @endif
                                 @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
                                     &nbsp;
-                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
+                                    <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
                                     <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
                                 @endif
                             </td>

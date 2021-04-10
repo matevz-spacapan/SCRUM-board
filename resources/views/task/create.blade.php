@@ -20,7 +20,7 @@
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter a description for this task.') }}></i></label>
 
                             <div class="col-md-6">
-                                <textarea id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" required>{{ old('description') }}</textarea>
+                                <textarea id="description" placeholder="Task description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" rows="5" required>{{ old('description') }}</textarea>
 
                                 @error('description')
                                 <span class="invalid-feedback" role="alert">
@@ -34,7 +34,7 @@
                             <label for="time_estimate" class="col-md-4 col-form-label text-md-right">{{ __('Time estimate') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter a time estimate value betwen 1 and 100.') }}></i></label>
 
                             <div class="col-md-6">
-                                <input id="time_estimate" type="number" class="form-control @error('time_estimate') is-invalid @enderror" name="time_estimate" value="{{ old('time_estimate') }}" min="1" max="100" required>
+                                <input id="time_estimate" placeholder="[h]" type="number" class="form-control @error('time_estimate') is-invalid @enderror" name="time_estimate" value="{{ old('time_estimate') }}" min="1" max="100" required>
 
                                 @error('time_estimate')
                                 <span class="invalid-feedback" role="alert">
