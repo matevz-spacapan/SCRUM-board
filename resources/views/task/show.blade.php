@@ -72,13 +72,13 @@
                                 @endif
                                 @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
                                     &nbsp;
-                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-check"></i></a>
+                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
                                     <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
                                 @endif
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
-                                <a class="btn btn-outline-primary" href="#">Edit</a>
-                                <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</a>
+                                <a class="btn btn-outline-primary" href="{{ route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
+                                <button href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }} {{($task->accepted) != 1 ? '' : 'disabled' }}>{{ __('Delete') }}</button>
                             </td>
                         </tr>
 

@@ -108,9 +108,23 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function edit(Story $story, Task $task)
+    public function edit(Project $project, Story $story, Task $task)
     {
-        //
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+        Task::findOrFail($task->id);
+
+        if ($story->id != $task->story_id) {
+            abort(404);
+        }
+
+        $a = Project::query()->where('id', $project->id)->pluck('product_owner');
+        $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
+            ->where('user_id', '<>', $a[0])->get();
+
+      //  $this->authorize('update', [Task::class]);
+
+        return view('task.edit', ['story' => $story, 'project' => $project, 'user_list'=> $user_list, 'task'=>$task]);
     }
 
     /**
@@ -163,7 +177,12 @@ class TaskController extends Controller
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
 
-        $task->delete();
+       // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
+
+        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 0)
+            $task->delete();
+        else
+            abort(403, 'Task was already accepted');
 
 /*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
         return redirect()->route('task.show', [$project->id, $story->id]);

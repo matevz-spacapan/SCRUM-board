@@ -24,7 +24,7 @@ class TaskPolicy
             return true;
         }
     }
-    
+
     /**
      * Determine whether the user can view any models.
      *
@@ -79,7 +79,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-        //
+        return true;
     }
 
     /**
