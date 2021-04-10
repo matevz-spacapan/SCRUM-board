@@ -97,7 +97,7 @@ class TaskController extends Controller
             $active_sprint = [];
 
         /*    ->join('sprint','id', '=', 'stories.sprint_id')->where('id', $story->id)*/
-        $timesum = Task::query()->sum('time_estimate');
+        $timesum = Task::query()->where('story_id', $story->id)->sum('time_estimate');
 
         return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks, 'timesum' => $timesum]);
     }
