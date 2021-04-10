@@ -17,8 +17,8 @@
             <div class="card-body px-0 py-0">
                 <table class="table table-bordered mb-0">
                     <tr>
-                        <th width="40%">Description</th>
-                        <th width="10%" style="text-align: center">Time estimate [h]</th>
+                        <th width="38%">Description</th>
+                        <th width="12%" style="text-align: center">Time estimate {{$timesum}}[h]</th>
                         <th width="15%" style="text-align: center">Asigned user</th>
                         <th width="20%" style="text-align: center">Status</th>
                         <th width="15%" style="text-align: center">Actions</th>
@@ -52,8 +52,8 @@
                             @default
                         @endswitch
                     <tr>
-                            <td width="40%" class="align-middle">{{ $task->description }}</td>
-                            <td width="10%" style="text-align: center" class="align-middle">{{ $task->time_estimate }}</td>
+                            <td width="38%" class="align-middle">{{ $task->description }}</td>
+                            <td width="12%" style="text-align: center" class="align-middle">{{ $task->time_estimate }} h</td>
                             <td width="15%" style="text-align: center" class="align-middle">
                                 @if(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>
