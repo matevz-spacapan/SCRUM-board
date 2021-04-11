@@ -153,6 +153,35 @@ class ProjectController extends Controller
     }
 
     /**
+     * Get the view for editing docs
+     */
+    public function edit_docs_view(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        return view('project.edit_docs', ['project' => $project]);
+    }
+
+    /**
+     * Edit the project's docs
+     */
+    public function edit_docs(Request $request, Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        $data = $request->validate([
+            'documentation' => ['required', 'string']
+        ]);
+
+        $project->documentation = $data['documentation'];
+        $project->update();
+
+        return redirect()->route('project.docs', $project->id);
+    }
+
+    /**
      * Download the project's documentation
      */
     public function download_docs(Project $project)

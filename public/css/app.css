@@ -16814,3 +16814,7 @@ video {
 .card-disabled {
   background-color: lightgray;
 }
+
+.documentation-textarea {
+  flex-basis: 600px;
+}

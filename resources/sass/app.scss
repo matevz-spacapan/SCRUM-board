@@ -344,3 +344,7 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
 .card-disabled {
     background-color: lightgray;
 }
+
+.documentation-textarea {
+    flex-basis: 600px;
+}
