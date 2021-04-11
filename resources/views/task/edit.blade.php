@@ -13,8 +13,9 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('task.store', [$project->id, $story->id]) }}">
+                    <form method="POST" action="{{ route('task.update', [$project->id, $story->id, $task->id]) }}">
                         @csrf
+                        @method('PATCH')
 
                         <div class="form-group row">
                             <label for="description" class="col-md-4 col-form-label text-md-right">{{ __('Description') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter a description for this task.') }}></i></label>
@@ -48,7 +49,7 @@
                             <label for="user" class="col-md-4 col-form-label text-md-right">{{ __('Assigned User') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Select the assigned user for this task.') }}></i></label>
 
                             <div class="col-md-6">
-                                <select id="user_id" class="form-control @error('user_id') is-invalid @enderror" name="user_id">
+                                <select id="user_id" class="form-control @error('user_id') is-invalid @enderror" name="user_id" {{($task->accepted) != 1 ? '' : 'disabled' }}>
                                     <option value="0">{{__('Not assigned')}}</option>
 
                                     @foreach($user_list as $user)

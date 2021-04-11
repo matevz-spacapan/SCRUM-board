@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
@@ -139,9 +140,36 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Story $story, Task $task)
+    public function update(Request $request, Project $project, Story $story, Task $task)
     {
-        //
+        Project::findOrFail($project->id);
+        Story::findOrFail($story->id);
+        Task::findOrFail($task->id);
+
+        if ($story->id != $task->story_id) {
+            abort(404);
+        }
+
+        $this->authorize('create', [Task::class, $project]);
+
+        $data = $request->validate([
+            'description' => ['required', 'string'],
+            'user_id' => ['numeric', 'nullable'],
+            'time_estimate' => ['required', 'numeric', 'between:1,100'],
+        ]);
+
+
+        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
+            if(Arr::get($data, 'user_id') != Task::query()->where('id', $task->id)->pluck('user_id'))
+                abort(403, 'You cannot change user on accepoted or completed task');
+
+        if(Arr::get($data, 'user_id') == 0)
+            Arr::pull($data, 'user_id');
+
+        $task->update($data);
+
+        return redirect()->route('task.show', [$project->id, $story->id]);
+
     }
 
     /**
