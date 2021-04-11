@@ -348,3 +348,8 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
 .documentation-textarea {
     flex-basis: 600px;
 }
+
+.documentation-header {
+    display: inline-block;
+    margin: 0;
+}
