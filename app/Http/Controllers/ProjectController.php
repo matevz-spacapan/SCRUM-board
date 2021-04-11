@@ -72,6 +72,7 @@ class ProjectController extends Controller
         $project->project_name = $data['project_name'];
         $project->product_owner = $data['product_owner'];
         $project->project_master = $data['project_master'];
+        $project->documentation = '';
 
         //save the project and developer IDs
         $project->save();
