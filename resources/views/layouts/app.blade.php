@@ -13,7 +13,6 @@
     <script src="{{ asset('js/app.js') }}" ></script>
 	<script src="{{ asset('js/select2.min.js') }}" ></script>
     @yield('page_specific_scripts')
-    @yield('count_sprints')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -113,15 +112,20 @@
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="productBacklog">
                                             <a class="dropdown-item" href="{{ route('project.show', Request::segment(2)) }}">{{ __('Unfinished stories') }}</a>
                                             @if(count(\App\Models\Story::query()->where('project_id', Request::segment(2))->where('accepted', 1)->get()) > 0)
-                                                <a class="dropdown-item" href="{{ route('story.accepted', Request::segment(2)) }}">{{ __('Finished stories') }}</a>
+                                                <a class="dropdown-item"
+                                                   href="{{ route('story.accepted', Request::segment(2)) }}">{{ __('Finished stories') }}</a>
                                             @else
                                                 <div class="dropdown-item disabled">{{__('Finished stories')}}</div>
                                             @endif
                                         </div>
                                     </li>
                                 </ul>
-                                <li class="nav-item"><a href="{{ route('sprint.index', $project->id) }}" class="nav-link">{{ __('Sprint list') }}</a></li>
-                                <li class="nav-item"><a href="{{ route('wall.index', $project->id) }}" class="nav-link">{{ __('Project wall') }}</a></li>
+                                <li class="nav-item"><a href="{{ route('sprint.index', $project->id) }}"
+                                                        class="nav-link">{{ __('Sprint list') }}</a></li>
+                                <li class="nav-item"><a href="{{ route('wall.index', $project->id) }}"
+                                                        class="nav-link">{{ __('Project wall') }}</a></li>
+                                <li class="nav-item"><a href="{{ route('project.docs', $project->id) }}"
+                                                        class="nav-link">{{ __('Project documentation') }}</a></li>
                             </ul>
                         </div>
                     </div>

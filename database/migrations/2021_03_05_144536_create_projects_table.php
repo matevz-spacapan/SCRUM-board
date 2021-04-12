@@ -18,6 +18,7 @@ class CreateProjectsTable extends Migration
             $table->string('project_name');
             $table->unsignedBigInteger('product_owner');
             $table->unsignedBigInteger('project_master');
+            $table->longText('documentation');
             $table->timestamps();
 
             $table->foreign('product_owner')->references('id')->on('users');

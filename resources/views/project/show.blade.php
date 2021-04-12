@@ -2,7 +2,7 @@
 
 @section('title', ' - '.$project->project_name)
 
-@section('count_sprints')
+@section('page_specific_scripts')
     @if($active_sprint)
         <script>
             counter = {{ $sprint_sum }};

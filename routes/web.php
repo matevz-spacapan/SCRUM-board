@@ -32,6 +32,10 @@ Route::get('/project', 'App\Http\Controllers\ProjectController@index')->middlewa
 Route::post('/project', 'App\Http\Controllers\ProjectController@store')->name('project.store');
 Route::get('/project/create', 'App\Http\Controllers\ProjectController@create')->name('project.create');
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
+Route::get('/project/{project}/docs', 'App\Http\Controllers\ProjectController@view_docs')->name('project.docs');
+Route::get('/project/{project}/docs/edit', 'App\Http\Controllers\ProjectController@edit_docs_view')->name('project.edit_docs_view');
+Route::post('/project/{project}/docs', 'App\Http\Controllers\ProjectController@edit_docs')->name('project.edit_docs');
+Route::get('/project/{project}/docs/download', 'App\Http\Controllers\ProjectController@download_docs')->name('project.download_docs');
 Route::delete('/project/{project}', 'App\Http\Controllers\ProjectController@destroy')->name('project.destroy');
 Route::get('/project/{project}/edit', 'App\Http\Controllers\ProjectController@edit')->name('project.edit');
 
