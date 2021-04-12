@@ -25,8 +25,8 @@ Route::get('/admin/dashboard', 'App\Http\Controllers\AdminPageController@index')
 
 Route::get('/admin/user/create', 'App\Http\Controllers\UserController@create')->name('user.create');
 
-Route::get('/user/settings', 'App\Http\Controllers\UserController@edit')->name('user.edit');
-Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name('user.update');
+Route::get('/user/settings', 'App\Http\Controllers\UserController@editOwn')->name('user.edit');
+//Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name('user.update');
 
 Route::get('/project', 'App\Http\Controllers\ProjectController@index')->name('project.index');
 Route::post('/project', 'App\Http\Controllers\ProjectController@store')->name('project.store');

@@ -10,9 +10,21 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Validator;
+<<<<<<< HEAD
+=======
+use Auth;
+>>>>>>> a9823d8 (Adding own user settings)
 
 class UserController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+        $this->middleware('permission:users-list|users-create|users-edit|users-delete', ['only' => ['index','store', 'show']]);
+        $this->middleware('permission:users-create', ['only' => ['create','store']]);
+        $this->middleware('permission:users-edit', ['only' => ['edit','create','store']]);// ,'update'
+        $this->middleware('permission:users-delete', ['only' => ['destroy']]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -78,6 +90,7 @@ class UserController extends Controller
         return view('users.show',compact('user'));
     }
     
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -85,10 +98,28 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id){
+        if(!Auth::user()->isAdmin()){
+            abort(403);
+        }
+        
         $user = User::find($id);
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
+        
+        return view('users.edit',compact('user','roles','userRole'));
+    }
     
+    /**
+     * Show the form for editing users own data.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function editOwn(){
+        
+        $user = User::find(Auth::user()->id);
+        $roles = Role::pluck('name','name')->all();
+        $userRole = $user->roles->pluck('name','name')->all();
+        
         return view('users.edit',compact('user','roles','userRole'));
     }
     
@@ -100,6 +131,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
+        
+        // if user not admin and user tries to update another user -> abort
+        if (!Auth::user()->isAdmin() && $id != Auth::user()->id) {
+            abort(403);
+        }
+        
         $this->validate($request, [
             'username' => 'required|unique:users,username,'.$id,
             'name' => 'required',
@@ -123,10 +160,12 @@ class UserController extends Controller
         $user = User::find($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
-    
         $user->assignRole($request->input('roles'));
-    
-        return redirect()->route('users.index')->with('success','User updated successfully');
+        
+        if ($user->isAdmin()) {
+            return redirect()->route('users.index')->with('success','User updated successfully');
+        }
+        return redirect()->route('home');
     }
     
     /**
