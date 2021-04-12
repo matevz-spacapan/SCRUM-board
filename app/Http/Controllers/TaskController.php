@@ -119,6 +119,8 @@ class TaskController extends Controller
         if ($story->id != $task->story_id) {
             abort(404);
         }
+        
+        $this->authorize('create', [Task::class, $project]);
 
         if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 3)
             abort(403, 'Task was already completed');
