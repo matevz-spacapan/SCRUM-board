@@ -10,10 +10,7 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Validator;
-<<<<<<< HEAD
-=======
 use Auth;
->>>>>>> a9823d8 (Adding own user settings)
 
 class UserController extends Controller
 {
