@@ -28,7 +28,7 @@ Route::get('/admin/user/create', 'App\Http\Controllers\UserController@create')->
 Route::get('/user/settings', 'App\Http\Controllers\UserController@editOwn')->name('user.edit');
 //Route::get('/user/settings', 'App\Http\Controllers\UserController@update')->name('user.update');
 
-Route::get('/project', 'App\Http\Controllers\ProjectController@index')->name('project.index');
+Route::get('/project', 'App\Http\Controllers\ProjectController@index')->middleware('auth')->name('project.index');
 Route::post('/project', 'App\Http\Controllers\ProjectController@store')->name('project.store');
 Route::get('/project/create', 'App\Http\Controllers\ProjectController@create')->name('project.create');
 Route::get('/project/{project}', 'App\Http\Controllers\ProjectController@show')->name('project.show');
