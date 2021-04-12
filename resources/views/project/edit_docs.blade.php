@@ -30,7 +30,7 @@
                     <a class="btn btn-link p-0"
                        href="{{ route('project.docs', [$project->id]) }}" {{ Popper::arrow()->position('right')->pop('Discard the form and return to the documentation.') }}>{{ __('Go back') }}</a>
                 </div>
-                <textarea id="documentation" class="form-control" rows="int"
+                <textarea id="documentation" class="form-control" rows="20"
                           name="documentation" autofocus>{{$project->documentation}}</textarea>
 
                 <div class="d-flex mt-2 justify-content-end">
