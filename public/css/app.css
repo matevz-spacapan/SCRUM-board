@@ -16815,10 +16815,6 @@ video {
   background-color: lightgray;
 }
 
-.documentation-textarea {
-  flex-basis: 600px;
-}
-
 .documentation-header {
   display: inline-block;
   margin: 0;

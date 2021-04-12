@@ -30,17 +30,18 @@
                     <a class="btn btn-link p-0"
                        href="{{ route('project.docs', [$project->id]) }}" {{ Popper::arrow()->position('right')->pop('Discard the form and return to the documentation.') }}>{{ __('Go back') }}</a>
                 </div>
-                <textarea id="documentation" type="text" class="form-control documentation-textarea"
-                          name="documentation" autofocus>
-                    {{$project->documentation}}
-                </textarea>
+                <textarea id="documentation" class="form-control" rows="int"
+                          name="documentation" autofocus>{{$project->documentation}}</textarea>
 
                 <div class="d-flex mt-2 justify-content-end">
-                    <input id="file_input" type="file" class="btn btn-primary mr-2"
-                           {{ Popper::arrow()->position('left')->pop('Upload documentation.') }}
-                           onchange="file_loaded()">
+
+                    <div class="custom-file mr-2">
+                        <input type="file" class="custom-file-input" id="file_input" onchange="file_loaded()"
+                            {{ Popper::arrow()->position('left')->pop('Upload documentation.') }}>
+                        <label class="custom-file-label" for="file_input">Choose a documentation file to import</label>
+                    </div>
                     <button type="submit" class="btn btn-primary">
-                        {{ __('Edit documentation') }}
+                        {{ __('Save') }}
                     </button>
                 </div>
             </div>
