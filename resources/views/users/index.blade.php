@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-
 @section('content')
 <div class="container">
     <div class="row">
@@ -14,7 +13,7 @@
                     
                     @if ($message = Session::get('success'))
                     <div class="alert alert-success">
-                        <p>{{ $message }}</p>
+                        {{ $message }}
                     </div>
                     @endif
                     
@@ -38,7 +37,11 @@
                             <td>
                             @if(!empty($user->getRoleNames()))
                                 @foreach($user->getRoleNames() as $v)
-                                <label class="badge badge-success">{{ $v }}</label>
+                                    @if($v == 'Administrator')
+                                    <span class="lead"><span class="badge badge-danger">{{ $v }}</span></span>
+                                    @else
+                                    <span class="lead"><span class="badge badge-warning">{{ $v }}</span></span>
+                                    @endif
                                 @endforeach
                             @endif
                             </td>
@@ -52,10 +55,10 @@
                         </tr>
                         @endforeach
                     </table>
+                    {!! $data->render() !!}
                 </div>
             </div>
         </div>
     </div>
-    {!! $data->render() !!}
 </div>
 @endsection

@@ -19,9 +19,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        $data = User::orderBy('id','ASC')->paginate(5);
+        $itemsOnPage = 10;
+        $data = User::orderBy('id','ASC')->paginate($itemsOnPage);
         return view('users.index',compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+            ->with('i', ($request->input('page', 1) - 1) * $itemsOnPage);
     }
     
     /**
@@ -40,8 +41,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $this->validate($request, [
             'username' => 'required|unique:users,username',
             'name' => 'required',
@@ -50,13 +50,17 @@ class UserController extends Controller
             'password' => 'required|same:confirm-password',
             'roles' => 'required'
         ]);
-    
+        
+        if ($this->checkUsername($request->username)){
+            return redirect()->back()->withErrors(['username' => 'User with same username already exists'])->withInput();
+        }
+        
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
     
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
-    
+        
         return redirect()->route('users.index')
                         ->with('success','User created successfully');
     }
@@ -102,14 +106,18 @@ class UserController extends Controller
             'password' => 'same:confirm-password',
             'roles' => 'required'
         ]);
-    
+        
+        if ($this->checkUsername($request->username, $id)){
+            return redirect()->back()->withErrors(['username' => 'User with same username already exists'])->withInput();
+        }
+        
         $input = $request->all();
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
         }else{
-            $input = Arr::except($input,array('password'));    
+            $input = Arr::except($input,array('password'));
         }
-    
+        
         $user = User::find($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id',$id)->delete();
@@ -129,5 +137,12 @@ class UserController extends Controller
         User::find($id)->delete();
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
+    }
+    
+    // CHECK if user with same username exists (case INsensitive)
+    private function checkUsername($username, $id = NULL){
+        $lowTitle = array_map("strtolower", [$username]);
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM users WHERE LOWER(users.username) = '".$lowTitle[0]."' AND users.id != ".$id.""));
+        return $stevilo[0]->stevilka > 0;
     }
 }
