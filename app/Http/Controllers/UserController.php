@@ -134,6 +134,10 @@ class UserController extends Controller
             abort(403);
         }
         
+        if (!Auth::user()->isAdmin()) {
+            $request->request->add(['roles' => array(Auth::user()->roles[0]->name)]);
+        }
+        
         $this->validate($request, [
             'username' => 'required|unique:users,username,'.$id,
             'name' => 'required',
