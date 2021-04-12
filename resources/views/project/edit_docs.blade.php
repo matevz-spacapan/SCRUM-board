@@ -2,6 +2,24 @@
 
 @section('title', __(' - Edit Documentation'))
 
+@section('page_specific_scripts')
+    <script type="text/javascript">
+        function file_loaded() {
+            const file = document.getElementById("file_input").files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsText(file, "UTF-8");
+                reader.onload = function (evt) {
+                    document.getElementById("documentation").value = evt.target.result;
+                }
+                reader.onerror = function (evt) {
+                    console.log("error reading file");
+                }
+            }
+        }
+    </script>
+@endsection
+
 @section('content')
     <div class="container">
         <form method="POST" action="{{ route('project.edit_docs', $project->id) }}">
@@ -18,9 +36,9 @@
                 </textarea>
 
                 <div class="d-flex mt-2 justify-content-end">
-                    <input type="file" class="btn btn-primary mr-2"
+                    <input id="file_input" type="file" class="btn btn-primary mr-2"
                            {{ Popper::arrow()->position('left')->pop('Upload documentation.') }}
-                           onchange="console.log('BOY')">
+                           onchange="file_loaded()">
                     <button type="submit" class="btn btn-primary">
                         {{ __('Edit documentation') }}
                     </button>
