@@ -17,6 +17,11 @@
                         {{ $message }}
                     </div>
                     @endif
+                    @error('duplicatedUser')
+                    <div class="alert alert-danger">
+                        {{ $message }}
+                    </div>
+                    @enderror
                     
                     <table class="table table-bordered">
                         <tr>
@@ -29,7 +34,8 @@
                             <th width="280px">Action</th>
                         </tr>
                         @foreach ($data as $key => $user)
-                        <tr>
+                        
+                        <tr class="@if(!empty($user->deleted_at)) table-danger @endif" >
                             <td>{{ ++$i }}</td>
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->name }}</td>
@@ -47,11 +53,8 @@
                             @endif
                             </td>
                             <td>
-                                {{--<!--<a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>-->--}}
-                                <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}">Edit</a>
-                                
-                                
                                 @if(empty($user->deleted_at))
+                                    <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}">Edit</a>
                                     {!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
                                         {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
                                     {!! Form::close() !!}

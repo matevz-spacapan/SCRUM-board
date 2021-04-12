@@ -22,7 +22,7 @@ class UserController extends Controller
         $itemsOnPage = 10;
         
         //$data = User::orderBy('id','ASC')->paginate($itemsOnPage);
-        $data = User::withTrashed()->orderBy('id','ASC')->paginate($itemsOnPage); // prikaze tudi izbrisane
+        $data = User::withTrashed()->orderBy('deleted_at','ASC')->orderBy('username','ASC')->orderBy('id','ASC')->paginate($itemsOnPage); // withTrashed() also shows deleted 
         return view('users.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * $itemsOnPage);
     }
@@ -152,6 +152,12 @@ class UserController extends Controller
     public function restore($id){
         $userToRestore = User::onlyTrashed()->find($id);
         $usernameClean = substr($userToRestore->username, strlen('deleted_'));
+        
+        if ($this->checkUsername($usernameClean)){
+            
+            return back()->withErrors(['duplicatedUser' => 'User with same username already exists']);
+        }
+        
         $userToRestore->update(array('username' => $usernameClean));
         $userToRestore->restore();
         return redirect()->route('users.index')
@@ -161,7 +167,11 @@ class UserController extends Controller
     // CHECK if user with same username exists (case INsensitive)
     private function checkUsername($username, $id = NULL){
         $lowTitle = array_map("strtolower", [$username]);
-        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM users WHERE LOWER(users.username) = '".$lowTitle[0]."' AND users.id != ".$id.""));
+        $qery = "SELECT COUNT(*) as stevilka FROM users WHERE LOWER(users.username) = '".$lowTitle[0]."'";
+        if($id != NULL){
+            $qery = $qery."AND users.id != ".$id."";
+        }
+        $stevilo = DB::select( DB::raw( $qery));
         return $stevilo[0]->stevilka > 0;
     }
 }
