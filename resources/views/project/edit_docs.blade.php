@@ -25,8 +25,8 @@
         <form method="POST" action="{{ route('project.edit_docs', $project->id) }}">
             @csrf
             <div class="d-flex flex-column justify-content-center">
-                <div class="d-flex flex-row m-auto">
-                    <label for="documentation" class="m-0 text-center mr-4">{{ __('Documentation') }}</label>
+                <div class="d-flex flex-row justify-content-between">
+                    <h3 class="pb-1 text-center mr-4">{{ __('Documentation') }}</h3>
                     <a class="btn btn-link p-0"
                        href="{{ route('project.docs', [$project->id]) }}" {{ Popper::arrow()->position('right')->pop('Discard the form and return to the documentation.') }}>{{ __('Go back') }}</a>
                 </div>
