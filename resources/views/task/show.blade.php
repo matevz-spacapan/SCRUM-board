@@ -58,7 +58,7 @@
                                 @if(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>
                                     @else
-                                    {{ \App\Models\User::where(['id' => $task->user_id])->pluck('username')->first() }}
+                                    {{ \App\Models\User::withTrashed()->where(['id' => $task->user_id])->pluck('username')->first() }}
                                 @endif
                             </td>
                             <td width="15%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">

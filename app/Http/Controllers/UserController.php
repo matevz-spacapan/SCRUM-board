@@ -1,7 +1,7 @@
 <?php
-    
+
 namespace App\Http\Controllers;
-    
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -10,7 +10,7 @@ use DB;
 use Hash;
 use Illuminate\Support\Arr;
 use Validator;
-    
+
 class UserController extends Controller
 {
     /**
@@ -20,7 +20,9 @@ class UserController extends Controller
      */
     public function index(Request $request){
         $itemsOnPage = 10;
-        $data = User::orderBy('id','ASC')->paginate($itemsOnPage);
+        
+        //$data = User::orderBy('id','ASC')->paginate($itemsOnPage);
+        $data = User::withTrashed()->orderBy('id','ASC')->paginate($itemsOnPage); // prikaze tudi izbrisane
         return view('users.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * $itemsOnPage);
     }
@@ -140,6 +142,23 @@ class UserController extends Controller
         return redirect()->route('users.index')
                         ->with('success','User (soft) deleted successfully');
     }
+    
+    /**
+     * Restore the specified user from trash.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    /*
+    public function restore($id){
+        $userToRestore = User::find($id);
+        $usernameClean = substr($userToRestore->username, strlen('deleted_'));
+        $userToRestore->update(array('username' => $usernameClean));
+        $userToRestore->restore();
+        return redirect()->route('users.index')
+                        ->with('success','User restored successfully');
+    }
+    */
     
     // CHECK if user with same username exists (case INsensitive)
     private function checkUsername($username, $id = NULL){

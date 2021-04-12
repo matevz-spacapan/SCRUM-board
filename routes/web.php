@@ -62,6 +62,7 @@ Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index
 Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallController@create')->name('wall.create');
 Route::post('/project/{project}/wall', 'App\Http\Controllers\WallController@store')->name('wall.store');
 
+
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');
 });
