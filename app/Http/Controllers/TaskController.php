@@ -239,7 +239,7 @@ class TaskController extends Controller
        // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
         $this->authorize('create', [Task::class, $project]);
 
-        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] != 1)
+        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
             abort(403, 'Task was already accepted');
         else
             $task->delete();
