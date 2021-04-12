@@ -6,13 +6,16 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header">
-                {{ __('Edit New User') }}
+                
+                <div class="card-header d-flex justify-content-between align-items-baseline">
+                    <div>{{ __('Edit User') }}</div>
+                    <div><a class="btn btn-link" href="{{ route('users.index') }}" {{ Popper::arrow()->position('bottom')->pop('Go back to user management.') }}>{{ __('Go back') }}</a></div>
                 </div>
+                
                 <div class="card-body">
                     @if (count($errors) > 0)
                     <div class="alert alert-danger">
-                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <strong>There were some problems with your input.</strong><br>
                         <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
