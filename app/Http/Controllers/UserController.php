@@ -134,9 +134,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id){
-        User::find($id)->delete();
+        $userToDelete = User::find($id);
+        $userToDelete->update(array('username' => 'deleted_'.$userToDelete->username));
+        $userToDelete->delete();
         return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+                        ->with('success','User (soft) deleted successfully');
     }
     
     // CHECK if user with same username exists (case INsensitive)

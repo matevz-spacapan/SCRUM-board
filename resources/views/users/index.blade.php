@@ -6,7 +6,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-baseline">
-                    <div>{{ __('Users Management') }}</div>
+                    <div>{{ __('User Management') }}</div>
                     <div><a class="btn btn-link" href="{{ route('adminPage.index') }}" {{ Popper::arrow()->position('bottom')->pop('Go back to administrator dashboard.') }}>{{ __('Go back') }}</a></div>
                 </div>
                 <div class="card-body">
@@ -49,9 +49,11 @@
                             <td>
                                 {{--<!--<a class="btn btn-info" href="{{ route('users.show',$user->id) }}">Show</a>-->--}}
                                 <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}">Edit</a>
+                                
                                 {!! Form::open(['method' => 'DELETE','route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
                                     {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
                                 {!! Form::close() !!}
+                                
                             </td>
                         </tr>
                         @endforeach

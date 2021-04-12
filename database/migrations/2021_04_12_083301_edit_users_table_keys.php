@@ -16,6 +16,7 @@ class EditUsersTableKeys extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropUnique(['name']);
             $table->unique(['username']);
+            $table->softDeletes();
         });
         
     }
