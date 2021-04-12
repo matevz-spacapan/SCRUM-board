@@ -59,6 +59,7 @@
                                     <!--{!! Form::open(['method' => 'PATCH','route' => ['users.update', $user->id],'style'=>'display:inline']) !!}
                                         {!! Form::submit('Restore', ['class' => 'btn btn-success']) !!}
                                     {!! Form::close() !!}-->
+                                    <a class="btn btn-success" href="{{ route('user.restore', $user->id) }}">Restore</a>
                                 @endif
                             </td>
                         </tr>

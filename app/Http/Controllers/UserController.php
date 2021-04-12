@@ -149,16 +149,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    /*
     public function restore($id){
-        $userToRestore = User::find($id);
+        $userToRestore = User::onlyTrashed()->find($id);
         $usernameClean = substr($userToRestore->username, strlen('deleted_'));
         $userToRestore->update(array('username' => $usernameClean));
         $userToRestore->restore();
         return redirect()->route('users.index')
                         ->with('success','User restored successfully');
     }
-    */
     
     // CHECK if user with same username exists (case INsensitive)
     private function checkUsername($username, $id = NULL){

@@ -63,6 +63,9 @@ Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallControlle
 Route::post('/project/{project}/wall', 'App\Http\Controllers\WallController@store')->name('wall.store');
 
 
+
+Route::get('/admin/users/restore/{id}', 'App\Http\Controllers\UserController@restore')->name('user.restore');
+
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('/admin/users', 'App\Http\Controllers\UserController');
 });
