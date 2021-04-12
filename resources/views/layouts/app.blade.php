@@ -13,7 +13,6 @@
     <script src="{{ asset('js/app.js') }}" ></script>
 	<script src="{{ asset('js/select2.min.js') }}" ></script>
     @yield('page_specific_scripts')
-    @yield('count_sprints')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

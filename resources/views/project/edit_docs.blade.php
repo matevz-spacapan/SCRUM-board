@@ -18,6 +18,9 @@
                 </textarea>
 
                 <div class="d-flex mt-2 justify-content-end">
+                    <input type="file" class="btn btn-primary mr-2"
+                           {{ Popper::arrow()->position('left')->pop('Upload documentation.') }}
+                           onchange="console.log('BOY')">
                     <button type="submit" class="btn btn-primary">
                         {{ __('Edit documentation') }}
                     </button>
