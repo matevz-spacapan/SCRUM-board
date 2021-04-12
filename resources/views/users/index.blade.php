@@ -5,8 +5,9 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header">
-                {{ __('Users Management') }}
+                <div class="card-header d-flex justify-content-between align-items-baseline">
+                    <div>{{ __('Users Management') }}</div>
+                    <div><a class="btn btn-link" href="{{ route('adminPage.index') }}" {{ Popper::arrow()->position('bottom')->pop('Go back to administrator dashboard.') }}>{{ __('Go back') }}</a></div>
                 </div>
                 <div class="card-body">
                     <a class="btn btn-success mb-2" href="{{ route('users.create') }}">{{ __('Create New User') }}</a>
