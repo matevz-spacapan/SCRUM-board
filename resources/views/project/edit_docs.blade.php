@@ -26,7 +26,7 @@
             @csrf
             <div class="d-flex flex-column justify-content-center">
                 <div class="d-flex flex-row justify-content-between">
-                    <h3 class="pb-1 text-center mr-4">{{ __('Documentation') }}</h3>
+                    <h4 class="pb-1 text-center mr-4">{{ __('Documentation') }}</h4>
                     <a class="btn btn-link p-0"
                        href="{{ route('project.docs', [$project->id]) }}" {{ Popper::arrow()->position('right')->pop('Discard the form and return to the documentation.') }}>{{ __('Go back') }}</a>
                 </div>
