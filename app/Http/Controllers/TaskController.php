@@ -195,6 +195,8 @@ class TaskController extends Controller
             abort(403, 'You are not the assigned user');
         elseif($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
+        elseif($izBaze->pluck('user_id')[0] === 0)
+            abort(403, 'This task has no asigned user');
         else
             Task::where('id', $task->id)->update(array('accepted' => 1));
 
@@ -217,6 +219,10 @@ class TaskController extends Controller
             abort(403, 'You are not the assigned user');
         elseif($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
+        elseif($izBaze->pluck('accepted')[0] === 3)
+            abort(403, 'This task was already completed');
+        elseif($izBaze->pluck('accepted')[0] != 1)
+            abort(403, 'This task is not yet accepted');
         else
             Task::where('id', $task->id)->update(array('accepted' => 3));
 
