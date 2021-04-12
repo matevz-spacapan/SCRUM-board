@@ -82,7 +82,7 @@
                                 @else
                                     <button class="btn btn-outline-primary" disabled>Edit</button>
                                 @endif
-                                <button href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }} {{($task->accepted) != 1 ? '' : 'disabled' }}>{{ __('Delete') }}</button>
+                                <button href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }} {{($task->accepted) != 3 ? '' : 'disabled' }}>{{ __('Delete') }}</button>
                             </td>
                         </tr>
 

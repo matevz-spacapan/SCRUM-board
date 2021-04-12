@@ -163,8 +163,9 @@ class TaskController extends Controller
             if(Arr::get($data, 'user_id') != Task::query()->where('id', $task->id)->pluck('user_id'))
                 abort(403, 'You cannot change user on accepoted or completed task');
 
+
         if(Arr::get($data, 'user_id') == 0)
-            Arr::pull($data, 'user_id');
+            $data['user_id']=null;
 
         $task->update($data);
 
@@ -239,8 +240,8 @@ class TaskController extends Controller
        // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
         $this->authorize('create', [Task::class, $project]);
 
-        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
-            abort(403, 'Task was already accepted');
+        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 3)
+            abort(403, 'Task was already completed');
         else
             $task->delete();
 
