@@ -119,7 +119,7 @@ class TaskController extends Controller
         if ($story->id != $task->story_id) {
             abort(404);
         }
-        
+
         $this->authorize('create', [Task::class, $project]);
 
         if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 3)
@@ -128,8 +128,6 @@ class TaskController extends Controller
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
         $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
             ->where('user_id', '<>', $a[0])->get();
-
-      //  $this->authorize('update', [Task::class]);
 
         return view('task.edit', ['story' => $story, 'project' => $project, 'user_list'=> $user_list, 'task'=>$task]);
     }
@@ -239,6 +237,7 @@ class TaskController extends Controller
         Story::findOrFail($story->id);
 
        // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
+        $this->authorize('create', [Task::class, $project]);
 
         if(Task::query()->where('id', $task->id)->pluck('accepted')[0] != 1)
             abort(403, 'Task was already accepted');
