@@ -38,6 +38,7 @@ Route::post('/project/{project}/docs', 'App\Http\Controllers\ProjectController@e
 Route::get('/project/{project}/docs/download', 'App\Http\Controllers\ProjectController@download_docs')->name('project.download_docs');
 Route::delete('/project/{project}', 'App\Http\Controllers\ProjectController@destroy')->name('project.destroy');
 Route::get('/project/{project}/edit', 'App\Http\Controllers\ProjectController@edit')->name('project.edit');
+Route::post('/project/{project}/update', 'App\Http\Controllers\ProjectController@update')->name('project.update');
 
 Route::post('/project/{project}/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
 Route::post('/project/{project}/stories', 'App\Http\Controllers\StoryController@update_stories')->name('story.update_stories');
