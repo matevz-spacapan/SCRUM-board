@@ -24,7 +24,7 @@ class TaskPolicy
             return true;
         }
     }
-    
+
     /**
      * Determine whether the user can view any models.
      *
@@ -91,7 +91,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
-        return true;
+        //
     }
 
     /**

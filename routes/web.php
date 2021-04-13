@@ -59,7 +59,11 @@ Route::get('/project/{project}/sprint/{sprint}/delete', 'App\Http\Controllers\Sp
 Route::get('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@show')->name('task.show');
 Route::post('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@store')->name('task.store');
 Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers\TaskController@create')->name('task.create');
+Route::get('/project/{project}/story/{story}/task/{task}/edit', 'App\Http\Controllers\TaskController@edit')->name('task.edit'); #show the form
+Route::patch('/project/{project}/story/{story}/task/{task}', 'App\Http\Controllers\TaskController@update')->name('task.update'); #actual process of updating the record
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
+Route::get('/project/{project}/story/{story}/task/{task}/accept', 'App\Http\Controllers\TaskController@accept')->name('task.accept');
+Route::get('/project/{project}/story/{story}/task/{task}/complete', 'App\Http\Controllers\TaskController@complete')->name('task.complete');
 
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');
