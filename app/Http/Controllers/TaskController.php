@@ -98,9 +98,8 @@ class TaskController extends Controller
             $active_sprint = [];
 
         /*    ->join('sprint','id', '=', 'stories.sprint_id')->where('id', $story->id)*/
-        $timesum = Task::query()->where('story_id', $story->id)->sum('time_estimate');
 
-        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks, 'timesum' => $timesum]);
+        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks]);
     }
 
     /**
@@ -158,13 +157,12 @@ class TaskController extends Controller
             'time_estimate' => ['required', 'numeric', 'between:1,100'],
         ]);
 
-
         if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
-            if(Arr::get($data, 'user_id') != Task::query()->where('id', $task->id)->pluck('user_id'))
-                abort(403, 'You cannot change user on accepoted or completed task');
+            if(Arr::get($data, 'user_id') != null)
+                abort(403, 'You cannot change user on accepted or completed task');
 
 
-        if(Arr::get($data, 'user_id') == 0)
+        if(Arr::get($data, 'user_id') == 0 && Task::query()->where('id', $task->id)->pluck('accepted')[0] != 1)
             $data['user_id']=null;
 
         $task->update($data);
