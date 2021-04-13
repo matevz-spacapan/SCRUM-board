@@ -222,10 +222,13 @@ class ProjectController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Project $project){
+
+        $this->authorize('update', [Project::class, $project]);
+
         $project = Project::findOrFail($project->id);
         $developers = $project->users()->withTrashed()->get();
-        $users = User::orderby('username','asc')->select('id','username')->withTrashed()->get();
-        
+        $users = User::orderby('username', 'asc')->select('id', 'username')->withTrashed()->get();
+
         return view('project.edit', compact('project', 'users', 'developers'));
     }
 
@@ -236,16 +239,17 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project){
-        
-        $this->authorize('update', Project::class);
+    public function update(Request $request, Project $project)
+    {
 
-        if(!isset($request->developers)){
+        $this->authorize('update', [Project::class, $project]);
+
+        if (!isset($request->developers)) {
             return redirect()->back()->withErrors(['developers' => 'Select at least one developer.'])->withInput();
         }
 
         $data = $request->validate([
-            'project_name' => ['required', 'string', 'max:255', 'unique:projects,project_name,'.$project->id],
+            'project_name' => ['required', 'string', 'max:255', 'unique:projects,project_name,' . $project->id],
             'product_owner' => ['required', 'numeric', 'exists:users,id', Rule::notIn([$request->project_master])],
             'project_master' => ['required', 'numeric', 'exists:users,id', Rule::notIn([$request->product_owner])],
             'developers.*' => ['required', 'numeric', 'max:255', 'exists:users,id'],
@@ -271,7 +275,7 @@ class ProjectController extends Controller
         //save the project and developer IDs
         $project->update();
         $project->users()->sync($data['developers']);
-        
+
 
         return redirect()->route('project.show', $project->id);
     }
