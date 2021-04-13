@@ -165,13 +165,13 @@ class StoryController extends Controller
         Project::findOrFail($project->id);
         Story::findOrFail($story->id);
 
-        if ($story->project_id != $project->id) {
+        if ($story->project_id !== $project->id) {
             abort(404);
         }
 
         $this->authorize('acceptReject', [Story::class, $project]);
         $data = $request->validate([
-            'comment' => ['nullable', 'string']
+            'comment' => ['required', 'string']
         ]);
         $story->update($data);
         $story->sprint_id = null;

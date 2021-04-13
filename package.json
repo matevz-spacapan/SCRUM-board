@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.2",
+        "bs-custom-file-input": "^1.3.4",
         "js-datepicker": "^5.18.0",
         "js-year-calendar": "^1.0.2"
     }

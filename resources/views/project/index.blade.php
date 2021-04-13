@@ -19,7 +19,7 @@
                         <tr>
                             <th>No</th>
                             <th>Project name</th>
-                            <th>Project owner</th>
+                            <th>Product owner</th>
                             <th>Scrum master</th>
 							<th>Team size <i class="far fa-question-circle" {{ Popper::arrow()->pop('This includes only developers.') }}></i></th>
                             <th>Actions</th>
@@ -34,8 +34,8 @@
                                     {{ $project->project_name }}
                                 @endcan
                             </td>
-                            <td>{{ \App\Models\User::where(['id' => $project->product_owner])->pluck('username')->first() }}</td>
-                            <td>{{ \App\Models\User::where(['id' => $project->project_master])->pluck('username')->first() }}</td>
+                            <td>{{ \App\Models\User::withTrashed()->where(['id' => $project->product_owner])->pluck('username')->first() }}</td>
+                            <td>{{ \App\Models\User::withTrashed()->where(['id' => $project->project_master])->pluck('username')->first() }}</td>
                             <td>{{ count($project->users) }}</td>
                             <td>
 <!--                                <a class="btn btn-primary" href="{{ route('project.edit', $project->id) }}">Edit</a>

@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\Story;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
-use App\Models\User;
 use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
@@ -73,6 +72,7 @@ class ProjectController extends Controller
         $project->project_name = $data['project_name'];
         $project->product_owner = $data['product_owner'];
         $project->project_master = $data['project_master'];
+        $project->documentation = '';
 
         //save the project and developer IDs
         $project->save();
@@ -131,11 +131,10 @@ class ProjectController extends Controller
 
         if ($active_sprint){
             $sprint_sum = DB::select("SELECT sum(stories.time_estimate) AS time_estimate from stories WHERE sprint_id = {$active_sprint->id}")[0]->time_estimate;
-            if(!$sprint_sum){
+            if (!$sprint_sum) {
                 $sprint_sum = 0;
             }
-        }
-        else{
+        } else {
             $sprint_sum = 0;
         }
 
@@ -143,10 +142,65 @@ class ProjectController extends Controller
     }
 
     /**
+     * View the project's documentation
+     */
+    public function view_docs(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        return view('project.docs', ['project' => $project]);
+    }
+
+    /**
+     * Get the view for editing docs
+     */
+    public function edit_docs_view(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        return view('project.edit_docs', ['project' => $project]);
+    }
+
+    /**
+     * Edit the project's docs
+     */
+    public function edit_docs(Request $request, Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        $data = $request->validate([
+            'documentation' => ['required', 'string']
+        ]);
+
+        $project->documentation = $data['documentation'];
+        $project->update();
+
+        return redirect()->route('project.docs', $project->id);
+    }
+
+    /**
+     * Download the project's documentation
+     */
+    public function download_docs(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        header("Content-type: text/markdown");
+        header("Cache-Control: no-store, no-cache");
+        header('Content-Disposition: attachment; filename="docs.m"');
+        $file = fopen('php://output', 'w');
+        fwrite($file, $project->documentation);
+    }
+
+    /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Project  $project
-     * @param  \App\Models\Story  $story
+     * @param \App\Models\Project $project
+     * @param \App\Models\Story $story
      * @return \Illuminate\Http\Response
      */
     public function accepted_stories(Project $project)
@@ -154,7 +208,7 @@ class ProjectController extends Controller
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
         $stories = Story::query()->where('project_id', $project->id)
-            ->where('accepted', 1)->get();
+            ->where('accepted', 1)->orderByDesc('sprint_id')->get();
         if(count($stories) === 0){
             abort(403, 'No accepted stories to show');
         }
