@@ -38,10 +38,9 @@
                             <td>{{ \App\Models\User::withTrashed()->where(['id' => $project->project_master])->pluck('username')->first() }}</td>
                             <td>{{ count($project->users) }}</td>
                             <td>
-<!--                                <a class="btn btn-primary" href="{{ route('project.edit', $project->id) }}">Edit</a>
-                                {!! Form::open(['method' => 'DELETE','route' => ['project.destroy', $project->id],'style'=>'display:inline']) !!}
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                                {!! Form::close() !!}-->
+                                @if($project->project_master === auth()->user()->id || auth()->user()->isAdmin()) <!-- Only Scrum master & admin can edit project -->
+                                    <a href="{{ route('project.edit', $project->id) }}" class="btn btn-primary mb-2">{{ __('Edit project') }}</a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
