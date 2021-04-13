@@ -20,8 +20,9 @@
 
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="project_name" type="text" class="form-control @error('project_name') is-invalid @enderror" name="project_name" value="{{ $project->project_name }}" required autofocus>
-
+                                    <input id="project_name" type="text" class="form-control @error('project_name') is-invalid @enderror" name="project_name"
+                                                        value="{{ is_null(old('project_name')) ? $project->project_name : old('project_name') }}" required autofocus>
+                                    
                                     @error('project_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -37,10 +38,18 @@
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
                                     <select id="s2n1" class="s2 form-control @error('product_owner') is-invalid @enderror" name="product_owner">
-                                        <option disabled {{ is_null($project->product_owner) ? 'selected':'' }}>-- Select user --</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ $project->product_owner == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
-                                        @endforeach
+                                        
+                                        @if(is_null(old('product_owner')))
+                                            <option disabled {{ is_null($project->product_owner) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ $project->product_owner == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @else
+                                            <option disabled {{ is_null(old('product_owner')) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('product_owner') == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
 
                                     @error('product_owner')
@@ -58,10 +67,18 @@
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
                                     <select id="s2n2" class="s2 form-control @error('project_master') is-invalid @enderror" name="project_master">
-                                        <option disabled {{ is_null($project->project_master) ? 'selected':'' }}>-- Select user --</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ $project->project_master == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
-                                        @endforeach
+                                        
+                                        @if(is_null(old('project_master')))
+                                            <option disabled {{ is_null($project->project_master) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ $project->project_master == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @else
+                                            <option disabled {{ is_null(old('project_master')) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('project_master') == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
 
                                     @error('project_master')
@@ -80,11 +97,18 @@
                             <div class="col-md-6 mt-2">
                                 <div class="input-group">
                                     <select id="s2n3" class="s2 form-control @error('developers') is-invalid @enderror" name="developers[]" multiple>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}"
-                                                @foreach($developers as $dev) {{ $dev->id == $user->id ? 'selected':'' }} @endforeach
-                                            >{{ $user->username }}</option>
-                                        @endforeach
+                                        
+                                        @if(is_null(old('developers')))
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}"
+                                                    @foreach($developers as $dev) {{ $dev->id == $user->id ? 'selected':'' }} @endforeach
+                                                >{{ $user->username }}</option>
+                                            @endforeach
+                                        @else
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ (old('developers') && in_array($user->id, old('developers'))) ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     @error('developers')
                                     <span class="invalid-feedback" role="alert">
