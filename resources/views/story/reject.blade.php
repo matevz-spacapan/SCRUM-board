@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="comment" class="col-form-label">{{ __('Comment for rejection') }} <i class="far fa-question-circle" {{ Popper::arrow()->position('right')->pop('If you wish, write a comment why you\'re rejecting this story.') }}></i></label>
-                        <textarea id="comment" class="form-control" name="comment" rows="3"></textarea>
+                        <textarea id="comment" class="form-control" name="comment" rows="3" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

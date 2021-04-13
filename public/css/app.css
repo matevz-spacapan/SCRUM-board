@@ -16814,3 +16814,8 @@ video {
 .card-disabled {
   background-color: lightgray;
 }
+
+.documentation-header {
+  display: inline-block;
+  margin: 0;
+}
