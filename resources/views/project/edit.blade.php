@@ -3,106 +3,134 @@
 @section('title', __(' - Edit Project'))
 
 @section('content')
-
-
 <div class="container">
-    <div class="row">
-        <div class="col">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                {{ __('Create new project') }}
+                <div class="card-header d-flex justify-content-between align-items-baseline">
+                    <div>{{ __('Update project') }}
+                    </div>
+                    <div><a class="btn btn-link" href="{{ route('project.index') }}" {{ Popper::arrow()->position('bottom')->pop('Discard the form and return to the project list.') }}>{{ __('Go back') }}</a></div>
                 </div>
                 <div class="card-body">
-                    @if (count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <strong>There were some problems with your input.</strong><br>
-                        <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                        </ul>
-                    </div>
-                    @endif
-                    {!! Form::open(array('route' => 'project.update','method'=>'POST')) !!}
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <strong>Project name:</strong>
-                                {!! Form::text('project_name', null, array('placeholder' => 'Project name','class' => 'form-control')) !!}
+                    <form method="POST" action="{{ route('project.update', $project->id) }}">
+                        @csrf
+                        <div class="form-group row">
+                            <label for="project_name" class="col-md-4 col-form-label text-md-right">{{ __('Project name') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter a name for this project.') }}></i></label>
+
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input id="project_name" type="text" class="form-control @error('project_name') is-invalid @enderror" name="project_name"
+                                                        value="{{ is_null(old('project_name')) ? $project->project_name : old('project_name') }}" required autofocus>
+                                    
+                                    @error('project_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="s2n1" class="col-md-4 col-form-label text-md-right">{{ __('Product owner') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Select the product owner.') }}></i></label>
 
-						<div class="col-xs-12 col-sm-12 col-md-12">
-							<div class="form-group">
-								<strong>Select project owner:</strong>
-								<select id="s2n1" class="form-control"   name="project_owner">
-									<option value='0'>-- Select user --</option>
-								</select>
-							</div>
-						</div>
+                            <div class="col-md-6 mt-2">
+                                <div class="input-group">
+                                    <select id="s2n1" class="s2 form-control @error('product_owner') is-invalid @enderror" name="product_owner">
+                                        
+                                        @if(is_null(old('product_owner')))
+                                            <option disabled {{ is_null($project->product_owner) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ $project->product_owner == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @else
+                                            <option disabled {{ is_null(old('product_owner')) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('product_owner') == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
 
-						<div class="col-xs-12 col-sm-12 col-md-12">
-							<div class="form-group">
-								<strong>Select scum master:</strong>
-								<select id="s2n2" class="form-control"   name="project_master">
-									<option value='0'>-- Select user --</option>
-								</select>
-							</div>
-						</div>
-
-						<hr class="w-100">
-
-						@foreach ($developers as $developer)
-							<div id="pud_{i}" class="pud col-xs-12 col-sm-12 col-md-12">
-								<div class="form-group">
-									<label>Developer:</label>
-									<input type="text" id="input_pud_{i}" class="form_control" name="name_pud_{i}" disabled value="">
-								</div>
-								<button id="remove_user_btn_{i}" class="remove_user_btn btn btn-secondary" onClick="remove_user_fun(this.id)" type="button">Remove  developer</button>
-								<hr class="w-100">
-							</div>
-							<hr class="w-100">
-						@endforeach
-
-						<div class="col-xs-12 col-sm-12 col-md-12">
-							<div class="form-group">
-								<strong>Search user:</strong>
-								<select id="s2n3" class="form-control">
-									<option value='0'>-- Select user --</option>
-								</select>
-
-
-							</div>
-							<button id="add_user_btn" class="btn btn-secondary" type="button">Add as developer</button>
-
-						</div>
-						<hr class="w-100">
-
-
-						<div id="p_dev_div">
-						</div>
-
-						<!--
-
-						<div id="pud_i" class="pud col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label>Developer i:</label>
-                                <input type="text" id="input_pud_i" name="name_pud_i" disabled value="">
+                                    @error('product_owner')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-						-->
 
-                        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="form-group row">
+                            <label for="s2n2" class="col-md-4 col-form-label text-md-right">{{ __('Scrum master') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Select the scrum master.') }}></i></label>
 
+                            <div class="col-md-6 mt-2">
+                                <div class="input-group">
+                                    <select id="s2n2" class="s2 form-control @error('project_master') is-invalid @enderror" name="project_master">
+                                        
+                                        @if(is_null(old('project_master')))
+                                            <option disabled {{ is_null($project->project_master) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ $project->project_master == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @else
+                                            <option disabled {{ is_null(old('project_master')) ? 'selected':'' }}>-- Select user --</option>
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ old('project_master') == $user->id ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+
+                                    @error('project_master')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
-                    </div>
+                        <hr class="w-100">
+
+                        <div class="form-group row">
+                            <label for="s2n3" class="col-md-4 col-form-label text-md-right">{{ __('Select developers') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Select developers for this project.') }}></i></label>
+                            <div class="col-md-6 mt-2">
+                                <div class="input-group">
+                                    <select id="s2n3" class="s2 form-control @error('developers') is-invalid @enderror" name="developers[]" multiple>
+                                        
+                                        @if(is_null(old('developers')))
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}"
+                                                    @foreach($developers as $dev) {{ $dev->id == $user->id ? 'selected':'' }} @endforeach
+                                                >{{ $user->username }}</option>
+                                            @endforeach
+                                        @else
+                                            @foreach($users as $user)
+                                                <option value="{{ $user->id }}" {{ (old('developers') && in_array($user->id, old('developers'))) ? 'selected':'' }}>{{ $user->username }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    @error('developers')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Update project') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                  </div>
             </div>
         </div>
     </div>
-    {!! Form::close() !!}
 </div>
 @endsection
+

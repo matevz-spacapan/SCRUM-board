@@ -38,6 +38,7 @@ Route::post('/project/{project}/docs', 'App\Http\Controllers\ProjectController@e
 Route::get('/project/{project}/docs/download', 'App\Http\Controllers\ProjectController@download_docs')->name('project.download_docs');
 Route::delete('/project/{project}', 'App\Http\Controllers\ProjectController@destroy')->name('project.destroy');
 Route::get('/project/{project}/edit', 'App\Http\Controllers\ProjectController@edit')->name('project.edit');
+Route::post('/project/{project}/update', 'App\Http\Controllers\ProjectController@update')->name('project.update');
 
 Route::post('/project/{project}/story', 'App\Http\Controllers\StoryController@store')->name('story.store');
 Route::post('/project/{project}/stories', 'App\Http\Controllers\StoryController@update_stories')->name('story.update_stories');
@@ -59,7 +60,11 @@ Route::get('/project/{project}/sprint/{sprint}/delete', 'App\Http\Controllers\Sp
 Route::get('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@show')->name('task.show');
 Route::post('/project/{project}/story/{story}/task', 'App\Http\Controllers\TaskController@store')->name('task.store');
 Route::get('/project/{project}/story/{story}/task/create', 'App\Http\Controllers\TaskController@create')->name('task.create');
+Route::get('/project/{project}/story/{story}/task/{task}/edit', 'App\Http\Controllers\TaskController@edit')->name('task.edit'); #show the form
+Route::patch('/project/{project}/story/{story}/task/{task}', 'App\Http\Controllers\TaskController@update')->name('task.update'); #actual process of updating the record
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
+Route::get('/project/{project}/story/{story}/task/{task}/accept', 'App\Http\Controllers\TaskController@accept')->name('task.accept');
+Route::get('/project/{project}/story/{story}/task/{task}/complete', 'App\Http\Controllers\TaskController@complete')->name('task.complete');
 
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');

@@ -61,7 +61,7 @@
                         @endif
                     </div>
                     @if(is_numeric($story->sprint_id))
-                        <div>Tasks: <b {{ Popper::arrow()->pop('Completed / All') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() }} / {{ \App\Models\Task::query()->where('story_id', $story->id)->count() }}</i> <i class="far fa-question-circle"></i></b> | Work: <b {{ Popper::arrow()->pop('Actual / Estimated') }}><i>13h / 20h</i> <i class="far fa-question-circle"></i></b></div>
+                        <div>Tasks: <b {{ Popper::arrow()->pop('Completed / All') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() }} / {{ \App\Models\Task::query()->where('story_id', $story->id)->count() }}</i> <i class="far fa-question-circle"></i></b> | Work: <b {{ Popper::arrow()->pop('Actual / Estimated') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->sum('time_estimate') }}h / {{ \App\Models\Task::query()->where('story_id', $story->id)->sum('time_estimate') }}h</i> <i class="far fa-question-circle"></i></b></div>
                     @endif
                 </div>
             </div>
