@@ -38,8 +38,8 @@
                             <td>{{ \App\Models\User::withTrashed()->where(['id' => $project->project_master])->pluck('username')->first() }}</td>
                             <td>{{ count($project->users) }}</td>
                             <td>
-                                @if($project->project_master === auth()->user()->id || auth()->user()->isAdmin()) <!-- Only Scrum master & admin can edit project -->
-                                    <a href="{{ route('project.edit', $project->id) }}" class="btn btn-primary mb-2">{{ __('Edit project') }}</a>
+                                @if($project->project_master === auth()->user()->id || auth()->user()->isAdmin()) <!-- Only Scrum master || admin can edit project -->
+                                    <a href="{{ route('project.edit', $project->id) }}" class="btn btn-primary">{{ __('Edit project') }}</a>
                                 @endif
                             </td>
                         </tr>
