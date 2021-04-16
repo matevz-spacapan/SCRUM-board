@@ -72,7 +72,7 @@
                             <td width="20%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
                                 @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
                                     <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-check"></i></a>
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @elseif($task->accepted === 0 && $task->user_id === null)
                                     <b><i>{{ $text }}</b></i>
                                     &nbsp;
@@ -80,14 +80,14 @@
                                 @elseif($task->accepted === 3)
                                     <b><i>{{ $text }}</b></i>
                                     &nbsp;
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-undo"></i></button>
+                                    <a href="{{ route('task.reopen', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-undo"></i></a>
                                 @else
                                     <b><i>{{ $text }}</b></i>
                                 @endif
                                 @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
                                     &nbsp;
                                     <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @endif
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">

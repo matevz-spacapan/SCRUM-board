@@ -229,7 +229,47 @@ class TaskController extends Controller
         return redirect()->route('task.show', [$project->id, $story->id]);
 
     }
+    
+    public function reject(Project $project, Story $story, Task $task){
+        Project::findOrFail($project->id);
+        Task::findOrFail($task->id);
+        Story::findOrFail($story->id);
+        $izBaze = Task::query()->where('id', $task->id);
 
+        if(Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
+            abort(403, 'You are not the assigned user');
+        elseif($story->id !== $izBaze->pluck('story_id')[0])
+            abort(403, 'You are not located on correct story');
+        elseif($izBaze->pluck('user_id')[0] === 0)
+            abort(403, 'This task has no asigned user');
+        else
+            Task::where('id', $task->id)->update(array('accepted' => 0));
+            Task::where('id', $task->id)->update(array('user_id' => null));
+
+        return redirect()->route('task.show', [$project->id, $story->id]);
+
+    }
+    
+    
+    //da kdr nazaj odpreš zaključeno nalogo, da je smiselno narest da se še user ponastavi na prazno, tku da se lahko kdor koli vpiše alpa določi na tisto kartico
+    public function reopen(Project $project, Story $story, Task $task){
+        Project::findOrFail($project->id);
+        Task::findOrFail($task->id);
+        Story::findOrFail($story->id);
+        $izBaze = Task::query()->where('id', $task->id);
+        
+        if($story->id !== $izBaze->pluck('story_id')[0])
+            abort(403, 'You are not located on correct story');
+        elseif($izBaze->pluck('user_id')[0] === 0)
+            abort(403, 'This task has no asigned user');
+        else
+            Task::where('id', $task->id)->update(array('accepted' => 0));
+            Task::where('id', $task->id)->update(array('user_id' => null));
+
+        return redirect()->route('task.show', [$project->id, $story->id]);
+
+    }
+    
     public function startwork(Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);

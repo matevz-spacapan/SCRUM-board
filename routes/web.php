@@ -68,7 +68,8 @@ Route::get('/project/{project}/story/{story}/task/{task}/accept', 'App\Http\Cont
 Route::get('/project/{project}/story/{story}/task/{task}/complete', 'App\Http\Controllers\TaskController@complete')->name('task.complete');
 Route::get('/project/{project}/story/{story}/task/{task}/startwork', 'App\Http\Controllers\TaskController@startwork')->name('task.startwork');
 Route::get('/project/{project}/story/{story}/task/{task}/stopwork', 'App\Http\Controllers\TaskController@stopwork')->name('task.stopwork');
-
+Route::get('/project/{project}/story/{story}/task/{task}/reject', 'App\Http\Controllers\TaskController@reject')->name('task.reject');
+Route::get('/project/{project}/story/{story}/task/{task}/reopen', 'App\Http\Controllers\TaskController@reopen')->name('task.reopen');
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');
 Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallController@create')->name('wall.create');

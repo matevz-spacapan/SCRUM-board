@@ -30,7 +30,11 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Username:</strong>
-                                {!! Form::text('username', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+                                @if($user->isAdmin())
+                                    {!! Form::text('username', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+                                @else
+                                    {!! Form::text('username', null, array('placeholder' => 'Name','class' => 'form-control', 'disabled')) !!}
+                                @endif
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
