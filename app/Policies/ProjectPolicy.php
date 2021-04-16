@@ -69,7 +69,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
-        //
+        return $user->isAdmin() || $project->project_master === $user->id;
     }
 
     /**

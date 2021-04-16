@@ -221,13 +221,15 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project)
-    {
+    public function edit(Project $project){
+
+        $this->authorize('update', [Project::class, $project]);
+
         $project = Project::findOrFail($project->id);
+        $developers = $project->users()->withTrashed()->get();
+        $users = User::orderby('username', 'asc')->select('id', 'username')->withTrashed()->get();
 
-        $developers= $project->users();
-
-        return view('project.edit', ['project' => $project, 'developers' => $developers]);
+        return view('project.edit', compact('project', 'users', 'developers'));
     }
 
     /**
@@ -239,7 +241,43 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+
+        $this->authorize('update', [Project::class, $project]);
+
+        if (!isset($request->developers)) {
+            return redirect()->back()->withErrors(['developers' => 'Select at least one developer.'])->withInput();
+        }
+
+        $data = $request->validate([
+            'project_name' => ['required', 'string', 'max:255', 'unique:projects,project_name,' . $project->id],
+            'product_owner' => ['required', 'numeric', 'exists:users,id', Rule::notIn([$request->project_master])],
+            'project_master' => ['required', 'numeric', 'exists:users,id', Rule::notIn([$request->product_owner])],
+            'developers.*' => ['required', 'numeric', 'max:255', 'exists:users,id'],
+        ]);
+
+        if(in_array($request->product_owner, $request->developers, true)){
+            return redirect()->back()->withErrors(['developers' => 'Product owner must not be a developer.'])->withInput();
+        }
+
+        $lowTitle = array_map("strtolower", [$request->project_name]);
+        $stevilo = DB::select( DB::raw("SELECT COUNT(*) as stevilka FROM projects WHERE LOWER(project_name) LIKE '".$lowTitle[0]."' AND projects.id != ".$project->id."") );
+        if($stevilo[0]->stevilka > 0){
+            return redirect()->back()->withErrors(['project_name' => 'A project with same name already exists.'])->withInput();
+        }
+
+        //insert data that we can do straight away (into the projects table)
+        //$project = new Project;
+        $project->project_name = $data['project_name'];
+        $project->product_owner = $data['product_owner'];
+        $project->project_master = $data['project_master'];
+        //$project->documentation = '';
+
+        //save the project and developer IDs
+        $project->update();
+        $project->users()->sync($data['developers']);
+
+
+        return redirect()->route('project.show', $project->id);
     }
 
     /**
