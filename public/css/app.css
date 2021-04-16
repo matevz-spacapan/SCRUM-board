@@ -16424,7 +16424,7 @@ readers do not read off random characters that represent icons */
 }
 
 #footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   height: 100px;

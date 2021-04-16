@@ -66,9 +66,9 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                
+
                                     <a class="dropdown-item" href="/user/settings" > {{ __('User Settings') }} </a>
-                                    
+
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
                                     </a>
@@ -126,6 +126,8 @@
                                                         class="nav-link">{{ __('Project wall') }}</a></li>
                                 <li class="nav-item"><a href="{{ route('project.docs', $project->id) }}"
                                                         class="nav-link">{{ __('Project documentation') }}</a></li>
+                                <li class="nav-item"><a href="{{ route('sprint.backlog', $project->id) }}"
+                                                        class="nav-link">{{ __('Sprint backlog') }}</a></li>
                             </ul>
                         </div>
                     </div>
