@@ -89,6 +89,14 @@
                                     <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
                                     <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @endif
+                                
+                                
+                                @error('errorTask')
+                                <span class="d-block invalid-feedback " role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                                
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
                                 @if($task->accepted != 3)
