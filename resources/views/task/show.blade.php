@@ -32,10 +32,17 @@
                             @endphp
                             @break
                             @case(1)
-                            @php
-                                $text = __('Accepted');
-                                $color='text-primary';
-                            @endphp
+                                @if($task->work === 1)
+                                @php
+                                    $text = __('In progress');
+                                    $color='text-primary';
+                                @endphp
+                                @else
+                                @php
+                                    $text = __('Accepted');
+                                    $color='text-primary';
+                                @endphp
+                                @endif
                             @break
                             @case(2)
                             @php

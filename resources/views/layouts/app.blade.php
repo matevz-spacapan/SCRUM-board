@@ -126,8 +126,10 @@
                                                         class="nav-link">{{ __('Project wall') }}</a></li>
                                 <li class="nav-item"><a href="{{ route('project.docs', $project->id) }}"
                                                         class="nav-link">{{ __('Project documentation') }}</a></li>
-                                <li class="nav-item"><a href="{{ route('sprint.backlog', $project->id) }}"
+
+<!--                                <li class="nav-item"><a href="{{ route('sprint.backlog', $project->id) }}"
                                                         class="nav-link">{{ __('Sprint backlog') }}</a></li>
+-->
                             </ul>
                         </div>
                     </div>
