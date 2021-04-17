@@ -90,8 +90,7 @@
                                     <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @endif
                                 
-                                
-                                @error('errorTask')
+                                @error('errorTask'.$task->id)
                                 <span class="d-block invalid-feedback " role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -99,7 +98,7 @@
                                 
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
-                                @if($task->accepted != 3)
+                                @if($task->accepted != 3 )
                                     <div class="dropdown">
                                         <button class="btn btn-outline-primary   dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Action
@@ -109,12 +108,14 @@
                                                 <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}" class="dropdown-item">Start work</a>
                                                 <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}" class="dropdown-item">Stop work</a>
                                             @endif
+                                            
+                                            @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
                                                 <a class="dropdown-item" href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
-                                                <button href="#" class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
+                                            @endif
+                                            <button href="#" class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
                                         </div>
                                      </div>
                                 @endif
-
                             </td>
                         </tr>
 
