@@ -187,13 +187,15 @@ class TaskController extends Controller
 
         $izBaze = Task::query()
             ->where('id', $task->id);
-            
+
         if(Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors(['errorTask' => 'You are not the assigned user!']);
             //abort(403, 'You are not the assigned user');
         elseif($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
         elseif($izBaze->pluck('user_id')[0] === 0)
+            return redirect()->route('task.show', [$project->id, $story->id])->withErrors(['errorTask' => 'This task has no asigned user!']);
+        elseif($izBaze->pluck('user_id')[0] != Auth::user()->id && $izBaze->pluck('accepted')[0] === 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors(['errorTask' => 'This task has no asigned user!']);
             //abort(403, 'This task has no asigned user');
         else
@@ -232,7 +234,7 @@ class TaskController extends Controller
         return redirect()->route('task.show', [$project->id, $story->id]);
 
     }
-    
+
     public function reject(Project $project, Story $story, Task $task){
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
@@ -254,13 +256,13 @@ class TaskController extends Controller
         return redirect()->route('task.show', [$project->id, $story->id]);
 
     }
-    
+
     public function reopen(Project $project, Story $story, Task $task){
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $izBaze = Task::query()->where('id', $task->id);
-        
+
         if($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
         elseif($izBaze->pluck('user_id')[0] === 0)
@@ -273,7 +275,7 @@ class TaskController extends Controller
         return redirect()->route('task.show', [$project->id, $story->id]);
 
     }
-    
+
     public function startwork(Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);
