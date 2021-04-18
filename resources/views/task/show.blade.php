@@ -72,7 +72,7 @@
                             <td width="20%" style="text-align:center; justify-content:center; align-items: center" class="{{ $color }} align-middle">
                                 @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
                                     <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-check"></i></a>
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @elseif($task->accepted === 0 && $task->user_id === null)
                                     <b><i>{{ $text }}</b></i>
                                     &nbsp;
@@ -80,18 +80,25 @@
                                 @elseif($task->accepted === 3)
                                     <b><i>{{ $text }}</b></i>
                                     &nbsp;
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-undo"></i></button>
+                                    <a href="{{ route('task.reopen', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-undo"></i></a>
                                 @else
                                     <b><i>{{ $text }}</b></i>
                                 @endif
                                 @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
                                     &nbsp;
                                     <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
-                                    <button type="button" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @endif
+                                
+                                @error('errorTask'.$task->id)
+                                <span class="d-block invalid-feedback " role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                                
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
-                                @if($task->accepted != 3)
+                                @if($task->accepted != 3 )
                                     <div class="dropdown">
                                         <button class="btn btn-outline-primary   dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Action
@@ -101,12 +108,14 @@
                                                 <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}" class="dropdown-item">Start work</a>
                                                 <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}" class="dropdown-item">Stop work</a>
                                             @endif
+                                            
+                                            @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
                                                 <a class="dropdown-item" href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
-                                                <button href="#" class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
+                                            @endif
+                                            <button href="#" class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
                                         </div>
                                      </div>
                                 @endif
-
                             </td>
                         </tr>
 

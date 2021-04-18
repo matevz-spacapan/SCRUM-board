@@ -135,6 +135,7 @@ class UserController extends Controller
         }
         
         if (!Auth::user()->isAdmin()) {
+            $request->request->add(['username' => Auth::user()->username]);
             $request->request->add(['roles' => array(Auth::user()->roles[0]->name)]);
         }
         
