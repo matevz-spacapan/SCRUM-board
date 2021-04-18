@@ -7,11 +7,11 @@ use App\Models\Sprint;
 use App\Models\Story;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Work;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
@@ -287,6 +287,7 @@ class TaskController extends Controller
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
+        $this->authorize('startWork', [Work::class, $task]);
 
         Task::where('id', $task->id)->update(array('work' => 1));
 
@@ -299,6 +300,7 @@ class TaskController extends Controller
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
+        $this->authorize('startWork', [Work::class, $task]);
 
         Task::where('id', $task->id)->update(array('work' => 0));
 

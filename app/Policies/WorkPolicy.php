@@ -79,7 +79,7 @@ class WorkPolicy
      */
     public function startWork(User $user, Task $task)
     {
-
+        return $task->user->id === $user->id;
     }
 
     /**

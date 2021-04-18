@@ -22,6 +22,10 @@ class CreateWorksTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table('users', function ($table) {
+            $table->unsignedInteger('working_on')->nullable();
+        });
     }
 
     /**
@@ -32,5 +36,9 @@ class CreateWorksTable extends Migration
     public function down()
     {
         Schema::dropIfExists('works');
+
+        Schema::table('users', function ($table) {
+            $table->dropColumn('working_on');
+        });
     }
 }
