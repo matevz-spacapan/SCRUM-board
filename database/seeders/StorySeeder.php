@@ -21,7 +21,7 @@ class StorySeeder extends Seeder
             'tests' => "Check validity of each point.\nDisplay the shortest route.\nCheck that invalid points show an error.",
             'priority' => 1,
             'business_value' => 10,
-            'sprint_id' => 2,
+            'sprint_id' => 1,
             'hash' => 1,
             'time_estimate' => 7
         ]);
