@@ -53,6 +53,7 @@ Route::get('/project/{project}/story/{story}/destroy', 'App\Http\Controllers\Sto
 Route::post('/project/{project}/sprint', 'App\Http\Controllers\SprintController@store')->name('sprint.store');
 Route::get('/project/{project}/sprint/create', 'App\Http\Controllers\SprintController@create')->name('sprint.create');
 Route::get('/project/{project}/sprint/index', 'App\Http\Controllers\SprintController@index')->name('sprint.index');
+Route::get('/project/{project}/sprint/backlog', 'App\Http\Controllers\SprintController@backlog')->name('sprint.backlog');
 Route::get('/project/{project}/sprint/{sprint}/edit', 'App\Http\Controllers\SprintController@edit')->name('sprint.edit');
 Route::put('/project/{project}/sprint/{sprint}', 'App\Http\Controllers\SprintController@update')->name('sprint.update');
 Route::get('/project/{project}/sprint/{sprint}/delete', 'App\Http\Controllers\SprintController@destroy')->name('sprint.delete');
@@ -65,7 +66,10 @@ Route::patch('/project/{project}/story/{story}/task/{task}', 'App\Http\Controlle
 Route::get('/project/{project}/story/{story}/task/{task}/destroy', 'App\Http\Controllers\TaskController@destroy')->name('task.destroy');
 Route::get('/project/{project}/story/{story}/task/{task}/accept', 'App\Http\Controllers\TaskController@accept')->name('task.accept');
 Route::get('/project/{project}/story/{story}/task/{task}/complete', 'App\Http\Controllers\TaskController@complete')->name('task.complete');
-
+Route::get('/project/{project}/story/{story}/task/{task}/startwork', 'App\Http\Controllers\TaskController@startwork')->name('task.startwork');
+Route::get('/project/{project}/story/{story}/task/{task}/stopwork', 'App\Http\Controllers\TaskController@stopwork')->name('task.stopwork');
+Route::get('/project/{project}/story/{story}/task/{task}/reject', 'App\Http\Controllers\TaskController@reject')->name('task.reject');
+Route::get('/project/{project}/story/{story}/task/{task}/reopen', 'App\Http\Controllers\TaskController@reopen')->name('task.reopen');
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');
 Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallController@create')->name('wall.create');

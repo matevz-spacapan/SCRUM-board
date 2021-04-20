@@ -15,7 +15,8 @@ class Task extends Model
         'time_estimate',
         'accepted',
         'story_id',
-        'user_id'
+        'user_id',
+        'work'
     ];
 
     public function story()

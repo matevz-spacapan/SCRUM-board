@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Sprint;
 use App\Models\Story;
+use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class SprintController extends Controller
 {
@@ -230,5 +232,34 @@ class SprintController extends Controller
         $sprint->delete();
 
         return redirect()->back();
+    }
+
+    public function backlog(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('viewAny', [Sprint::class, $project]);
+
+        $active_sprint = Sprint::query()
+            ->where('project_id', $project->id)
+            ->where('start_date', '<=', Carbon::now()->toDateString())
+            ->where('end_date', '>=', Carbon::now()->toDateString())->first();
+
+        $stories_sprint = Story::query()->where('project_id', $project->id)
+            ->where('accepted', 0)
+            ->where('sprint_id', $active_sprint->id)->get();
+
+        $ids = [];
+
+        for($i=0; $i<count($stories_sprint); $i++){
+           array_push($ids, Arr::get($stories_sprint[$i], 'id'));
+        }
+        //dd($ids);
+
+        $tasksUnAs = Task::all()->whereIn('story_id', $ids)->where('accepted', 0);
+        $tasksAs = Task::all()->whereIn('story_id', $ids)->where('accepted', 1)->where('work', 0);
+        $tasksAct = Task::all()->whereIn('story_id', $ids)->where('accepted', 1)->where('work', 1);
+        $tasksCom = Task::all()->whereIn('story_id', $ids)->where('accepted', 3);
+
+        return view('sprint.backlog', ['project' => $project, 'story_list' => $stories_sprint, 'active_sprint' => $active_sprint, 'tasksUnAs' => $tasksUnAs, 'tasksAs' => $tasksAs, 'tasksAct' => $tasksAct, 'tasksCom' => $tasksCom]);
     }
 }
