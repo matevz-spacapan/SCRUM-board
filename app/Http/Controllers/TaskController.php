@@ -247,16 +247,17 @@ class TaskController extends Controller
 
         $errorId = 'errorTask'.$task->id;
 
-        if(Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
+        if (Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'You are not the assigned developer!']);
-            //abort(403, 'You are not the assigned user');
-        elseif($story->id !== $izBaze->pluck('story_id')[0])
+        //abort(403, 'You are not the assigned user');
+        elseif ($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
-        elseif($izBaze->pluck('user_id')[0] === 0)
+        elseif ($izBaze->pluck('user_id')[0] === 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'This task has no asigned developer!']);
-            //abort(403, 'This task has no asigned user');
+        //abort(403, 'This task has no asigned user');
         else
-            Task::where('id', $task->id)->update(array('accepted' => 0, 'work' => 0, 'user_id' => null));
+            $this->stopwork($project, $story, $task);
+        Task::where('id', $task->id)->update(array('accepted' => 0, 'user_id' => null));
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
@@ -295,16 +296,14 @@ class TaskController extends Controller
 
     }
 
-    public function stopwork(User $user, Project $project, Story $story, Task $task)
+    public function stopwork(Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $this->authorize('startWork', [Work::class, $task]);
 
-        $user->working_on = null;
-        $user->started_working_at = null;
-        $user->update();
+        User::where('id', Auth::user()->id)->update(array('working_on' => null, 'started_working_at' => null));
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
