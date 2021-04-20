@@ -121,7 +121,7 @@ class TaskController extends Controller
 
         $errorId = 'errorTask'.$task->id;
         $izBaze = Task::query()->where('id', $task->id);
-        
+
         $this->authorize('create', [Task::class, $project]);
 
         if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 3)
@@ -129,7 +129,7 @@ class TaskController extends Controller
             //abort(403, 'Task was already completed');
         elseif($izBaze->pluck('user_id')[0] != null && Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'You are not the assigned developer!']);
-        
+
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
         $user_list = User::query()->join("project_user", 'user_id', '=', 'users.id')->where('project_id', $project->id)
             ->where('user_id', '<>', $a[0])->get();
@@ -190,9 +190,9 @@ class TaskController extends Controller
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
-        
+
         $errorId = 'errorTask'.$task->id;
-        
+
         $izBaze = Task::query()->where('id', $task->id);
 
         if(Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
@@ -246,7 +246,7 @@ class TaskController extends Controller
         $izBaze = Task::query()->where('id', $task->id);
 
         $errorId = 'errorTask'.$task->id;
-        
+
         if(Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'You are not the assigned developer!']);
             //abort(403, 'You are not the assigned user');
@@ -267,9 +267,9 @@ class TaskController extends Controller
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $izBaze = Task::query()->where('id', $task->id);
-        
+
         $errorId = 'errorTask'.$task->id;
-        
+
         if($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
         elseif($izBaze->pluck('user_id')[0] === 0)
@@ -282,27 +282,31 @@ class TaskController extends Controller
 
     }
 
-    public function startwork(Project $project, Story $story, Task $task)
+    public function startwork(User $user, Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $this->authorize('startWork', [Work::class, $task]);
 
-        Task::where('id', $task->id)->update(array('work' => 1));
+        $user->working_on = $task->id;
+        $user->started_working_at = Carbon::now();
+        $user->update();
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
     }
 
-    public function stopwork(Project $project, Story $story, Task $task)
+    public function stopwork(User $user, Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $this->authorize('startWork', [Work::class, $task]);
 
-        Task::where('id', $task->id)->update(array('work' => 0));
+        $user->working_on = null;
+        $user->started_working_at = null;
+        $user->update();
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
@@ -314,7 +318,7 @@ class TaskController extends Controller
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
-        
+
         $errorId = 'errorTask'.$task->id;
 
        // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
