@@ -23,8 +23,9 @@ class CreateWorksTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('users', function ($table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->unsignedInteger('working_on')->nullable();
+            $table->dateTime('started_working_at')->nullable();
         });
     }
 
@@ -37,8 +38,9 @@ class CreateWorksTable extends Migration
     {
         Schema::dropIfExists('works');
 
-        Schema::table('users', function ($table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('working_on');
+            $table->dropColumn('started_working_at');
         });
     }
 }
