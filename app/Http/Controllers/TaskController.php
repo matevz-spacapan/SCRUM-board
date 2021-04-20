@@ -282,16 +282,14 @@ class TaskController extends Controller
 
     }
 
-    public function startwork(User $user, Project $project, Story $story, Task $task)
+    public function startwork(Project $project, Story $story, Task $task)
     {
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $this->authorize('startWork', [Work::class, $task]);
 
-        $user->working_on = $task->id;
-        $user->started_working_at = Carbon::now();
-        $user->update();
+        User::where('id', Auth::user()->id)->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 

@@ -32,7 +32,7 @@
                             @endphp
                             @break
                             @case(1)
-                                @if($task->work === 1)
+                            @if(Auth::User()->working_on === $task->id)
                                 @php
                                     $text = __('In progress');
                                     $color='text-primary';
@@ -89,13 +89,13 @@
                                     <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}" class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
                                     <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}" class="btn btn-danger"><i class="fas fa-times"></i></a>
                                 @endif
-                                
-                                @error('errorTask'.$task->id)
+
+                                    @error('errorTask'.$task->id)
                                 <span class="d-block invalid-feedback " role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
-                                
+
                             </td>
                             <td width="15%" style="text-align: center" class="align-middle">
                                 @if($task->accepted != 3 )
@@ -108,7 +108,7 @@
                                                 <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}" class="dropdown-item">Start work</a>
                                                 <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}" class="dropdown-item">Stop work</a>
                                             @endif
-                                            
+
                                             @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
                                                 <a class="dropdown-item" href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
                                             @endif
