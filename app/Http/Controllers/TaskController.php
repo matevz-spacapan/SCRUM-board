@@ -293,8 +293,16 @@ class TaskController extends Controller
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $this->authorize('startWork', [Work::class, $task]);
+        $auth_user = User::where('id', Auth::user()->id)->first();
 
-        User::where('id', Auth::user()->id)->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
+        if ($auth_user->working_on !== $task->id && $auth_user->working_on !== null) {
+            $worked_task = Task::where('id', $auth_user->working_on)->first();
+            $this->stopwork($project, $worked_task->story, $worked_task);
+            $auth_user->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
+        } elseif ($auth_user->working_on === null) {
+            $auth_user->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
+        }
+        // pass if already working on this task
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
@@ -306,6 +314,12 @@ class TaskController extends Controller
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $this->authorize('startWork', [Work::class, $task]);
+
+        $auth_user = User::where('id', Auth::user()->id)->first();
+
+        if ($auth_user->working_on !== $task->id) {
+            abort(403, 'You are not working on this task');
+        }
 
         User::where('id', Auth::user()->id)->update(array('working_on' => null, 'started_working_at' => null));
 
