@@ -41,6 +41,12 @@ class WorkController extends Controller
         //
     }
 
+    public function store_direct(Work $work)
+    {
+        $this->authorize('create', [Work::class, $work]);
+        Work::create($work);
+    }
+
     /**
      * Display the specified resource.
      *

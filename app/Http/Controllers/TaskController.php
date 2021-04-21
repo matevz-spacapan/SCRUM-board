@@ -295,11 +295,15 @@ class TaskController extends Controller
         $this->authorize('startWork', [Work::class, $task]);
         $auth_user = User::where('id', Auth::user()->id)->first();
 
+        if ($task->user_id !== $auth_user->id) {
+            abort('The task is not assigned to you');
+        }
+
         if ($auth_user->working_on !== $task->id && $auth_user->working_on !== null) {
             $worked_task = Task::where('id', $auth_user->working_on)->first();
             $this->stopwork($project, $worked_task->story, $worked_task);
             $auth_user->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
-        } elseif ($auth_user->working_on === null) {
+        } else if ($auth_user->working_on === null) {
             $auth_user->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
         }
         // pass if already working on this task
