@@ -18,6 +18,7 @@ class CreateWorksTable extends Migration
             $table->date('day');
             $table->unsignedBigInteger('amount_min');
             $table->foreignId('story_id')->constrained();
+            $table->foreignId('task_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

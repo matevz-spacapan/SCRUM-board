@@ -233,7 +233,10 @@ class TaskController extends Controller
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'This task is not accepted yet!']);
         //abort(403, 'This task is not accepted yet');
         else {
-            $this->stopwork($project, $story, $task);
+            $working_on_user = User::where('working_on', $task->id)->first();
+            if ($working_on_user) {
+                $this->stopwork($project, $story, $task);
+            }
             Task::where('id', $task->id)->update(array('accepted' => 3));
         }
 
@@ -258,7 +261,10 @@ class TaskController extends Controller
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'This task has no asigned developer!']);
         //abort(403, 'This task has no asigned user');
         else {
-            $this->stopwork($project, $story, $task);
+            $working_on_user = User::where('working_on', $task->id)->first();
+            if ($working_on_user) {
+                $this->stopwork($project, $story, $task);
+            }
             Task::where('id', $task->id)->update(array('accepted' => 0, 'user_id' => null));
         }
 
@@ -328,6 +334,7 @@ class TaskController extends Controller
         $work = new Work();
         $work->story_id = $story->id;
         $work->user_id = $auth_user->id;
+        $work->task_id = $task->id;
         $work->day = Carbon::today();
         $work->amount_min = Carbon::now()->diffInRealMinutes($auth_user->started_working_at);
 

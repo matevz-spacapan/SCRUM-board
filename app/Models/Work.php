@@ -13,6 +13,7 @@ class Work extends Model
     protected $fillable = [
         'story_id',
         'user_id',
+        'task_id',
         'day',
         'amount_min'
     ];
@@ -25,5 +26,10 @@ class Work extends Model
     public function story()
     {
         return $this->belongsTo(Story::class);
+    }
+
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
     }
 }

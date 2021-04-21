@@ -45,7 +45,11 @@ class WorkController extends Controller
     public function store_direct(Task $task, Work $work)
     {
         $this->authorize('create', [Work::class, $task]);
-        $work_in_database = Work::where('day', $work->day)->first();
+        $work_in_database = Work::where('day', $work->day)
+            ->where('story_id', $work->story->id)
+            ->where('task_id', $work->task->id)
+            ->where('user_id', $work->user->id)
+            ->first();
 
         if ($work_in_database) {
             $combined_time = $work_in_database->amount_min + $work->amount_min;
