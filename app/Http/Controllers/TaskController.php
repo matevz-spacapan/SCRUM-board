@@ -303,7 +303,7 @@ class TaskController extends Controller
             $worked_task = Task::where('id', $auth_user->working_on)->first();
             $this->stopwork($project, $worked_task->story, $worked_task);
             $auth_user->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
-        } else if ($auth_user->working_on === null) {
+        } elseif ($auth_user->working_on === null) {
             $auth_user->update(array('working_on' => $task->id, 'started_working_at' => Carbon::now()));
         }
         // pass if already working on this task
@@ -351,11 +351,12 @@ class TaskController extends Controller
        // dd(Task::query()->where('id', $task->id)->pluck('accepted')[0]);
         $this->authorize('create', [Task::class, $project]);
 
-        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 3)
+        if (Task::query()->where('id', $task->id)->pluck('accepted')[0] === 3) {
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'Task was already completed!']);
-            //abort(403, 'Task was already completed');
-        else
+        } else {
+            $this->stopwork($project, $story, $task);
             $task->delete();
+        }
 
 /*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
         return redirect()->route('task.show', [$project->id, $story->id]);
