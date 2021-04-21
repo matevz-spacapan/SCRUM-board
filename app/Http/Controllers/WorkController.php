@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Story;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Work;
 use Illuminate\Http\Request;
@@ -41,10 +42,10 @@ class WorkController extends Controller
         //
     }
 
-    public function store_direct(Work $work)
+    public function store_direct(Task $task, Work $work)
     {
-        $this->authorize('create', [Work::class, $work]);
-        Work::create($work);
+        $this->authorize('create', [Work::class, $task]);
+        Work::create($work->attributesToArray());
     }
 
     /**

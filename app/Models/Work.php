@@ -14,7 +14,7 @@ class Work extends Model
         'story_id',
         'user_id',
         'day',
-        'amount_h'
+        'amount_min'
     ];
 
     public function user()

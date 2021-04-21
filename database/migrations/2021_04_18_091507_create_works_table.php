@@ -16,7 +16,7 @@ class CreateWorksTable extends Migration
         Schema::create('works', function (Blueprint $table) {
             $table->id();
             $table->date('day');
-            $table->unsignedFloat('amount_h');
+            $table->unsignedBigInteger('amount_min');
             $table->foreignId('story_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();

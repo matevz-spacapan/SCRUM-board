@@ -325,6 +325,14 @@ class TaskController extends Controller
             abort(403, 'You are not working on this task');
         }
 
+        $work = new Work();
+        $work->story_id = $story->id;
+        $work->user_id = $auth_user->id;
+        $work->day = Carbon::today();
+        $work->amount_min = Carbon::now()->diffInRealMinutes($auth_user->started_working_at);
+
+        (new WorkController)->store_direct($task, $work);
+
         User::where('id', Auth::user()->id)->update(array('working_on' => null, 'started_working_at' => null));
 
         return redirect()->route('task.show', [$project->id, $story->id]);

@@ -56,9 +56,9 @@ class WorkPolicy
      * @param \App\Models\User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user, Task $task)
     {
-        //
+        return $user->working_on === $task->id && $task->user_id === $user->id;
     }
 
     /**
