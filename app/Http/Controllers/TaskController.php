@@ -94,12 +94,18 @@ class TaskController extends Controller
             ->where('start_date', '<=', Carbon::now()->toDateString())
             ->where('end_date', '>=', Carbon::now()->toDateString())->first();
 
-        if($active_sprint && $active_sprint->id != $story->sprint_id)
+        if ($active_sprint && $active_sprint->id != $story->sprint_id) {
             $active_sprint = [];
+        }
+
+        $work_done_min = Work::where('task_id', $task->id)
+            ->sum('amount_min');
+
+        $task->work_done_h = round($work_done_min / 60, 1);
 
         /*    ->join('sprint','id', '=', 'stories.sprint_id')->where('id', $story->id)*/
 
-        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks'=>$tasks]);
+        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks' => $tasks]);
     }
 
     /**
@@ -332,7 +338,6 @@ class TaskController extends Controller
         }
 
         $work = new Work();
-        $work->story_id = $story->id;
         $work->user_id = $auth_user->id;
         $work->task_id = $task->id;
         $work->day = Carbon::today();

@@ -46,7 +46,6 @@ class WorkController extends Controller
     {
         $this->authorize('create', [Work::class, $task]);
         $work_in_database = Work::where('day', $work->day)
-            ->where('story_id', $work->story->id)
             ->where('task_id', $work->task->id)
             ->where('user_id', $work->user->id)
             ->first();
