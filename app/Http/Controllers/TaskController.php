@@ -93,7 +93,7 @@ class TaskController extends Controller
         foreach ($tasks as $taskInDB) {
             $work = $taskInDB->works_sum_amount_min;
             if ($work) {
-                $taskInDB->works_sum_amount_min = round($work / 60, 1);
+                $taskInDB->works_sum_amount_min = round($work / 60, 2);
             } else {
                 $taskInDB->works_sum_amount_min = 0;
             }

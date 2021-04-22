@@ -75,64 +75,49 @@
                                 @endif
                             </td>
                             <td class="{{ $color }} align-middle">
-                                @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
-                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
-                                       class="btn btn-success"><i class="fas fa-check"></i></a>
-                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
-                                       class="btn btn-danger"><i class="fas fa-times"></i></a>
-                                @elseif($task->accepted === 0 && $task->user_id === null)
-                                    <b><i>{{ $text }}</b></i>
-                                    &nbsp;
-                                    <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
-                                       class="btn btn-success"><i class="fas fa-check"></i></a>
-                                @elseif($task->accepted === 3)
-                                    <b><i>{{ $text }}</b></i>
-                                    &nbsp;
-                                    <a href="{{ route('task.reopen', [$project->id, $story->id, $task->id]) }}"
-                                       class="btn btn-danger"><i class="fas fa-undo"></i></a>
-                                @else
-                                    <b><i>{{ $text }}</b></i>
-                                @endif
-                                @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
-                                    &nbsp;
-                                    <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}"
-                                       class="btn btn-success"><i class="fas fa-clipboard-check"></i></a>
-                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
-                                       class="btn btn-danger"><i class="fas fa-times"></i></a>
-                                @endif
-
-                                @error('errorTask'.$task->id)
-                                <span class="d-block invalid-feedback " role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-
+                                <b><i>{{ $text }}</i></b>
                             </td>
                             <td class="align-middle">
-                                @if($task->accepted != 3 )
-                                    <div class="dropdown">
-                                        <button class="btn btn-outline-primary   dropdown-toggle" type="button"
-                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                            Action
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            @if(Auth::User()->id === $task->user_id && $task->accepted === 1)
-                                                <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}"
-                                                   class="dropdown-item">Start work</a>
-                                                <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}"
-                                                   class="dropdown-item">Stop work</a>
-                                            @endif
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-primary   dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">Action
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        @if(Auth::User()->id === $task->user_id && $task->accepted === 1)
+                                            <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Start work</a>
+                                            <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Stop work</a>
+                                        @endif
 
-                                            @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
-                                                <a class="dropdown-item"
-                                                   href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
-                                            @endif
-                                            <button href="#" class="dropdown-item text-danger" data-toggle="modal"
-                                                    data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
-                                        </div>
+                                        @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
+                                            <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Accept</a>
+                                            <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Reject</a>
+                                        @elseif($task->accepted === 0 && $task->user_id === null)
+                                            <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Accept</a>
+                                        @elseif($task->accepted === 3)
+                                            <a href="{{ route('task.reopen', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Reopen</a>
+                                        @endif
+                                        @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
+                                            <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Complete</a>
+                                            <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
+                                               class="dropdown-item">Reject</a>
+                                        @endif
+
+                                        @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
+                                            <a class="dropdown-item"
+                                               href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
+                                        @endif
+                                        <button href="#" class="dropdown-item text-danger" data-toggle="modal"
+                                                data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
                                     </div>
-                                @endif
+                                </div>
                             </td>
                         </tr>
 

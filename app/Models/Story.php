@@ -45,11 +45,8 @@ class Story extends Model
             $work = $taskInDB->works_sum_amount_min;
             if ($work) {
                 $amount_worked += $work;
-                $taskInDB->works_sum_amount_min = round($work / 60, 1);
-            } else {
-                $taskInDB->works_sum_amount_min = 0;
             }
         }
-        return round($amount_worked / 60, 1);
+        return round($amount_worked / 60, 2);
     }
 }
