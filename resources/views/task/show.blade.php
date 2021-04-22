@@ -84,9 +84,10 @@
                                             aria-expanded="false">Action
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        @if(Auth::User()->id === $task->user_id && $task->accepted === 1)
+                                        @if(Auth::User()->id === $task->user_id && $task->accepted === 1 && Auth::User()->working_on !== $task->id)
                                             <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}"
                                                class="dropdown-item">Start work</a>
+                                        @elseif(Auth::User()->id === $task->user_id && $task->accepted === 1 && Auth::User()->working_on === $task->id)
                                             <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}"
                                                class="dropdown-item">Stop work</a>
                                         @endif
