@@ -313,7 +313,7 @@ class TaskController extends Controller
         $auth_user = User::where('id', Auth::user()->id)->first();
 
         if ($task->user_id !== $auth_user->id) {
-            abort('The task is not assigned to you');
+            abort(403, 'The task is not assigned to you');
         }
 
         if ($auth_user->working_on !== $task->id && $auth_user->working_on !== null) {
