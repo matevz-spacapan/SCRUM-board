@@ -18,11 +18,12 @@
             <div class="card-body px-0 py-0">
                 <table class="table table-bordered mb-0">
                     <tr>
-                        <th width="37%">Description</th>
-                        <th width="13%" style="text-align: center">Time estimate</th>
-                        <th width="15%" style="text-align: center">Asigned user</th>
-                        <th width="20%" style="text-align: center">Status</th>
-                        <th width="15%" style="text-align: center">Actions</th>
+                        <th>Description</th>
+                        <th>Time estimate</th>
+                        <th>Actual amount worked</th>
+                        <th>Assigned user</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                     @foreach($tasks as $task)
                         @switch($task->accepted)
@@ -60,20 +61,20 @@
                             @default
                         @endswitch
                         <tr>
-                            <td width="37%" class="align-middle">{{ $task->description }}
+                            <td>{{ $task->description }}
                             </td>
-                            <td width="13%" style="text-align: center" class="align-middle">{{ $task->time_estimate }}
-                                h
+                            <td class="align-middle">{{ $task->time_estimate }} h
                             </td>
-                            <td width="15%" style="text-align: center" class="align-middle">
+                            <td class="align-middle">{{ $task->works_sum_amount_min }} h
+                            </td>
+                            <td class="align-middle">
                                 @if(is_null($task->user_id))
                                     <i class="fas fa-minus"></i>
                                 @else
                                     {{ \App\Models\User::withTrashed()->where(['id' => $task->user_id])->pluck('username')->first() }}
                                 @endif
                             </td>
-                            <td width="20%" style="text-align:center; justify-content:center; align-items: center"
-                                class="{{ $color }} align-middle">
+                            <td class="{{ $color }} align-middle">
                                 @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
                                     <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
                                        class="btn btn-success"><i class="fas fa-check"></i></a>
@@ -107,7 +108,7 @@
                                 @enderror
 
                             </td>
-                            <td width="15%" style="text-align: center" class="align-middle">
+                            <td class="align-middle">
                                 @if($task->accepted != 3 )
                                     <div class="dropdown">
                                         <button class="btn btn-outline-primary   dropdown-toggle" type="button"

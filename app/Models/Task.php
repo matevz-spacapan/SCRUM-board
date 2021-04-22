@@ -27,4 +27,9 @@ class Task extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function works()
+    {
+        return $this->hasMany(Work::class);
+    }
 }

@@ -82,10 +82,22 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project, Story $story, Task $task)
+    public function show(Project $project, Story $story)
     {
         Story::findOrFail($story->id);
-        $tasks = Task::all()->where('story_id', $story->id);
+        $tasks = Task::query()
+            ->withSum('works', 'amount_min')
+            ->where('story_id', $story->id)
+            ->get();
+
+        foreach ($tasks as $taskInDB) {
+            $work = $taskInDB->works_sum_amount_min;
+            if ($work) {
+                $taskInDB->works_sum_amount_min = round($work / 60, 1);
+            } else {
+                $taskInDB->works_sum_amount_min = 0;
+            }
+        }
 
         $this->authorize('viewAny', [Task::class, $project]);
 
@@ -97,13 +109,6 @@ class TaskController extends Controller
         if ($active_sprint && $active_sprint->id != $story->sprint_id) {
             $active_sprint = [];
         }
-
-        $work_done_min = Work::where('task_id', $task->id)
-            ->sum('amount_min');
-
-        $task->work_done_h = round($work_done_min / 60, 1);
-
-        /*    ->join('sprint','id', '=', 'stories.sprint_id')->where('id', $story->id)*/
 
         return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' => $active_sprint, 'tasks' => $tasks]);
     }
