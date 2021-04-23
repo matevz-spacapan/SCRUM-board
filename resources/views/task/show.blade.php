@@ -81,7 +81,8 @@
                                 <div class="dropdown">
                                     <button class="btn btn-outline-primary   dropdown-toggle" type="button"
                                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            @if($task->is_worked_on() && $task->user !== Auth::User()) disabled @endif
+                                            @if($task->is_worked_on() && $task->user->id !== Auth::User()->id) disabled
+                                            @endif
                                             aria-expanded="false">Action
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
