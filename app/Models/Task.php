@@ -32,4 +32,11 @@ class Task extends Model
     {
         return $this->hasMany(Work::class);
     }
+
+    public function is_worked_on()
+    {
+        return User::query()
+            ->where('working_on', $this->id)
+            ->first();
+    }
 }

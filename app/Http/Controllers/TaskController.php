@@ -370,8 +370,9 @@ class TaskController extends Controller
 
         if (Task::query()->where('id', $task->id)->pluck('accepted')[0] === 3) {
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'Task was already completed!']);
+        } elseif ($task->is_worked_on()) {
+            abort(403, 'Task is being worked on.');
         } else {
-            $this->stopwork($project, $story, $task);
             $task->delete();
         }
 

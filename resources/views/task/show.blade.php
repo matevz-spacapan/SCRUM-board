@@ -34,7 +34,7 @@
                             @endphp
                             @break
                             @case(1)
-                            @if(Auth::User()->working_on === $task->id)
+                            @if($task->is_worked_on())
                                 @php
                                     $text = __('In progress');
                                     $color='text-primary';
@@ -81,6 +81,7 @@
                                 <div class="dropdown">
                                     <button class="btn btn-outline-primary   dropdown-toggle" type="button"
                                             id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                            @if($task->is_worked_on() && $task->user !== Auth::User()) disabled @endif
                                             aria-expanded="false">Action
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -115,8 +116,12 @@
                                             <a class="dropdown-item"
                                                href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
                                         @endif
-                                        <button href="#" class="dropdown-item text-danger" data-toggle="modal"
-                                                data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</button>
+
+                                        @if(!$task->is_worked_on())
+                                            <a class="dropdown-item text-danger" data-toggle="modal"
+                                               data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</a>
+                                        @endif
+
                                     </div>
                                 </div>
                             </td>
