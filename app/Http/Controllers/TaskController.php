@@ -166,6 +166,10 @@ class TaskController extends Controller
             abort(404);
         }
 
+        if ($story->accepted) {
+            abort(403, 'Story has already been accepted');
+        }
+
         $this->authorize('create', [Task::class, $project]);
 
         $data = $request->validate([
@@ -174,7 +178,7 @@ class TaskController extends Controller
             'time_estimate' => ['required', 'numeric', 'between:1,100'],
         ]);
 
-        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
+        if (Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
             if(Arr::get($data, 'user_id') != null)
                 abort(403, 'You cannot change user on accepted or completed task');
 
