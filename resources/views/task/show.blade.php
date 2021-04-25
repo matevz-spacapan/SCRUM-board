@@ -113,19 +113,19 @@
                                             @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
                                                 <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}"
                                                    class="dropdown-item">Complete</a>
-                                                <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
-                                                   class="dropdown-item">Reject</a>
-                                            @endif
+                                                    <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
+                                                       class="dropdown-item">Reject</a>
+                                                @endif
 
-                                            @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
-                                                <a class="dropdown-item"
-                                                   href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
-                                            @endif
+                                                @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
+                                                    <a class="dropdown-item"
+                                                       href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
+                                                @endif
 
-                                            @if(!$task->is_worked_on())
-                                                <a class="dropdown-item text-danger" data-toggle="modal"
-                                                   data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</a>
-                                            @endif
+                                                @if(!$task->is_worked_on())
+                                                    <a class="dropdown-item text-danger" data-toggle="modal" href="#"
+                                                       data-target="#deleteModal{{$task->id}}">Delete</a>
+                                                @endif
 
                                         </div>
                                     </div>
@@ -133,8 +133,8 @@
                             @endif
                         </tr>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="deleteModal{{$task->id}}" tabindex="-1" role="dialog"
+                            <!-- Modal -->
+                            <div class="modal fade" id="deleteModal{{$task->id}}" tabindex="-1" role="dialog"
                              aria-labelledby="deleteModalLabel{{$task->id}}" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
