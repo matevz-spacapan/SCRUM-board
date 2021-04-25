@@ -28,7 +28,25 @@ class Story extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function tasks(){
+    public function tasks()
+    {
         return $this->hasMany(Task::class);
+    }
+
+    public function amount_worked()
+    {
+        $tasks = Task::query()
+            ->withSum('works', 'amount_min')
+            ->where('story_id', $this->id)
+            ->get();
+
+        $amount_worked = 0;
+        foreach ($tasks as $taskInDB) {
+            $work = $taskInDB->works_sum_amount_min;
+            if ($work) {
+                $amount_worked += $work;
+            }
+        }
+        return round($amount_worked / 60, 2);
     }
 }

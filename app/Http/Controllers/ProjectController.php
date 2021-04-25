@@ -92,21 +92,26 @@ class ProjectController extends Controller
         Project::findOrFail($project->id);
         $this->authorize('view', [Project::class, $project]);
         $active_sprint = Sprint::query()
-                            ->where('project_id', $project->id)
-                            ->where('start_date', '<=', Carbon::now()->toDateString())
-                            ->where('end_date', '>=', Carbon::now()->toDateString())->first();
+            ->where('project_id', $project->id)
+            ->where('start_date', '<=', Carbon::now()->toDateString())
+            ->where('end_date', '>=', Carbon::now()->toDateString())->first();
 
         $a = Story::query()->where('project_id', $project->id)
             ->where('accepted', 0)
             ->where('priority', 4)
             ->whereNull('sprint_id');
-        $stories_project = Story::query()->where('project_id', $project->id)
+        $stories_project = Story::query()
+            ->where('project_id', $project->id)
             ->where('accepted', 0)
             ->where('priority', '<>', 4)
             ->whereNull('sprint_id')
             ->union($a)->get();
-        $accepted_stories = Story::query()->where('project_id', $project->id)
-            ->where('accepted', 1)->get();
+
+
+        $accepted_stories = Story::query()
+            ->where('project_id', $project->id)
+            ->where('accepted', 1)
+            ->get();
 
         if ($active_sprint) {
             $stories_sprint = Story::query()->where('project_id', $project->id)
@@ -125,7 +130,6 @@ class ProjectController extends Controller
 
         $sprints = Sprint::query()
             ->where('project_id', $project->id)
-            ->where('deleted_at')
             ->where('end_date', '>=', Carbon::now())
             ->get();
 
