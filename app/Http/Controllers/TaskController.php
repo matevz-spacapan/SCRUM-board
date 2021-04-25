@@ -58,6 +58,19 @@ class TaskController extends Controller
         Project::findOrFail($project->id);
         $this->authorize('create', [Task::class, $project]);
 
+        if ($story->accepted) {
+            abort(403, 'Story has already been accepted.');
+        }
+
+        $active_sprint = Sprint::query()
+            ->where('project_id', $project->id)
+            ->where('start_date', '<=', Carbon::now()->toDateString())
+            ->where('end_date', '>=', Carbon::now()->toDateString())->first();
+
+        if (!$active_sprint || $active_sprint->id != $story->sprint_id) {
+            abort(403, 'Story is not in an active sprint.');
+        }
+
         $request->request->add(['story_id' => $story->id]);
         $data = $request->validate([
             'description' => ['required', 'string'],
@@ -66,7 +79,7 @@ class TaskController extends Controller
             'time_estimate' => ['required', 'numeric', 'between:1,100'],
         ]);
 
-        if(Arr::get($data, 'user_id') == 0)
+        if (Arr::get($data, 'user_id') == 0)
             Arr::pull($data, 'user_id');
 
         Task::create($data);
@@ -130,15 +143,19 @@ class TaskController extends Controller
             abort(404);
         }
 
-        $errorId = 'errorTask'.$task->id;
+        if ($story->accepted) {
+            abort(403, 'Story has already been accepted');
+        }
+
+        $errorId = 'errorTask' . $task->id;
         $izBaze = Task::query()->where('id', $task->id);
 
         $this->authorize('create', [Task::class, $project]);
 
-        if(Task::query()->where('id', $task->id)->pluck('accepted')[0] == 3)
+        if (Task::query()->where('id', $task->id)->pluck('accepted')[0] == 3)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'Task was already completed!']);
-            //abort(403, 'Task was already completed');
-        elseif($izBaze->pluck('user_id')[0] != null && Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
+        //abort(403, 'Task was already completed');
+        elseif ($izBaze->pluck('user_id')[0] != null && Auth::user()->id !== $izBaze->pluck('user_id')[0] && $izBaze->pluck('accepted')[0] != 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'You are not the assigned developer!']);
 
         $a = Project::query()->where('id', $project->id)->pluck('product_owner');
@@ -287,19 +304,24 @@ class TaskController extends Controller
 
     }
 
-    public function reopen(Project $project, Story $story, Task $task){
+    public function reopen(Project $project, Story $story, Task $task)
+    {
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
         Story::findOrFail($story->id);
         $izBaze = Task::query()->where('id', $task->id);
 
-        $errorId = 'errorTask'.$task->id;
+        if ($story->accepted) {
+            abort(403, 'Story has already been accepted');
+        }
 
-        if($story->id !== $izBaze->pluck('story_id')[0])
+        $errorId = 'errorTask' . $task->id;
+
+        if ($story->id !== $izBaze->pluck('story_id')[0])
             abort(403, 'You are not located on correct story');
-        elseif($izBaze->pluck('user_id')[0] === 0)
+        elseif ($izBaze->pluck('user_id')[0] === 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'This task has no asigned developer!']);
-            //abort(403, 'This task has no asigned user');
+        //abort(403, 'This task has no asigned user');
         else {
             Task::where('id', $task->id)->update(array('accepted' => 0, 'user_id' => null));
         }

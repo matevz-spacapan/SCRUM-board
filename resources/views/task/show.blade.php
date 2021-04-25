@@ -8,7 +8,7 @@
         <div class="card mb-3 align-middle">
             <div class="card-header d-flex">
                 <div class="align-self-center"><h5 class="mb-0">Tasks</h5></div>
-                @if($active_sprint)
+                @if($active_sprint && !$story_list[0]->accepted)
                     @can("create", [\App\Models\Task::class, $project])
                         <a href="{{ route('task.create', [$project->id, $story->id]) }}"
                            class="btn btn-success ml-3" {{ Popper::arrow()->position('right')->pop("Let's add some tasks! <i class='far fa-smile-beam'></i>") }}>{{ __('Add new task') }}</a>
@@ -23,7 +23,9 @@
                         <th>Actual amount worked</th>
                         <th>Assigned user</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        @if(!$story_list[0]->accepted)
+                            <th>Actions</th>
+                        @endif
                     </tr>
                     @foreach($tasks as $task)
                         @switch($task->accepted)
@@ -77,55 +79,58 @@
                             <td class="{{ $color }} align-middle">
                                 <b><i>{{ $text }}</i></b>
                             </td>
-                            <td class="align-middle">
-                                <div class="dropdown">
-                                    <button class="btn btn-outline-primary   dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            @if($task->is_worked_on() && $task->user->id !== Auth::User()->id) disabled
+
+                            @if(!$story_list[0]->accepted)
+                                <td class="align-middle">
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-primary   dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                @if($task->is_worked_on() && $task->user->id !== Auth::User()->id) disabled
+                                                @endif
+                                                aria-expanded="false">Action
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            @if(Auth::User()->id === $task->user_id && $task->accepted === 1 && Auth::User()->working_on !== $task->id)
+                                                <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Start work</a>
+                                            @elseif(Auth::User()->id === $task->user_id && $task->accepted === 1 && Auth::User()->working_on === $task->id)
+                                                <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Stop work</a>
                                             @endif
-                                            aria-expanded="false">Action
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        @if(Auth::User()->id === $task->user_id && $task->accepted === 1 && Auth::User()->working_on !== $task->id)
-                                            <a href="{{ route('task.startwork', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Start work</a>
-                                        @elseif(Auth::User()->id === $task->user_id && $task->accepted === 1 && Auth::User()->working_on === $task->id)
-                                            <a href="{{ route('task.stopwork', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Stop work</a>
-                                        @endif
 
-                                        @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
-                                            <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Accept</a>
-                                            <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Reject</a>
-                                        @elseif($task->accepted === 0 && $task->user_id === null)
-                                            <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Accept</a>
-                                        @elseif($task->accepted === 3)
-                                            <a href="{{ route('task.reopen', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Reopen</a>
-                                        @endif
-                                        @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
-                                            <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Complete</a>
-                                            <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
-                                               class="dropdown-item">Reject</a>
-                                        @endif
+                                            @if($task->accepted === 0 && Auth::User()->id === $task->user_id)
+                                                <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Accept</a>
+                                                <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Reject</a>
+                                            @elseif($task->accepted === 0 && $task->user_id === null)
+                                                <a href="{{ route('task.accept', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Accept</a>
+                                            @elseif($task->accepted === 3)
+                                                <a href="{{ route('task.reopen', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Reopen</a>
+                                            @endif
+                                            @if($task->accepted === 1 && Auth::user()->id === $task->user_id)
+                                                <a href="{{ route('task.complete', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Complete</a>
+                                                <a href="{{ route('task.reject', [$project->id, $story->id, $task->id]) }}"
+                                                   class="dropdown-item">Reject</a>
+                                            @endif
 
-                                        @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
-                                            <a class="dropdown-item"
-                                               href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
-                                        @endif
+                                            @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
+                                                <a class="dropdown-item"
+                                                   href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
+                                            @endif
 
-                                        @if(!$task->is_worked_on())
-                                            <a class="dropdown-item text-danger" data-toggle="modal"
-                                               data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</a>
-                                        @endif
+                                            @if(!$task->is_worked_on())
+                                                <a class="dropdown-item text-danger" data-toggle="modal"
+                                                   data-target="#deleteModal{{$task->id}}" {{ Popper::arrow()->position('right')->pop("Is this task all wrong? Delete it here") }}>{{ __('Delete') }}</a>
+                                            @endif
 
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endif
                         </tr>
 
                         <!-- Modal -->
