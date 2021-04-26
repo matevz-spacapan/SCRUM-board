@@ -1,0 +1,42 @@
+@extends('layouts.app')
+
+@section('title', __(' - Project tasks'))
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-baseline">
+                        <div>{{ __('Project tasks') }}</div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Story</th>
+                                <th>Task description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($story_task_dict as $task_list)
+                                <tr>
+                                    <th rowspan="{{count($task_list)}}">{{$task_list[0]->story->title}}</th>
+                                    <td>{{$task_list[0]->description}}</td>
+                                </tr>
+
+                                @for ($i = 1; $i < count($task_list); $i++)
+                                    <tr>
+                                        <td>{{$task_list[$i]->description}}</td>
+                                    </tr>
+                                @endfor
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

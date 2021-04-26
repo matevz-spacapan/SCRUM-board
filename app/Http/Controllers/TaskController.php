@@ -402,8 +402,31 @@ class TaskController extends Controller
             $task->delete();
         }
 
-/*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
+        /*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
         return redirect()->route('task.show', [$project->id, $story->id]);
 
+    }
+
+    public function task_view(Project $project)
+    {
+        Project::findOrFail($project->id);
+
+        $tasks = Task::query()
+            ->join('stories', 'tasks.story_id', '=', 'stories.id')
+            ->where('project_id', '=', $project->id)
+            ->select('tasks.description', 'tasks.story_id')
+            ->get();
+
+        $story_task_table = [];
+
+        foreach ($tasks as $task) {
+            if (!array_key_exists($task->story_id, $story_task_table)) {
+                $story_task_table[$task->story_id] = [$task];
+            } else {
+                $story_task_table[$task->story_id][] = $task;
+            }
+        }
+
+        return view('task.project_tasks', ['project' => $project, 'story_task_dict' => $story_task_table]);
     }
 }
