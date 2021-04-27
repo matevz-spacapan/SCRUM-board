@@ -57,7 +57,7 @@ class WorkController extends Controller
         $data = $request->validate([
             'user_id' => ['required', 'numeric', 'min:0'],
             'task_id' => ['required', 'numeric', 'min:0'],
-            'amount_min' => ['required', 'numeric', 'min:0', 'max:1440'],
+            'amount_min' => ['required', 'numeric', 'min:0', 'max:720'],
             'day' => 'required|date|before_or_equal:today'
         ]);
 
