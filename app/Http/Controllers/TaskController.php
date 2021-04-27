@@ -374,7 +374,7 @@ class TaskController extends Controller
         $work->day = Carbon::today();
         $work->amount_min = Carbon::now()->diffInRealMinutes($auth_user->started_working_at);
 
-        (new WorkController)->store_direct($task, $work);
+        (new WorkController)->store_direct($project, $task, $work);
 
         User::where('id', Auth::user()->id)->update(array('working_on' => null, 'started_working_at' => null));
 

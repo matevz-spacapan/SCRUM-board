@@ -68,7 +68,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer"></div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <a class="btn btn-primary "
+                           href="{{ route('work.create', [$project->id, $task->id]) }}" {{ Popper::arrow()->position('right')->pop('Create a new work log') }}>{{ __('Create new') }}</a>
+                    </div>
                 </div>
             </div>
         </div>

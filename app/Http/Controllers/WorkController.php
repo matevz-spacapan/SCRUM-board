@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class WorkController extends Controller
 {
@@ -30,12 +31,11 @@ class WorkController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Project $project, Task $task)
     {
-        //
+        $this->authorize('viewAny', [Task::class, $project]);
+        return view('work.create', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -44,14 +44,29 @@ class WorkController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Project $project, Task $task)
     {
-        //
+        $this->authorize('view', [Project::class, $project]);
+        $request->request->add(['task_id' => $task->id]);
+        $request->request->add(['user_id' => Auth::user()->id]);
+
+        $data = $request->validate([
+            'user_id' => ['required', 'numeric', 'min:0'],
+            'task_id' => ['required', 'numeric', 'min:0'],
+            'amount_min' => ['required', 'numeric', 'min:0', 'max:1440'],
+            'day' => 'required|date|before_or_equal:today'
+        ]);
+
+        $work = new Work();
+        $work->fill($data);
+        $this->store_direct($project, $task, $work);
+
+        return redirect()->route('task.work', [$project->id, $task->id]);
     }
 
-    public function store_direct(Task $task, Work $work)
+    public function store_direct(Project $project, Task $task, Work $work)
     {
-        $this->authorize('create', [Work::class, $task]);
+        $this->authorize('view', [Project::class, $project]);
         $work_in_database = Work::where('day', $work->day)
             ->where('task_id', $work->task->id)
             ->where('user_id', $work->user->id)
