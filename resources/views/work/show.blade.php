@@ -6,7 +6,7 @@
     <script>
         function delete_work(work, button) {
             axios.delete('/work/' + work.id)
-                .then(() => $(button).parent().parent().addClass('grayed'));
+                .then(() => $(button).parent().parent().css("display", "none"));
         }
 
         function edit_work(work, button) {

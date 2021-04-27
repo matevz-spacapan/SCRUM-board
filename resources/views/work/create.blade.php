@@ -40,7 +40,7 @@
                                 <div class="col-md-6">
                                     <input id="amount_min" type="number"
                                            class="form-control @error('amount_min') is-invalid @enderror"
-                                           name="amount_min" required min="1">
+                                           name="amount_min" required min="1" max="1440">
 
                                     @error('amount_min')
                                     <span class="invalid-feedback" role="alert">
