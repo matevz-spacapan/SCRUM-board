@@ -72,6 +72,7 @@ Route::get('/project/{project}/story/{story}/task/{task}/reject', 'App\Http\Cont
 Route::get('/project/{project}/story/{story}/task/{task}/reopen', 'App\Http\Controllers\TaskController@reopen')->name('task.reopen');
 Route::get('/project/{project}/taskview', 'App\Http\Controllers\TaskController@task_view')->name('task.task_view');
 Route::get('/project/{project}/task/{task}/work', 'App\Http\Controllers\WorkController@index')->name('task.work');
+Route::put('work/{work}', 'App\Http\Controllers\WorkController@update')->name('work.delete');
 Route::delete('work/{work}', 'App\Http\Controllers\WorkController@destroy')->name('work.delete');
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');

@@ -96,7 +96,16 @@ class WorkController extends Controller
      */
     public function update(Request $request, Work $work)
     {
-        //
+        $this->authorize('update', [Work::class, $work]);
+        $data = $request->validate([
+            'amount_min' => ['required', 'numeric', 'min:0', 'max:1440']
+        ]);
+
+        $work->amount_min = $data['amount_min'];
+
+        //save the project and developer IDs
+        $work->update();
+        return new Response();
     }
 
     /**

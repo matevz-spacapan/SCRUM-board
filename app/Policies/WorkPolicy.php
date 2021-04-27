@@ -70,7 +70,7 @@ class WorkPolicy
      */
     public function update(User $user, Work $work)
     {
-        //
+        return $work->user_id === $user->id;
     }
 
 
