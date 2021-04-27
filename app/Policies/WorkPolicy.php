@@ -91,7 +91,7 @@ class WorkPolicy
      */
     public function delete(User $user, Work $work)
     {
-        //
+        return $work->user_id === $user->id;
     }
 
     /**
@@ -115,6 +115,6 @@ class WorkPolicy
      */
     public function forceDelete(User $user, Work $work)
     {
-        //
+
     }
 }

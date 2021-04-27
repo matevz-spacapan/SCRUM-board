@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Work;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class WorkController extends Controller
 {
@@ -20,7 +21,11 @@ class WorkController extends Controller
         Task::findOrFail($task->id);
         $this->authorize('view', [Project::class, $project]);
 
-        return view('work.show', ['project' => $project]);
+        $works = Work::query()
+            ->where('task_id', $task->id)
+            ->get();
+
+        return view('work.show', ['project' => $project, 'task' => $task, 'works' => $works]);
     }
 
     /**
@@ -102,6 +107,9 @@ class WorkController extends Controller
      */
     public function destroy(Work $work)
     {
-        //
+        $this->authorize('delete', [Work::class, $work]);
+        $work->delete();
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }
