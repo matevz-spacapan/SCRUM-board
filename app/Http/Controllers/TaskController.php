@@ -410,6 +410,7 @@ class TaskController extends Controller
     public function task_view(Project $project)
     {
         Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
 
         $tasks = Task::query()
             ->join('stories', 'tasks.story_id', '=', 'stories.id')

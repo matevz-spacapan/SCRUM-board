@@ -25,7 +25,7 @@
                                     <th rowspan="{{count($task_list)}}">{{$task_list[0]->story->title}}</th>
                                     <td>{{$task_list[0]->description}}</td>
                                     <td>
-                                        <a href="{{ route('task.work', [$task_list[0]->id]) }}"
+                                        <a href="{{ route('task.work', [$project->id, $task_list[0]->id]) }}"
                                            class="btn btn-primary" type="button">Edit work</a>
                                     </td>
                                 </tr>

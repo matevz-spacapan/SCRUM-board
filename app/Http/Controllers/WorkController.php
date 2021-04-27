@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Story;
+use App\Models\Project;
 use App\Models\Task;
 use App\Models\Work;
 use Illuminate\Http\Request;
@@ -14,10 +14,13 @@ class WorkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Task $task)
+    public function index(Project $project, Task $task)
     {
-        Story::findOrFail($task->id);
+        Project::findOrFail($project->id);
+        Task::findOrFail($task->id);
+        $this->authorize('view', [Project::class, $project]);
 
+        return view('work.show', ['project' => $project]);
     }
 
     /**
