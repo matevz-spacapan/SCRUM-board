@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Story;
 use App\Models\Task;
-use App\Models\User;
 use App\Models\Work;
 use Illuminate\Http\Request;
 
@@ -15,9 +14,9 @@ class WorkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user, Story $story)
+    public function index(Task $task)
     {
-        Story::findOrFail($story->id);
+        Story::findOrFail($task->id);
 
     }
 

@@ -16,6 +16,7 @@
                             <tr>
                                 <th>Story</th>
                                 <th>Task description</th>
+                                <th>Manage work</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -23,11 +24,19 @@
                                 <tr>
                                     <th rowspan="{{count($task_list)}}">{{$task_list[0]->story->title}}</th>
                                     <td>{{$task_list[0]->description}}</td>
+                                    <td>
+                                        <a href="{{ route('task.work', [$task_list[0]->id]) }}"
+                                           class="btn btn-primary" type="button">Edit work</a>
+                                    </td>
                                 </tr>
 
                                 @for ($i = 1; $i < count($task_list); $i++)
                                     <tr>
                                         <td>{{$task_list[$i]->description}}</td>
+                                        <td>
+                                            <a href="{{ route('task.work', [$project->id, $task_list[$i]->id]) }}"
+                                               class="btn btn-primary" type="button">Edit work</a>
+                                        </td>
                                     </tr>
                                 @endfor
                             @endforeach
