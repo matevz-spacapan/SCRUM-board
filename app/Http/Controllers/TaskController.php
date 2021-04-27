@@ -374,7 +374,7 @@ class TaskController extends Controller
         $work->day = Carbon::today();
         $work->amount_min = Carbon::now()->diffInRealMinutes($auth_user->started_working_at);
 
-        (new WorkController)->store_direct($task, $work);
+        (new WorkController)->store_direct($project, $task, $work);
 
         User::where('id', Auth::user()->id)->update(array('working_on' => null, 'started_working_at' => null));
 
@@ -402,8 +402,33 @@ class TaskController extends Controller
             $task->delete();
         }
 
-/*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
+        /*        return view('task.show', ['story' => $story, 'project' => $project, 'story_list' => [$story], 'active_sprint' =>  $active_sprint, 'tasks'=>$tasks]);*/
         return redirect()->route('task.show', [$project->id, $story->id]);
 
+    }
+
+    public function task_view(Project $project)
+    {
+        Project::findOrFail($project->id);
+        $this->authorize('view', [Project::class, $project]);
+
+        $tasks = Task::query()
+            ->join('stories', 'tasks.story_id', '=', 'stories.id')
+            ->where('stories.accepted', false)
+            ->where('project_id', $project->id)
+            ->select('tasks.description', 'tasks.story_id', 'tasks.id', 'tasks.user_id', 'tasks.accepted')
+            ->get();
+
+        $story_task_table = [];
+
+        foreach ($tasks as $task) {
+            if (!array_key_exists($task->story_id, $story_task_table)) {
+                $story_task_table[$task->story_id] = [$task];
+            } else {
+                $story_task_table[$task->story_id][] = $task;
+            }
+        }
+
+        return view('task.project_tasks', ['project' => $project, 'story_task_dict' => $story_task_table]);
     }
 }

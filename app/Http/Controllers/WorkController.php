@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Story;
+use App\Models\Project;
 use App\Models\Task;
-use App\Models\User;
 use App\Models\Work;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class WorkController extends Controller
 {
@@ -15,20 +16,30 @@ class WorkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user, Story $story)
+    public function index(Project $project, Task $task)
     {
-        Story::findOrFail($story->id);
+        Project::findOrFail($project->id);
+        Task::findOrFail($task->id);
+        $this->authorize('viewAny', [Work::class, $project]);
 
+        $works = Work::query()
+            ->where('task_id', $task->id)
+            ->where('user_id', Auth::user()->id)
+            ->get();
+
+        return view('work.show', ['project' => $project, 'task' => $task, 'works' => $works]);
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Project $project, Task $task)
     {
-        //
+        $this->authorize('viewAny', [Task::class, $project]);
+        if (!$task->user || $task->user->id !== Auth::user()->id || $task->accepted === 3) {
+            abort(403);
+        }
+        return view('work.create', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -37,14 +48,29 @@ class WorkController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Project $project, Task $task)
     {
-        //
+        $this->authorize('view', [Project::class, $project]);
+        $request->request->add(['task_id' => $task->id]);
+        $request->request->add(['user_id' => Auth::user()->id]);
+
+        $data = $request->validate([
+            'user_id' => ['required', 'numeric', 'min:0'],
+            'task_id' => ['required', 'numeric', 'min:0'],
+            'amount_min' => ['required', 'numeric', 'min:0', 'max:720'],
+            'day' => 'required|date|before_or_equal:today'
+        ]);
+
+        $work = new Work();
+        $work->fill($data);
+        $this->store_direct($project, $task, $work);
+
+        return redirect()->route('task.work', [$project->id, $task->id]);
     }
 
-    public function store_direct(Task $task, Work $work)
+    public function store_direct(Project $project, Task $task, Work $work)
     {
-        $this->authorize('create', [Work::class, $task]);
+        $this->authorize('view', [Project::class, $project]);
         $work_in_database = Work::where('day', $work->day)
             ->where('task_id', $work->task->id)
             ->where('user_id', $work->user->id)
@@ -89,7 +115,16 @@ class WorkController extends Controller
      */
     public function update(Request $request, Work $work)
     {
-        //
+        $this->authorize('update', [Work::class, $work]);
+        $data = $request->validate([
+            'amount_min' => ['required', 'numeric', 'min:0', 'max:1440']
+        ]);
+
+        $work->amount_min = $data['amount_min'];
+
+        //save the project and developer IDs
+        $work->update();
+        return new Response();
     }
 
     /**
@@ -100,6 +135,9 @@ class WorkController extends Controller
      */
     public function destroy(Work $work)
     {
-        //
+        $this->authorize('delete', [Work::class, $work]);
+        $work->delete();
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

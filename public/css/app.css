@@ -16819,3 +16819,7 @@ video {
   display: inline-block;
   margin: 0;
 }
+
+.grayed {
+  background-color: lightgray;
+}
