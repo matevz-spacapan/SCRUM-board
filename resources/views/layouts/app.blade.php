@@ -122,12 +122,14 @@
                                 </ul>
                                 <li class="nav-item"><a href="{{ route('sprint.index', $project->id) }}"
                                                         class="nav-link">{{ __('Sprint list') }}</a></li>
+                                <li class="nav-item"><a href="{{ route('task.task_view', $project->id) }}"
+                                                        class="nav-link">{{ __('Task view') }}</a></li>
                                 <li class="nav-item"><a href="{{ route('wall.index', $project->id) }}"
                                                         class="nav-link">{{ __('Project wall') }}</a></li>
                                 <li class="nav-item"><a href="{{ route('project.docs', $project->id) }}"
                                                         class="nav-link">{{ __('Project documentation') }}</a></li>
 
-                                @if($project->project_master === auth()->user()->id || auth()->user()->isAdmin()) <!-- Only Scrum master & admin can edit project -->
+                            @if($project->project_master === auth()->user()->id || auth()->user()->isAdmin()) <!-- Only Scrum master & admin can edit project -->
                                 <li class="nav-item"><a href="{{ route('project.edit', $project->id) }}"
                                                         class="nav-link">{{ __('Edit project') }}</a></li>
                                 @endif
