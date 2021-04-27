@@ -122,8 +122,10 @@
                                 </ul>
                                 <li class="nav-item"><a href="{{ route('sprint.index', $project->id) }}"
                                                         class="nav-link">{{ __('Sprint list') }}</a></li>
+                                @if($project->product_owner !== auth()->user()->id)
                                 <li class="nav-item"><a href="{{ route('task.task_view', $project->id) }}"
                                                         class="nav-link">{{ __('Task view') }}</a></li>
+                                @endif
                                 <li class="nav-item"><a href="{{ route('wall.index', $project->id) }}"
                                                         class="nav-link">{{ __('Project wall') }}</a></li>
                                 <li class="nav-item"><a href="{{ route('project.docs', $project->id) }}"

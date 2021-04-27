@@ -20,10 +20,11 @@ class WorkController extends Controller
     {
         Project::findOrFail($project->id);
         Task::findOrFail($task->id);
-        $this->authorize('view', [Project::class, $project]);
+        $this->authorize('viewAny', [Work::class, $project]);
 
         $works = Work::query()
             ->where('task_id', $task->id)
+            ->where('user_id', Auth::user()->id)
             ->get();
 
         return view('work.show', ['project' => $project, 'task' => $task, 'works' => $works]);
@@ -35,6 +36,9 @@ class WorkController extends Controller
     public function create(Project $project, Task $task)
     {
         $this->authorize('viewAny', [Task::class, $project]);
+        if (!$task->user || $task->user->id !== Auth::user()->id || $task->accepted === 3) {
+            abort(403);
+        }
         return view('work.create', ['project' => $project, 'task' => $task]);
     }
 

@@ -49,7 +49,9 @@
                             <tr>
                                 <th>Day</th>
                                 <th>Amount worked in minutes</th>
-                                <th colspan="2">Manage work</th>
+                                @if($task->accepted !== 3 && ($task->user && $task->user->id === Auth::user()->id))
+                                    <th colspan="2">Manage work</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -58,10 +60,20 @@
                                     <td class="day-field">{{$work->day}}</td>
                                     <td class="amount-field"><input class="form-control" value="{{$work->amount_min}}"
                                                                     disabled></td>
-                                    <td><a class="btn btn-primary" type="button" onclick="edit_work({{$work}}, this)">Edit
-                                            work</a></td>
-                                    <td><a class="btn btn-danger" type="button" onclick="delete_work({{$work}}, this)">Delete
-                                            work</a></td>
+                                    <td>
+                                        @if($task->accepted !== 3 && ($task->user && $task->user->id === Auth::user()->id))
+                                            <a class="btn btn-primary" type="button"
+                                               onclick="edit_work({{$work}}, this)">Edit
+                                                work</a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($task->accepted !== 3 && ($task->user && $task->user->id === Auth::user()->id))
+                                            <a class="btn btn-danger" type="button"
+                                               onclick="delete_work({{$work}}, this)">Delete
+                                                work</a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
 
@@ -69,8 +81,10 @@
                         </table>
                     </div>
                     <div class="card-footer d-flex justify-content-end">
-                        <a class="btn btn-primary "
-                           href="{{ route('work.create', [$project->id, $task->id]) }}" {{ Popper::arrow()->position('right')->pop('Create a new work log') }}>{{ __('Create new') }}</a>
+                        @if($task->accepted !== 3 && ($task->user && $task->user->id === Auth::user()->id))
+                            <a class="btn btn-primary "
+                               href="{{ route('work.create', [$project->id, $task->id]) }}" {{ Popper::arrow()->position('right')->pop('Create a new work log') }}>{{ __('Create new') }}</a>
+                        @endif
                     </div>
                 </div>
             </div>

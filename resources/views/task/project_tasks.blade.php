@@ -23,19 +23,19 @@
                             @foreach($story_task_dict as $task_list)
                                 <tr>
                                     <th rowspan="{{count($task_list)}}">{{$task_list[0]->story->title}}</th>
-                                    <td>{{$task_list[0]->description}}</td>
-                                    <td>
+                                    <td class="@if(!$task_list[0]->user || $task_list[0]->user->id !== Auth::user()->id || $task_list[0]->accepted === 3) grayed @endif">{{$task_list[0]->description}}</td>
+                                    <td class="@if(!$task_list[0]->user || $task_list[0]->user->id !== Auth::user()->id || $task_list[0]->accepted === 3) grayed @endif">
                                         <a href="{{ route('task.work', [$project->id, $task_list[0]->id]) }}"
-                                           class="btn btn-primary" type="button">Edit work</a>
+                                           class="btn btn-primary" type="button">See my work</a>
                                     </td>
                                 </tr>
 
                                 @for ($i = 1; $i < count($task_list); $i++)
-                                    <tr>
+                                    <tr class="@if(!$task_list[$i]->user || $task_list[$i]->user->id !== Auth::user()->id || $task_list[$i]->accepted === 3) grayed @endif">
                                         <td>{{$task_list[$i]->description}}</td>
                                         <td>
                                             <a href="{{ route('task.work', [$project->id, $task_list[$i]->id]) }}"
-                                               class="btn btn-primary" type="button">Edit work</a>
+                                               class="btn btn-primary" type="button">See my work</a>
                                         </td>
                                     </tr>
                                 @endfor

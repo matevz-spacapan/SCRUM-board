@@ -415,7 +415,7 @@ class TaskController extends Controller
         $tasks = Task::query()
             ->join('stories', 'tasks.story_id', '=', 'stories.id')
             ->where('project_id', '=', $project->id)
-            ->select('tasks.description', 'tasks.story_id', 'tasks.id')
+            ->select('tasks.description', 'tasks.story_id', 'tasks.id', 'tasks.user_id', 'tasks.accepted')
             ->get();
 
         $story_task_table = [];
