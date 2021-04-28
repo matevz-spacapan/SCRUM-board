@@ -8,7 +8,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-baseline">
-                        <div>{{ __('Update sprint') }}</div>
+                        <div>{{ __('Create new work') }}</div>
                         <a class="btn btn-link"
                            href="{{ route('task.work', [$project->id, $task->id]) }}" {{ Popper::arrow()->position('right')->pop('Discard the form and return to the work view.') }}>{{ __('Go back') }}</a>
                     </div>
