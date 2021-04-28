@@ -39,4 +39,14 @@ class Task extends Model
             ->where('working_on', $this->id)
             ->first();
     }
+
+    public function most_recent_time_estimate_min()
+    {
+
+        return Work::query()
+            ->where('task_id', $this->id)
+            ->orderBy('day', 'desc')
+            ->first()
+            ->time_estimate_min;
+    }
 }

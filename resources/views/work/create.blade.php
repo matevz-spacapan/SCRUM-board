@@ -34,13 +34,30 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="time_estimate_min"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Time estimate [h]') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="time_estimate_min" type="number"
+                                           class="form-control @error('time_estimate_min') is-invalid @enderror"
+                                           name="time_estimate_min" required min="1" max="720">
+
+                                    @error('time_estimate_min')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="amount_min"
-                                       class="col-md-4 col-form-label text-md-right">{{ __('Amount worked in minutes.') }}</label>
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Amount worked [h]') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="amount_min" type="number"
                                            class="form-control @error('amount_min') is-invalid @enderror"
-                                           name="amount_min" required min="1" max="720">
+                                           name="amount_min" required min="1" max="12">
 
                                     @error('amount_min')
                                     <span class="invalid-feedback" role="alert">

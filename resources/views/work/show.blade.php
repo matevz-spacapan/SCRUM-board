@@ -11,22 +11,30 @@
 
         function edit_work(work, button) {
             const work_id = work.id;
+            const time_estimate_button = $('tr[work=' + work_id + '] td.estimate-field input');
             const amount_button = $('tr[work=' + work_id + '] td.amount-field input');
 
             if (!amount_button.prop('disabled')) {
-                work.amount_min = amount_button.val();
+                work.amount_min = Math.floor(amount_button.val() * 60);
+                work.time_estimate_min = Math.floor(time_estimate_button.val() * 60);
+
                 axios.put('/work/' + work.id, work)
                     .then(() => {
                         $(button).text('Edit work');
                         amount_button.removeClass('is-invalid');
+                        time_estimate_button.removeClass('is-invalid');
+
                         amount_button.prop('disabled', true);
+                        time_estimate_button.prop('disabled', true);
                     })
                     .catch(() => {
                         amount_button.addClass('is-invalid');
+                        time_estimate_button.addClass('is-invalid');
                     })
             } else {
                 $(button).text('Submit edit');
                 amount_button.prop('disabled', false);
+                time_estimate_button.prop('disabled', false);
             }
         }
     </script>
@@ -48,7 +56,8 @@
                             <thead>
                             <tr>
                                 <th>Day</th>
-                                <th>Amount worked in minutes</th>
+                                <th>Time estimate [h]</th>
+                                <th>Amount worked [h]</th>
                                 @if($task->accepted !== 3 && ($task->user && $task->user->id === Auth::user()->id))
                                     <th colspan="2">Manage work</th>
                                 @endif
@@ -58,7 +67,11 @@
                             @foreach($works as $work)
                                 <tr work="{{$work->id}}">
                                     <td class="day-field">{{$work->day}}</td>
-                                    <td class="amount-field"><input class="form-control" value="{{$work->amount_min}}"
+                                    <td class="estimate-field"><input class="form-control"
+                                                                      value="{{round($work->time_estimate_min / 60, 2)}}"
+                                                                      disabled></td>
+                                    <td class="amount-field"><input class="form-control"
+                                                                    value="{{round($work->amount_min / 60, 2)}}"
                                                                     disabled></td>
                                     <td>
                                         @if($task->accepted !== 3 && ($task->user && $task->user->id === Auth::user()->id))
