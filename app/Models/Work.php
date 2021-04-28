@@ -14,7 +14,8 @@ class Work extends Model
         'user_id',
         'task_id',
         'day',
-        'amount_min'
+        'amount_min',
+        'time_estimate_min'
     ];
 
     public function user()

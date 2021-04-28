@@ -58,11 +58,14 @@ class WorkController extends Controller
             'user_id' => ['required', 'numeric', 'min:0'],
             'task_id' => ['required', 'numeric', 'min:0'],
             'amount_min' => ['required', 'numeric', 'min:0', 'max:720'],
+            'time_estimate_min' => ['required', 'numeric', 'min:0'],
             'day' => 'required|date|before_or_equal:today'
         ]);
 
         $work = new Work();
         $work->fill($data);
+        $work->time_estimate_min = floor($work->time_estimate_min * 60);
+        $work->amount_min = floor($work->amount_min * 60);
         $this->store_direct($project, $task, $work);
 
         return redirect()->route('task.work', [$project->id, $task->id]);
@@ -78,7 +81,7 @@ class WorkController extends Controller
 
         if ($work_in_database) {
             $combined_time = $work_in_database->amount_min + $work->amount_min;
-            $work_in_database->update(array('amount_min' => $combined_time));
+            $work_in_database->update(array('amount_min' => $combined_time, 'time_estimate_min' => $work->time_estimate_min));
         } else {
             Work::create($work->attributesToArray());
         }
@@ -117,12 +120,13 @@ class WorkController extends Controller
     {
         $this->authorize('update', [Work::class, $work]);
         $data = $request->validate([
+            'time_estimate_min' => ['required', 'numeric', 'min:0'],
             'amount_min' => ['required', 'numeric', 'min:0', 'max:1440']
         ]);
 
         $work->amount_min = $data['amount_min'];
+        $work->time_estimate_min = $data['time_estimate_min'];
 
-        //save the project and developer IDs
         $work->update();
         return new Response();
     }
