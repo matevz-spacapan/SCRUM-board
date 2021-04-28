@@ -251,7 +251,7 @@ class TaskController extends Controller
             $work = new Work();
             $work->user_id = Auth::user()->id;
             $work->task_id = $task->id;
-            $work->time_estimate_min = $task->time_estimate * 60;
+            $work->time_estimate_min = floor($task->time_estimate * 60);
             $work->day = Carbon::today();
             $work->amount_min = 0;
 

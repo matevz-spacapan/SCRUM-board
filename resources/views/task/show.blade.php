@@ -117,7 +117,7 @@
                                                        class="dropdown-item">Reject</a>
                                                 @endif
 
-                                                @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
+                                                @if(Auth::User()->id === $task->user_id && $task->accepted === 1 )
                                                     <a class="dropdown-item"
                                                        href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
                                                 @endif
