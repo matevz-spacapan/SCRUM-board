@@ -65,7 +65,7 @@
                         <tr>
                             <td>{{ $task->description }}
                             </td>
-                            <td class="align-middle">{{ $task->time_estimate }} h
+                            <td class="align-middle">{{ $task->most_recent_time_estimate_min() / 60 }} h
                             </td>
                             <td class="align-middle">{{ $task->works_sum_amount_min }} h
                             </td>
@@ -117,7 +117,7 @@
                                                        class="dropdown-item">Reject</a>
                                                 @endif
 
-                                                @if( $task->user_id === null || Auth::User()->id === $task->user_id && $task->accepted === 1 )
+                                                @if(Auth::User()->id === $task->user_id && $task->accepted === 1 )
                                                     <a class="dropdown-item"
                                                        href="{{route('task.edit', [$project->id, $story->id, $task->id]) }}">Edit</a>
                                                 @endif

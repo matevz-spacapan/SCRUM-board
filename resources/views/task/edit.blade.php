@@ -32,10 +32,16 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="time_estimate" class="col-md-4 col-form-label text-md-right">{{ __('Time estimate') }} <i class="far fa-question-circle" {{ Popper::arrow()->pop('Enter a time estimate value betwen 1 and 100.') }}></i></label>
+                            <label for="time_estimate"
+                                   class="col-md-4 col-form-label text-md-right">{{ __('Time estimate') }} <i
+                                    class="far fa-question-circle" {{ Popper::arrow()->pop('Enter a time estimate value betwen 1 and 100.') }}></i></label>
 
                             <div class="col-md-6">
-                                <input id="time_estimate" placeholder="[h]" type="number" class="form-control @error('time_estimate') is-invalid @enderror" name="time_estimate" value="{{ old('time_estimate') ?? $task->time_estimate}}" min="1" max="100" required>
+                                <input id="time_estimate" placeholder="[h]" type="number"
+                                       class="form-control @error('time_estimate') is-invalid @enderror"
+                                       name="time_estimate"
+                                       value="{{ old('time_estimate') ?? $task->most_recent_time_estimate_min() / 60}}"
+                                       min="1" max="100" required>
 
                                 @error('time_estimate')
                                 <span class="invalid-feedback" role="alert">

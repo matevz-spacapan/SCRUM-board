@@ -196,12 +196,21 @@ class TaskController extends Controller
         ]);
 
         if (Task::query()->where('id', $task->id)->pluck('accepted')[0] === 1)
-            if(Arr::get($data, 'user_id') != null)
+            if (Arr::get($data, 'user_id') != null)
                 abort(403, 'You cannot change user on accepted or completed task');
 
 
-        if(Arr::get($data, 'user_id') == 0 && Task::query()->where('id', $task->id)->pluck('accepted')[0] != 1)
-            $data['user_id']=null;
+        if (Arr::get($data, 'user_id') == 0 && Task::query()->where('id', $task->id)->pluck('accepted')[0] != 1)
+            $data['user_id'] = null;
+
+        $work = new Work();
+        $work->user_id = Auth::user()->id;
+        $work->task_id = $task->id;
+        $work->time_estimate_min = $task->time_estimate * 60;
+        $work->day = Carbon::today();
+        $work->amount_min = 0;
+
+        (new WorkController)->store_direct($project, $task, $work);
 
         $task->update($data);
 
@@ -236,8 +245,18 @@ class TaskController extends Controller
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'This task has no asigned developer!']);
         elseif($izBaze->pluck('user_id')[0] != null && $izBaze->pluck('user_id')[0] != Auth::user()->id && $izBaze->pluck('accepted')[0] === 0)
             return redirect()->route('task.show', [$project->id, $story->id])->withErrors([$errorId => 'Developer is already assigned on this task!']);
-        else
+        else {
             Task::where('id', $task->id)->update(array('accepted' => 1, 'user_id' => Auth::user()->id));
+
+            $work = new Work();
+            $work->user_id = Auth::user()->id;
+            $work->task_id = $task->id;
+            $work->time_estimate_min = floor($task->time_estimate * 60);
+            $work->day = Carbon::today();
+            $work->amount_min = 0;
+
+            (new WorkController)->store_direct($project, $task, $work);
+        }
 
         return redirect()->route('task.show', [$project->id, $story->id]);
 
@@ -371,6 +390,7 @@ class TaskController extends Controller
         $work = new Work();
         $work->user_id = $auth_user->id;
         $work->task_id = $task->id;
+        $work->time_estimate_min = $task->time_estimate * 60;
         $work->day = Carbon::today();
         $work->amount_min = Carbon::now()->diffInRealMinutes($auth_user->started_working_at);
 

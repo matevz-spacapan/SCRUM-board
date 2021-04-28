@@ -17,6 +17,7 @@ class CreateWorksTable extends Migration
             $table->id();
             $table->date('day');
             $table->unsignedBigInteger('amount_min');
+            $table->unsignedBigInteger('time_estimate_min');
             $table->foreignId('task_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
