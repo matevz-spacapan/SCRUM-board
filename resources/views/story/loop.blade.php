@@ -52,7 +52,10 @@
                         Time estimate
                         @if(is_null($story->sprint_id))
                             @can('update_sprints', [\App\Models\Story::class, $project])
-                                <input type="number" class="form-control text-center estimate" name="time_estimate[{{ $story->id }}]" value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1" max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
+                                <input type="number" class="form-control text-center estimate"
+                                       name="time_estimate[{{ $story->id }}]"
+                                       value="{{ old("time_estimate[{$story->id}]", $story->time_estimate) }}" min="1"
+                                       max="10" {{ Popper::arrow()->pop('Between 1 and 10.') }}> pts
                             @else
                                 {{ $story->time_estimate ? "{$story->time_estimate} pts" : 'not set' }}
                             @endcan
@@ -61,7 +64,13 @@
                         @endif
                     </div>
                     @if(is_numeric($story->sprint_id))
-                        <div>Tasks: <b {{ Popper::arrow()->pop('Completed / All') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() }} / {{ \App\Models\Task::query()->where('story_id', $story->id)->count() }}</i> <i class="far fa-question-circle"></i></b> | Work: <b {{ Popper::arrow()->pop('Actual / Estimated') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->sum('time_estimate') }}h / {{ \App\Models\Task::query()->where('story_id', $story->id)->sum('time_estimate') }}h</i> <i class="far fa-question-circle"></i></b></div>
+                        <div>Tasks:
+                            <b {{ Popper::arrow()->pop('Completed / All') }}><i>{{ \App\Models\Task::query()->where('story_id', $story->id)->where('accepted', 3)->count() }}
+                                    / {{ \App\Models\Task::query()->where('story_id', $story->id)->count() }}</i> <i
+                                    class="far fa-question-circle"></i></b> | Work:
+                            <b {{ Popper::arrow()->pop('Actual / Estimated') }}><i>{{ $story->amount_worked() }}h
+                                    / {{ \App\Models\Task::query()->where('story_id', $story->id)->sum('time_estimate') }}
+                                    h</i> <i class="far fa-question-circle"></i></b></div>
                     @endif
                 </div>
             </div>

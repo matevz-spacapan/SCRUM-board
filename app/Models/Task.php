@@ -15,8 +15,7 @@ class Task extends Model
         'time_estimate',
         'accepted',
         'story_id',
-        'user_id',
-        'work'
+        'user_id'
     ];
 
     public function story()
@@ -27,5 +26,17 @@ class Task extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function works()
+    {
+        return $this->hasMany(Work::class);
+    }
+
+    public function is_worked_on()
+    {
+        return User::query()
+            ->where('working_on', $this->id)
+            ->first();
     }
 }

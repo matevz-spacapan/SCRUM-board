@@ -70,11 +70,16 @@ Route::get('/project/{project}/story/{story}/task/{task}/startwork', 'App\Http\C
 Route::get('/project/{project}/story/{story}/task/{task}/stopwork', 'App\Http\Controllers\TaskController@stopwork')->name('task.stopwork');
 Route::get('/project/{project}/story/{story}/task/{task}/reject', 'App\Http\Controllers\TaskController@reject')->name('task.reject');
 Route::get('/project/{project}/story/{story}/task/{task}/reopen', 'App\Http\Controllers\TaskController@reopen')->name('task.reopen');
+Route::get('/project/{project}/taskview', 'App\Http\Controllers\TaskController@task_view')->name('task.task_view');
+Route::get('/project/{project}/task/{task}/work', 'App\Http\Controllers\WorkController@index')->name('task.work');
+Route::get('/project/{project}/task/{task}/work/create', 'App\Http\Controllers\WorkController@create')->name('work.create');
+Route::post('/project/{project}/task/{task}/work', 'App\Http\Controllers\WorkController@store')->name('work.store');
+Route::put('work/{work}', 'App\Http\Controllers\WorkController@update')->name('work.delete');
+Route::delete('work/{work}', 'App\Http\Controllers\WorkController@destroy')->name('work.delete');
 
 Route::get('/project/{project}/wall', 'App\Http\Controllers\WallController@index')->name('wall.index');
 Route::get('/project/{project}/wall/create', 'App\Http\Controllers\WallController@create')->name('wall.create');
 Route::post('/project/{project}/wall', 'App\Http\Controllers\WallController@store')->name('wall.store');
-
 
 
 Route::get('/admin/users/restore/{id}', 'App\Http\Controllers\UserController@restore')->name('user.restore');

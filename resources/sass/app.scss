@@ -349,3 +349,7 @@ grid-template-columns: repeat(1, minmax(0, 1fr));
     display: inline-block;
     margin: 0;
 }
+
+.grayed {
+    background-color: lightgray;
+}
