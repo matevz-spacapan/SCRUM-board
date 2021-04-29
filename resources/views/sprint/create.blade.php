@@ -82,11 +82,11 @@
                                                    name="start_date" value="{{ old('start_date') }}" required>
                                         @endif
 
-                                    @error('start_date')
-                                    <span class="invalid-feedback" role="alert">
+                                        @error('start_date')
+                                        <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
-                                    @enderror
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -108,12 +108,12 @@
                                         @endif
 
                                         @error('end_date')
-                                    <span class="invalid-feedback" role="alert">
+                                        <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
-                                    @enderror
-                                    @error('in_progress')
-                                    <span class="invalid-feedback" role="alert">
+                                        @enderror
+                                        @error('in_progress')
+                                        <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror

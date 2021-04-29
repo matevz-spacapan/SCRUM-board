@@ -18,11 +18,6 @@
                 work.amount_min = Math.floor(amount_button.val() * 60);
                 work.time_estimate_min = Math.floor(time_estimate_button.val() * 60);
 
-                if (work.amount_min > work.time_estimate_min) {
-                    time_estimate_button.addClass('is-invalid');
-                    return;
-                }
-
                 axios.put('/work/' + work.id, work)
                     .then(() => {
                         $(button).text('Edit work');

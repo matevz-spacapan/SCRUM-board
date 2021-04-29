@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use App\Models\Sprint;
 use App\Models\Task;
 use App\Models\Work;
 use Illuminate\Http\Request;
@@ -61,6 +62,15 @@ class WorkController extends Controller
             'time_estimate_min' => ['required', 'numeric', 'min:0'],
             'day' => 'required|date|before_or_equal:today'
         ]);
+
+        $active_sprint = Sprint::query()
+            ->where('project_id', $project->id)
+            ->where('start_date', '<=', $data['day'])
+            ->where('end_date', '>=', $data['day'])->first();
+
+        if (!$active_sprint) {
+            return redirect()->back()->withInput()->withErrors(['day' => 'The work is outside any sprint.']);
+        }
 
         $work = new Work();
         $work->fill($data);
