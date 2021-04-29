@@ -23,7 +23,7 @@
 
                                 <div class="col-md-6">
                                     <input id="day" type="text" class="form-control @error('day') is-invalid @enderror"
-                                           name="day" required autocomplete="off">
+                                           name="day" required autocomplete="off" value="{{ old('day') }}">
 
                                     @error('day')
                                     <span class="invalid-feedback" role="alert">
@@ -40,7 +40,8 @@
                                 <div class="col-md-6">
                                     <input id="time_estimate_min" type="number"
                                            class="form-control @error('time_estimate_min') is-invalid @enderror"
-                                           name="time_estimate_min" required min="1" max="720">
+                                           name="time_estimate_min" required min="1" max="720"
+                                           value="{{ old('time_estimate_min') }}">
 
                                     @error('time_estimate_min')
                                     <span class="invalid-feedback" role="alert">
@@ -57,7 +58,7 @@
                                 <div class="col-md-6">
                                     <input id="amount_min" type="number"
                                            class="form-control @error('amount_min') is-invalid @enderror"
-                                           name="amount_min" required min="1" max="12">
+                                           name="amount_min" required min="1" max="12" value="{{ old('amount_min') }}">
 
                                     @error('amount_min')
                                     <span class="invalid-feedback" role="alert">

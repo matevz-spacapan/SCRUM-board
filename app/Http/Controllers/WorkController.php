@@ -69,7 +69,7 @@ class WorkController extends Controller
             ->where('end_date', '>=', $data['day'])->first();
 
         if (!$active_sprint) {
-            return redirect()->back()->withErrors(['day ' => 'The work is outside any sprint.'])->withInput();
+            return redirect()->back()->withInput()->withErrors(['day' => 'The work is outside any sprint.']);
         }
 
         $work = new Work();
